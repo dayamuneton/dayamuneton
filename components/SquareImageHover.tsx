@@ -14,7 +14,7 @@ function SquareImageHover({ src, alt, width, scale }: SquareImageHoverProps) {
          <Image
             src={src}
             alt={alt}
-            className={`object-cover ${scale} ease-in-out duration-300  `}
+            className={`object-cover ${scale} ease-in-out duration-200  `}
             fill
             priority
          />
