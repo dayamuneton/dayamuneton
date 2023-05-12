@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes wiggle {
+   0%,
+   75%,
+   100% {
+      transform: rotate(0deg);
+   }
+   80% {
+      transform: rotate(1deg) translateX(10px);
+   }
+   85% {
+      transform: rotate(-1deg) translateX(-10px);
+   }
+   90% {
+      transform: rotate(1deg) translateX(10px);
+   }
+   95% {
+      transform: rotate(-1deg) translateX(-10px);
+   }
+}
+
+.animate-wiggle {
+   animation: wiggle 3s infinite ease-in-out;
+}
