@@ -5,13 +5,13 @@ import { useRouter } from "next/router";
 const SupportMyWork: React.FC = () => {
    const router = useRouter();
    const [isOpen, setIsOpen] = useState(false);
-   const [amount, setAmount] = useState<number | string>("");
+   const [amount, setAmount] = useState<number>();
    const toggleAccordion = () => {
       setIsOpen(!isOpen);
    };
 
    const redirectToCheckout = async () => {
-      if (amount < 0.5) return;
+      if (amount && amount < 0.5) return;
       const response = await fetch(`/api/create-checkout-session`, {
          method: "POST",
          headers: {
