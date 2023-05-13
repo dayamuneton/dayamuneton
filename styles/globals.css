@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-scrollbar {
+   scrollbar-color: gray white;
+   scrollbar-width: thin;
+}
+.custom-scrollbar::-webkit-scrollbar {
+   width: 0.4rem;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+   border-radius: 0.5rem;
+   background: gray;
+}
+
 @keyframes wiggle {
    0%,
    75%,

@@ -6,10 +6,11 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
 
 interface WithAuthComponentProps {
-   Component: NextPage;
+   Component: any;
+   props: any;
 }
 
-const WithAuth: NextPage<WithAuthComponentProps> = ({ Component }) => {
+const WithAuth = ({ Component, props }: WithAuthComponentProps) => {
    const { currentUser, logout } = useAuth();
    const router = useRouter();
 
@@ -28,7 +29,7 @@ const WithAuth: NextPage<WithAuthComponentProps> = ({ Component }) => {
       checkAdminStatus();
    }, [currentUser, router, logout]);
 
-   return currentUser ? <Component /> : null;
+   return currentUser ? <Component {...props} /> : null;
 };
 
 export default WithAuth;

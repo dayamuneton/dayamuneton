@@ -1,37 +1,38 @@
 import Modal from "@/components/modal";
 import Navbar from "@/components/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
 import React, { useState } from "react";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Link from "next/link";
 
-export async function getStaticPaths() {
-   const data = ["heads", "bodies", "abstracts", "memorials"];
+// export async function getStaticPaths() {
+//    const data = ["heads", "bodies", "abstracts", "memorials"];
 
-   const paths = data.map((item: any) => {
-      return {
-         params: { category: item },
-      };
-   });
-   return {
-      paths,
-      fallback: false,
-   };
-}
+//    const paths = data.map((item: any) => {
+//       return {
+//          params: { category: item },
+//       };
+//    });
+//    return {
+//       paths,
+//       fallback: false,
+//    };
+// }
 
-export async function getStaticProps({ params }: { params: any }) {
-   const { category } = params;
+export async function getServerSideProps(context: any) {
+   const { category } = context.query;
    const response = await fetch(
       `http://localhost:3000/shopdata/${category}.json`
    );
    const data = await response.json();
    const galleryContent: any[] = [];
    const galleryQuery = query(
-      collection(db, category),
-      orderBy("available", "desc")
+      collection(db, "products"),
+      where("category", "==", category),
+      orderBy("status", "desc")
    );
    const gallerySnapshot = await getDocs(galleryQuery);
    gallerySnapshot.forEach((doc) => {
@@ -40,6 +41,7 @@ export async function getStaticProps({ params }: { params: any }) {
          ...doc.data(),
       });
    });
+
    data.galleryContent = galleryContent;
    return {
       props: {
@@ -50,6 +52,8 @@ export async function getStaticProps({ params }: { params: any }) {
 
 function Shop({ data }: { data: any }) {
    const [item, setItem] = useState<any>(null);
+   console.log(data);
+
    return (
       <div className="flex flex-col items-center min-h-screen overflow-hidden bg-[#ddf2f1]">
          <Head>

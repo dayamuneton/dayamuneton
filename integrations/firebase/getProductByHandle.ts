@@ -7,7 +7,7 @@ export async function getProductByHandle(
 ) {
    try {
       const q = query(
-         collection(db, category),
+         collection(db, "products"),
          where("handle", "==", productHandle)
       );
 
