@@ -13,6 +13,7 @@ import { replaceSpacesWithDashes } from "@/utils/replaceSpacesWithDashes";
 import { dataURLtoBlob } from "@/utils/dataURLtoBlob";
 import Link from "next/link";
 import { CgSpinner } from "react-icons/cg";
+import { capitalizeWords } from "@/utils/capitalizeWords";
 
 export async function getServerSideProps(context: any) {
    const { product } = context.query;
@@ -46,16 +47,19 @@ function Product(props: any) {
    const [loading, setLoading] = useState(false);
    const [name, setName] = useState(product?.name || "");
    const [description, setDescription] = useState(product?.description || "");
-   const [price, setPrice] = useState(product?.price || 0);
-   const [date, setDate] = useState(product?.date || 0);
+   const [price, setPrice] = useState<number | string>(product?.price || 0);
+   const [date, setDate] = useState<number | string>(product?.date || 0);
    const [category, setCategory] = useState(product?.category || "heads");
-   const [status, setStatus] = useState(product?.status || "available");
+   const [status, setStatus] = useState(product?.status || "soldout");
    const [formatedFiles, setFormatedFiles] = useState<
       {
          dataURL: string | ArrayBuffer | null;
          name: string;
       }[]
    >([]);
+   const [dimentionSelected, setDimentionSelected] = useState(
+      product?.dimention || ""
+   );
    const [images, setImages] = useState<string[]>(product?.images || []);
    const [featuredImage, setFeaturedImage] = useState(
       product?.featuredImage || ""
@@ -64,10 +68,28 @@ function Product(props: any) {
       product?.techniques || []
    );
    const techniquesOptions = ["Acrylic", "Abstraction", "Expressionism"];
+   const dimentionsOptions = [
+      ' 24" x 48" ',
+      ' 30" x 40" ',
+      ' 30" x 48" ',
+      ' 36" x 36" ',
+      ' 36" x 48" ',
+      ' 48" x 48" ',
+      ' 48" x 60"',
+   ];
+   const [limitedEdition, setLimitedEdition] = useState(false);
+   const [shippingInformation, setShippingInformation] = useState(
+      product?.shippingInformation || ""
+   );
 
    const saveProduct = async (e: any) => {
       setLoading(true);
       e.preventDefault();
+
+      if (images.length === 0 || date === "" || price === "") {
+         setLoading(false);
+         return;
+      }
 
       let dbImages = product?.images || [],
          featuredImageDB = featuredImage;
@@ -88,18 +110,21 @@ function Product(props: any) {
             featuredImageDB = photoURL;
          }
       }
+
       const data = {
-         name: name.toLowerCase() || "",
+         name: capitalizeWords(name.toLowerCase()) || "",
          description: description || 0,
          images: dbImages || [],
          featuredImage:
             featuredImageDB === "" ? dbImages[0] || "" : featuredImageDB,
-         price: price || 0,
-         date: date || 0,
+         price: Number(price) || 0,
+         date: Number(date) || 0,
          status: status === "available" ? 1 : 0,
          category: category || "",
          handle: replaceSpacesWithDashes(name.toLowerCase()),
          techniques: techniques || [],
+         shippingInformation: shippingInformation || "",
+         // dimention: dimentionSelected || "",
       };
 
       if (product === null) {
@@ -192,6 +217,16 @@ function Product(props: any) {
       setTechnique([...techniques]);
    };
 
+   const handleNumberInputChange = (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setState: React.Dispatch<React.SetStateAction<string | number>>
+   ) => {
+      const value = e.target.value;
+      if (/^\d*$/.test(value)) {
+         setState(value);
+      }
+   };
+
    return (
       <div className="flex flex-col items-center min-h-screen overflow-hidden bg-[#ddf2f1]">
          <Head>
@@ -209,7 +244,7 @@ function Product(props: any) {
          </Head>
          <Navbar />
          <div className="flex flex-col items-center justify-center w-full h-full mt-12 mb-auto">
-            <div className="bg-white w-[95vw] max-w-md mb-4 p-4 rounded-xl flex flex-col">
+            <div className="bg-white w-[95vw] max-w-xl mb-4 p-4 rounded-xl flex flex-col">
                <div className="flex ml-auto">
                   <Link
                      href="/admin"
@@ -238,9 +273,17 @@ function Product(props: any) {
                <label className="mt-4">
                   <p className="text-lg font-medium">Description:</p>
                   <textarea
-                     className="flex w-full px-2 py-1 bg-gray-100 min-h-[15rem] capitalize"
+                     className="flex w-full px-2 py-1 bg-gray-100 min-h-[10rem] capitalize"
                      value={description}
                      onChange={(e) => setDescription(e.target.value)}
+                  />
+               </label>
+               <label className="mt-4">
+                  <p className="text-lg font-medium">Shipping Information:</p>
+                  <textarea
+                     className="flex w-full px-2 py-1 bg-gray-100 min-h-[10rem] capitalize"
+                     value={shippingInformation}
+                     onChange={(e) => setShippingInformation(e.target.value)}
                   />
                </label>
                <p className="mt-4 text-lg font-medium">Images:</p>
@@ -311,9 +354,8 @@ function Product(props: any) {
                   <input
                      type="number"
                      required
-                     min={0}
                      value={price}
-                     onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
+                     onChange={(e) => handleNumberInputChange(e, setPrice)}
                      className="w-full bg-gray-100"
                   />
                </label>
@@ -323,14 +365,13 @@ function Product(props: any) {
                   <input
                      type="number"
                      required
-                     min={0}
                      value={date}
-                     onChange={(e) => setDate(parseFloat(e.target.value) || 0)}
+                     onChange={(e) => handleNumberInputChange(e, setDate)}
                      className="w-full bg-gray-100"
                   />
                </label>
 
-               <div className="flex mt-4">
+               <div className="flex flex-wrap mt-4">
                   {techniquesOptions.map((technique: string) => (
                      <button
                         key={technique}
@@ -346,6 +387,42 @@ function Product(props: any) {
                   ))}
                </div>
 
+               {/* <div className="flex flex-wrap mt-4">
+                  {dimentionsOptions.map((dimention: string) => (
+                     <button
+                        key={dimention}
+                        onClick={() => setDimentionSelected(dimention)}
+                        className={`${
+                           dimention === dimentionSelected
+                              ? "border-2 border-blue-700"
+                              : ""
+                        } px-4 py-2 whitespace-nowrap mr-1 bg-gray-100 rounded-lg hover:bg-gray-200 mb-1 `}
+                     >
+                        {dimention}
+                     </button>
+                  ))}
+               </div> */}
+               {/* <div className="flex items-center gap-2 mt-4">
+                  <p>Limited Edition: </p>
+
+                  <div
+                     className={
+                        "flex items-center w-12 h-6 py-1  rounded-full cursor-pointer md:w-14 md:h-7 " +
+                        (limitedEdition ? "bg-blue-500" : "bg-gray-300")
+                     }
+                     onClick={() => {
+                        setLimitedEdition(!limitedEdition);
+                     }}
+                  >
+                     <div
+                        className={
+                           "bg-white ease-in-out duration-200 md:w-7 md:h-7 h-6 w-6 rounded-full shadow-md transform" +
+                           (limitedEdition ? "transform translate-x-7" : null)
+                        }
+                     ></div>
+                  </div>
+               </div> */}
+
                <select
                   className="my-4 border-b-2 border-gray-300"
                   autoComplete="on"
@@ -357,6 +434,7 @@ function Product(props: any) {
                   <option value="bodies">Bodies</option>
                   <option value="abstracts">Abstracts</option>
                   <option value="memorials">Memorials</option>
+                  <option value="custom">Custom</option>
                </select>
                <select
                   required
@@ -370,6 +448,7 @@ function Product(props: any) {
                </select>
             </div>
          </div>
+
          <Footer />
       </div>
    );

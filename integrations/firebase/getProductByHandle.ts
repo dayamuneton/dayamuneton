@@ -19,7 +19,6 @@ export async function getProductByHandle(
       }
 
       const docSnap = querySnapshot.docs[0];
-      console.log("Product document:", docSnap.data());
       return docSnap.data();
    } catch (error) {
       console.error(error);

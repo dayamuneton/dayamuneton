@@ -20,7 +20,7 @@ function Navbar() {
             onClick={() => setShowNavbar((show) => !show)}
          />
          <ul
-            className={`bg-[#045184]/90 min-h-screen sm:min-h-0 sm:absolute fixed pl-4 pr-8 pt-2 flex-col sm:flex-row gap-4 sm:pt-1 top-0 p-1 flex  ease-in-out duration-300 sm:left-0 ${
+            className={`bg-[#4a23a9] min-h-screen sm:min-h-0 sm:absolute fixed pl-4 pr-8 pt-2 flex-col sm:flex-row gap-4 sm:pt-1 top-0 p-1 flex  ease-in-out duration-300 sm:left-0 ${
                showNavbar ? "left-0" : "-left-full"
             }`}
             ref={navRef}

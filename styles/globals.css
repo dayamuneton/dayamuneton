@@ -8,6 +8,7 @@
 }
 .custom-scrollbar::-webkit-scrollbar {
    width: 0.4rem;
+   height: 0.4rem;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
    border-radius: 0.5rem;
