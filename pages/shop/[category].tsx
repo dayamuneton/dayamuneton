@@ -25,7 +25,7 @@ import Link from "next/link";
 export async function getServerSideProps(context: any) {
    const { category } = context.query;
    const response = await fetch(
-      `http://localhost:3000/shopdata/${category}.json`
+      `${process.env.MY_DOMAIN}/shopdata/${category}.json`
    );
    const data = await response.json();
    const galleryContent: any[] = [];
@@ -51,8 +51,8 @@ export async function getServerSideProps(context: any) {
 }
 
 function Shop({ data }: { data: any }) {
-   const [item, setItem] = useState<any>(null);
-   console.log(data);
+   // const [item, setItem] = useState<any>(null);
+   // console.log(data);
 
    return (
       <div className="flex flex-col items-center min-h-screen overflow-hidden bg-[#ddf2f1]">
@@ -85,7 +85,6 @@ function Shop({ data }: { data: any }) {
                      href={`/shop/${item.category}/${item.handle || item.id}`}
                      key={item.id}
                      className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden"
-                     onClick={() => setItem(item)}
                   >
                      <span className="relative flex w-full aspect-square">
                         <Image
