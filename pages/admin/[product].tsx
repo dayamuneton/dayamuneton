@@ -1,7 +1,14 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { db, storage } from "@/integrations/firebase/firebaseConfig";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+   addDoc,
+   collection,
+   deleteDoc,
+   doc,
+   getDoc,
+   updateDoc,
+} from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -14,6 +21,11 @@ import { dataURLtoBlob } from "@/utils/dataURLtoBlob";
 import Link from "next/link";
 import { CgSpinner } from "react-icons/cg";
 import { capitalizeWords } from "@/utils/capitalizeWords";
+import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import Modal from "@/components/ui/modal";
+import { useRouter } from "next/router";
+import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 
 export async function getServerSideProps(context: any) {
    const { product } = context.query;
@@ -43,6 +55,7 @@ export async function getServerSideProps(context: any) {
 }
 
 function Product(props: any) {
+   const router = useRouter();
    const { product } = props;
    const [loading, setLoading] = useState(false);
    const [name, setName] = useState(product?.name || "");
@@ -81,10 +94,26 @@ function Product(props: any) {
    const [shippingInformation, setShippingInformation] = useState(
       product?.shippingInformation || ""
    );
+   const [showdeleteModal, setShowDeleteModal] = useState(false);
 
    const saveProduct = async (e: any) => {
       setLoading(true);
       e.preventDefault();
+
+      const productByHandle = await getProductByHandle(
+         replaceSpacesWithDashes(name.toLowerCase().trim())
+      );
+      if (product === null && productByHandle?.exists()) {
+         setLoading(false);
+         alert("Title already in use");
+         return;
+      } else if (product && product.id !== productByHandle?.id) {
+         setLoading(false);
+         console.log(product, productByHandle);
+
+         alert("Title already in use!");
+         return;
+      }
 
       if (images.length === 0 || date === "" || price === "") {
          setLoading(false);
@@ -112,7 +141,7 @@ function Product(props: any) {
       }
 
       const data = {
-         name: capitalizeWords(name.toLowerCase()) || "",
+         name: capitalizeWords(name.toLowerCase().trim()) || "",
          description: description || 0,
          images: dbImages || [],
          featuredImage:
@@ -121,14 +150,15 @@ function Product(props: any) {
          date: Number(date) || 0,
          status: status === "available" ? 1 : 0,
          category: category || "",
-         handle: replaceSpacesWithDashes(name.toLowerCase()),
+         handle: replaceSpacesWithDashes(name.toLowerCase().trim()),
          techniques: techniques || [],
          shippingInformation: shippingInformation || "",
          // dimention: dimentionSelected || "",
       };
 
       if (product === null) {
-         await addDoc(collection(db, "products"), data);
+         const newProduct = await addDoc(collection(db, "products"), data);
+         router.push(`/admin/${newProduct.id}`);
       } else {
          await updateDoc(doc(db, "products", product.id), data);
       }
@@ -227,8 +257,45 @@ function Product(props: any) {
       }
    };
 
+   const deleteProduct = async () => {
+      await deleteDoc(doc(db, "products", product?.id));
+      router.push("/admin");
+   };
+
+   const closeModal = () => setShowDeleteModal(false);
+
    return (
       <div className="flex flex-col items-center min-h-screen overflow-hidden bg-[#ddf2f1]">
+         <Modal isOpen={showdeleteModal} onClose={closeModal}>
+            <div className="relative p-3 bg-white rounded-xl">
+               <div className="flex items-center justify-between">
+                  <p className="text-lg font-semibold">Delete Product</p>
+                  <CloseIcon
+                     onClick={closeModal}
+                     className="p-1 rounded-full cursor-pointer top-1 right-1 hover:bg-gray-100"
+                     sx={{ fontSize: "1.7rem" }}
+                  />
+               </div>
+               <p>Are you sure to delete this product?</p>
+               <p className="py-2 my-2 font-medium border-gray-100 border-y-2">
+                  {product?.name}
+               </p>
+               <div className="flex justify-end gap-2 mt-4">
+                  <button
+                     onClick={closeModal}
+                     className="px-4 py-2 bg-gray-100 rounded-lg"
+                  >
+                     Cancel
+                  </button>
+                  <button
+                     onClick={deleteProduct}
+                     className="px-4 py-2 text-white bg-red-600 rounded-lg"
+                  >
+                     Delete
+                  </button>
+               </div>
+            </div>
+         </Modal>
          <Head>
             <title>
                {product?.name
@@ -245,16 +312,22 @@ function Product(props: any) {
          <Navbar />
          <div className="flex flex-col items-center justify-center w-full h-full mt-12 mb-auto">
             <div className="bg-white w-[95vw] max-w-xl mb-4 p-4 rounded-xl flex flex-col">
-               <div className="flex ml-auto">
+               <div className="flex w-full">
                   <Link
                      href="/admin"
-                     className="px-4 py-2 mr-1 font-medium bg-gray-100 rounded-lg hover:bg-gray-100 hover:scale-[1.01] hover:text-red-600"
+                     className="px-4 py-2 mr-1 font-medium bg-gray-100 rounded-lg hover:scale-[1.01] "
                   >
-                     Cancel
+                     <KeyboardBackspaceIcon />
                   </Link>
                   <button
+                     onClick={() => setShowDeleteModal(true)}
+                     className="px-4 py-2 ml-auto mr-1 bg-gray-100 rounded-lg hover:text-red-600 hover:scale-[1.03]"
+                  >
+                     <DeleteIcon />
+                  </button>
+                  <button
                      onClick={saveProduct}
-                     className="ml-auto bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 hover:scale-[1.01] cursor-pointer "
+                     className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 hover:scale-[1.01] cursor-pointer "
                      disabled={loading}
                   >
                      {loading ? <CgSpinner className="animate-spin" /> : "Save"}

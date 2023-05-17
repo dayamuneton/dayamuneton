@@ -1,10 +1,7 @@
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
-export async function getProductByHandle(
-   category: string,
-   productHandle: string
-) {
+export async function getProductByHandle(productHandle: string) {
    try {
       const q = query(
          collection(db, "products"),
@@ -19,7 +16,7 @@ export async function getProductByHandle(
       }
 
       const docSnap = querySnapshot.docs[0];
-      return docSnap.data();
+      return docSnap;
    } catch (error) {
       console.error(error);
       return null;

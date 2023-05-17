@@ -20,9 +20,6 @@ function ProductRow({ product }: { product: any }) {
             </Link>
          </td>
          <td className="py-2 pr-6 min-w-[10ch]"> {product.category} </td>
-         <td className="py-2 pr-6 min-w-[10ch]">
-            {product.status === 1 ? "Available" : "Sold Out"}
-         </td>
          <td className="py-2 pr-6"> {product.price} </td>
       </tr>
    );
@@ -30,14 +27,13 @@ function ProductRow({ product }: { product: any }) {
 
 function ProductsTable({ products }: { products: any }) {
    return (
-      <div className="mb-auto ">
+      <div className="mb-auto max-w-[95vw] overflow-x-auto">
          <table>
             <thead>
                <tr className="bg-gray-100">
                   <th className="py-2 pl-2 pr-4 text-start"></th>
                   <th className="py-2 pl-2 pr-4 text-start">Name</th>
                   <th className="py-2 pr-4 text-start">Category</th>
-                  <th className="py-2 pr-4 text-start">Status</th>
                   <th className="py-2 pr-4 text-start">Price</th>
                </tr>
             </thead>

@@ -1,4 +1,4 @@
-import Modal from "@/components/modal";
+import Modal from "@/components/ui/modal";
 import Navbar from "@/components/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";

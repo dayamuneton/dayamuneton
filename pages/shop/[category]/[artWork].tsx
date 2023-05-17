@@ -14,7 +14,7 @@ import ImageIcon from "@mui/icons-material/Image";
 export async function getServerSideProps(context: any) {
    const { category, artWork } = context.query;
 
-   const product = await getProductByHandle(category || "", artWork || "");
+   const product = await getProductByHandle(artWork || "");
    if (product === null) {
       return {
          redirect: {
@@ -26,7 +26,7 @@ export async function getServerSideProps(context: any) {
 
    return {
       props: {
-         product,
+         product: product.data(),
       },
    };
 }
