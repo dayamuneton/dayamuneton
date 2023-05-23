@@ -88,7 +88,7 @@ function Shop({ data }: { data: any }) {
                   >
                      <span className="relative flex w-full aspect-square">
                         <Image
-                           src={item.images[0]}
+                           src={item.featuredImage || item.images[0]}
                            alt={item.name}
                            fill
                            className="object-cover"

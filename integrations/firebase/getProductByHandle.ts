@@ -1,10 +1,10 @@
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
-export async function getProductByHandle(productHandle: string) {
+export async function getProductByHandle(path: string, productHandle: string) {
    try {
       const q = query(
-         collection(db, "products"),
+         collection(db, path),
          where("handle", "==", productHandle)
       );
 

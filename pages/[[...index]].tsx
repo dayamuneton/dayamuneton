@@ -67,9 +67,8 @@ export default function Home() {
                </span>
             </Link>
             <Link
-               href="https://www.ageofemotions.com"
+               href="/ageofemotions"
                className="relative drop-shadow-lg group"
-               target="_blank"
             >
                <SquareImageHover
                   src="/MyNotes.png"

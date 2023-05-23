@@ -276,7 +276,7 @@ function Community() {
                <div className="flex flex-col items-center gap-3 sm:flex-row">
                   <span className="flex relative mx-auto min-w-[20rem]  sm:min-w-[15rem] h-[23rem]">
                      <Image
-                        src="/LeoMujerSelfie.jpg"
+                        src="/LeoMujer.png"
                         fill
                         alt=""
                         className="object-cover object-top"

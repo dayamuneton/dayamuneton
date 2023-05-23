@@ -38,8 +38,7 @@ function Navbar() {
                Shop
             </Link>
             <Link
-               href="https://www.ageofemotions.com/"
-               target="_blank"
+               href="/ageofemotions"
                className="hover:underline hover:scale-[1.01]"
             >
                My Notes

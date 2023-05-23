@@ -2,18 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function ProductRow({ product }: { product: any }) {
+function ProductRow({ product, type }: { product: any; type: string }) {
    if (!product) return null;
    return (
       <tr className="capitalize border-b-2 border-gray-300">
          <td className="pl-2">
             <span className="relative flex aspect-square h-[3rem] w-[3rem]">
-               <Image src={product.featuredImage} alt={product.name} fill />
+               <Image
+                  src={product.featuredImage || product.images[0]}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+               />
             </span>
          </td>
          <td className="py-2 pr-6 pl-2 max-w-[30ch] min-w-[10rem] flex items-center h-full">
             <Link
-               href={`/admin/${product.id}`}
+               href={`/admin/${type}/${product.id}`}
                className="w-full h-full my-auto"
             >
                {product.name}
@@ -25,7 +30,7 @@ function ProductRow({ product }: { product: any }) {
    );
 }
 
-function ProductsTable({ products }: { products: any }) {
+function ProductsTable({ products, type }: { products: any; type: string }) {
    return (
       <div className="mb-auto max-w-[95vw] overflow-x-auto">
          <table>
@@ -39,7 +44,7 @@ function ProductsTable({ products }: { products: any }) {
             </thead>
             <tbody>
                {products?.map((product: any) => (
-                  <ProductRow key={product.id} product={product} />
+                  <ProductRow key={product.id} product={product} type={type} />
                ))}
             </tbody>
          </table>

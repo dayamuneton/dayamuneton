@@ -4,7 +4,7 @@ import ContactLinks from "./contactLinks";
 
 function Footer() {
    return (
-      <div className="flex flex-col items-center w-full gap-2 p-4 pb-8 text-white bg-black border-t-2 border-white">
+      <footer className="mt-auto flex flex-col items-center w-full gap-2 p-4 pb-8 text-white bg-black border-t-2 border-white">
          <span className="flex flex-col items-center text-sm md:flex-row text-center max-w-[95vw] overflow-hidden">
             <p className="whitespace-nowrap w-full max-w-[95vw]">
                Daya Muneton © All rights reserved.
@@ -35,7 +35,7 @@ function Footer() {
             </a>
          </span>
          <ContactLinks />
-      </div>
+      </footer>
    );
 }
 

@@ -1,39 +1,11 @@
+import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import WithAuth from "@/components/withAuth";
 import Head from "next/head";
-import React, { useState, useEffect } from "react";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useAuth } from "@/context/authContext";
-import AddProduct from "@/components/addProduct";
-import ProductsTable from "@/components/productsTable";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { db } from "@/integrations/firebase/firebaseConfig";
-import { NextPage } from "next";
-import Footer from "@/components/footer";
 import Link from "next/link";
+import React from "react";
 
-export async function getServerSideProps() {
-   const q = query(
-      collection(db, "products"),
-      orderBy("date", "desc"),
-      limit(10)
-   );
-   const products = await getDocs(q);
-   const productsData = products.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-   }));
-   return {
-      props: {
-         products: productsData,
-      },
-   };
-}
-
-function Admin(props: any) {
-   const { logout } = useAuth();
-   const { products } = props;
-
+function Admin() {
    return (
       <div className="flex flex-col items-center justify-center min-h-screen text-lg">
          <Head>
@@ -46,20 +18,21 @@ function Admin(props: any) {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <LogoutIcon
-            onClick={logout}
-            className="absolute cursor-pointer right-2 top-2"
-            sx={{ fontSize: "2rem" }}
-         />
-         <div className="flex flex-col mt-12 mb-auto">
-            {/* <AddProduct /> */}
-            <Link
-               href="/admin/addProduct"
-               className="px-6 py-2 mb-1 ml-auto font-medium rounded bg-slate-100"
-            >
-               Add Product
-            </Link>
-            <ProductsTable products={products} />
+         <div className="flex flex-col items-center justify-center mb-auto mt-14">
+            <div className="flex gap-2">
+               <Link
+                  href="/admin/paintings"
+                  className="px-8 py-2 border-2 rounded-md hover:scale-[1.03]"
+               >
+                  Paintings
+               </Link>
+               <Link
+                  href="/admin/guides"
+                  className="px-8 py-2 border-2 rounded-md hover:scale-[1.03]"
+               >
+                  Guides
+               </Link>
+            </div>
          </div>
          <Footer />
       </div>
