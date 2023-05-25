@@ -92,15 +92,23 @@ function Product(props: any) {
       setLoading(true);
       e.preventDefault();
 
+      const formatedName = name.trim().toLowerCase();
+
+      console.log(replaceSpacesWithDashes(formatedName));
+
       const productByHandle = await getProductByHandle(
          "pdfproducts",
-         replaceSpacesWithDashes(name.toLowerCase().trim())
+         replaceSpacesWithDashes(formatedName)
       );
       if (product === null && productByHandle?.exists()) {
          setLoading(false);
          alert("Title already in use");
          return;
-      } else if (product && product.id !== productByHandle?.id) {
+      } else if (
+         product &&
+         productByHandle &&
+         product.id !== productByHandle?.id
+      ) {
          setLoading(false);
          console.log(product, productByHandle);
 
@@ -108,7 +116,7 @@ function Product(props: any) {
          return;
       }
 
-      if (images.length === 0 || date === "" || price === "") {
+      if (images.length === 0) {
          setLoading(false);
          return;
       }
@@ -131,22 +139,22 @@ function Product(props: any) {
 
          let photoURL = await getDownloadURL(photoRef);
          dbImages.push(photoURL);
-         if (featuredImage === image.dataURL) {
+
+         if (featuredImage == image.dataURL) {
             featuredImageDB = photoURL;
          }
       }
 
       const data = {
-         name: capitalizeWords(name.toLowerCase().trim()) || "",
+         name: capitalizeWords(formatedName) || "",
          description: description || 0,
          images: dbImages || [],
-         featuredImage:
-            featuredImageDB === "" ? dbImages[0] || "" : featuredImageDB,
+         featuredImage: (featuredImageDB === "" && dbImages[0]) || "",
          price: Number(price) || 0,
          date: Number(date) || 0,
          status: status === "available" ? 1 : 0,
          category: category || "",
-         handle: replaceSpacesWithDashes(name.toLowerCase().trim()),
+         handle: replaceSpacesWithDashes(formatedName),
          englishPDF: englishPDF || "",
          spanishPDF: spanishPDF || "",
          beneficts: beneficts || "",
@@ -159,6 +167,8 @@ function Product(props: any) {
          await updateDoc(doc(db, "pdfproducts", product.id), data);
       }
       setFormatedFiles([]);
+      setFeaturedImage(featuredImageDB);
+      setImages(dbImages);
 
       setLoading(false);
       // setFormatedFiles([]);
@@ -175,10 +185,10 @@ function Product(props: any) {
          const reader = new FileReader();
          reader.onload = () => {
             if (reader.readyState === 2) {
-               let index = formatedFiles.findIndex(
-                  (file) => file.dataURL === reader.result
-               );
-               if (index !== -1) return;
+               // let index = formatedFiles.findIndex(
+               //    (file) => file.dataURL === reader.result
+               // );
+               // if (index !== -1) return;
                setFormatedFiles((prev) => [
                   ...prev,
                   {
@@ -225,31 +235,12 @@ function Product(props: any) {
       setImages(newImages);
    };
 
-   const handleTechniqueClick = (technique: string) => {
-      if (techniques.includes(technique)) {
-         removeTechnique(technique);
-         return;
-      }
-      addTechnique(technique);
-   };
-
-   const addTechnique = (technique: string) => {
-      setTechnique((prev) => [...prev, technique]);
-   };
-   const removeTechnique = (technique: string) => {
-      const index = techniques.findIndex((tech) => tech === technique);
-      if (index !== -1) {
-         techniques.splice(index, 1);
-      }
-      setTechnique([...techniques]);
-   };
-
    const handleNumberInputChange = (
       e: React.ChangeEvent<HTMLInputElement>,
       setState: React.Dispatch<React.SetStateAction<string | number>>
    ) => {
       const value = e.target.value;
-      if (/^\d*$/.test(value)) {
+      if (/^[0-9]*[.,]?[0-9]*$/.test(value)) {
          setState(value);
       }
    };
