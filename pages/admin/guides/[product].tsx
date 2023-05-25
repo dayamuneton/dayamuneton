@@ -149,7 +149,7 @@ function Product(props: any) {
          name: capitalizeWords(formatedName) || "",
          description: description || 0,
          images: dbImages || [],
-         featuredImage: (featuredImageDB === "" && dbImages[0]) || "",
+         featuredImage: featuredImageDB || dbImages[0],
          price: Number(price) || 0,
          date: Number(date) || 0,
          status: status === "available" ? 1 : 0,
