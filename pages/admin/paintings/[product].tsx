@@ -107,15 +107,21 @@ function Product(props: any) {
       setLoading(true);
       e.preventDefault();
 
+      const formatedName = name.trim().toLowerCase();
+
       const productByHandle = await getProductByHandle(
          "products",
-         replaceSpacesWithDashes(name.toLowerCase().trim())
+         replaceSpacesWithDashes(formatedName)
       );
       if (product === null && productByHandle?.exists()) {
          setLoading(false);
          alert("Title already in use");
          return;
-      } else if (product && product.id !== productByHandle?.id) {
+      } else if (
+         product &&
+         productByHandle &&
+         product.id !== productByHandle?.id
+      ) {
          setLoading(false);
          console.log(product, productByHandle);
 
@@ -152,16 +158,15 @@ function Product(props: any) {
       }
 
       const data = {
-         name: capitalizeWords(name.toLowerCase().trim()) || "",
+         name: capitalizeWords(formatedName) || "",
          description: description || 0,
          images: dbImages || [],
-         featuredImage:
-            featuredImageDB === "" ? dbImages[0] || "" : featuredImageDB,
+         featuredImage: featuredImageDB || dbImages[0],
          price: Number(price) || 0,
          date: Number(date) || 0,
          status: status === "available" ? 1 : 0,
          category: category || "",
-         handle: replaceSpacesWithDashes(name.toLowerCase().trim()),
+         handle: replaceSpacesWithDashes(formatedName),
          techniques: techniques || [],
          shippingInformation: shippingInformation || "",
          // dimention: dimentionSelected || "",
@@ -175,7 +180,9 @@ function Product(props: any) {
       }
 
       setLoading(false);
-      // setFormatedFiles([]);
+      setFormatedFiles([]);
+      setFeaturedImage(featuredImageDB);
+      setImages(dbImages);
       // setImageSrc("");
       // setName("");
       // setDescription("");
