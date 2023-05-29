@@ -8,26 +8,32 @@ import React, { useState } from "react";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Link from "next/link";
 
-// export async function getStaticPaths() {
-//    const data = ["heads", "bodies", "abstracts", "memorials"];
-
-//    const paths = data.map((item: any) => {
-//       return {
-//          params: { category: item },
-//       };
-//    });
-//    return {
-//       paths,
-//       fallback: false,
-//    };
-// }
+const validCategories = [
+   {
+      category: "heads",
+      bannerImg: "/BannerHeads.png",
+      title: "Heads",
+   },
+   {
+      category: "bodies",
+      title: "Bodies",
+      bannerImg: "/Bannerbodies.png",
+   },
+   {
+      category: "abstracts",
+      bannerImg: "/BannerAbstracts.png",
+      title: "Abstracts",
+   },
+   {
+      category: "memorials",
+      bannerImg: "/BannerConmemorativeArt.png",
+      title: "Memorials",
+   },
+];
 
 export async function getServerSideProps(context: any) {
    const { category } = context.query;
-   const response = await fetch(
-      `${process.env.NEXT_PUBLIC_MY_DOMAIN}/shopdata/${category}.json`
-   );
-   const data = await response.json();
+   const data: any = validCategories.find((item) => item.category === category);
    const galleryContent: any[] = [];
    const galleryQuery = query(
       collection(db, "products"),
