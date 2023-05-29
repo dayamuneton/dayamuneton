@@ -1,5 +1,5 @@
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import { db, storage } from "@/integrations/firebase/firebaseConfig";
 import {
    addDoc,
@@ -140,7 +140,7 @@ function Product(props: any) {
       for (const image of formatedFiles) {
          const photoRef = ref(
             storage,
-            `${image.name}${Math.floor(Math.random() * 1000)}`
+            `${Math.floor(Math.random() * 10000)}${image.name}`
          );
          const blob = dataURLtoBlob(image.dataURL as string); //convert dataURL to Blob
          if (!blob) {

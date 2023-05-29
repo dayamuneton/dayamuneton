@@ -1,8 +1,9 @@
 import Link from "next/link";
-import React, { useState, useRef } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useRef, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useClickOutside } from "@/hooks/clickOutside";
+import { ShoppingCart } from "./shoppingCart";
+import NavbarProfile from "./profile";
 
 function Navbar() {
    const [showNavbar, setShowNavbar] = useState(false);
@@ -19,6 +20,10 @@ function Navbar() {
             }}
             onClick={() => setShowNavbar((show) => !show)}
          />
+         <div className="fixed flex top-2 right-2">
+            <ShoppingCart size="1.7rem" className="" />
+            <NavbarProfile size="1.7rem" className="" />
+         </div>
          <ul
             className={`bg-[#4a23a9] min-h-screen sm:min-h-0 sm:absolute fixed pl-4 pr-8 pt-2 flex-col sm:flex-row gap-4 sm:pt-1 top-0 p-1 flex  ease-in-out duration-300 sm:left-0 ${
                showNavbar ? "left-0" : "-left-full"

@@ -1,11 +1,12 @@
 import CommunityColumn from "@/components/communityColumn";
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState, FormEvent } from "react";
 import { Dancing_Script } from "next/font/google";
+import { useAuth } from "@/context/authContext";
 const dancingScript = Dancing_Script({ subsets: ["latin"] });
 
 function Community() {
@@ -14,6 +15,7 @@ function Community() {
    const [email, setEmail] = useState("");
    const [message, setMessage] = useState("");
    const [anonymously, setAnonymously] = useState(false);
+   const { currentUser } = useAuth();
 
    const sendEmail = async (e: FormEvent) => {
       e.preventDefault();
@@ -49,7 +51,7 @@ function Community() {
 
    return (
       <div
-         className="flex flex-col items-center min-h-screen text-lg "
+         className="flex flex-col items-center h-full min-h-screen text-lg "
          style={{
             backgroundImage:
                "radial-gradient(circle at center, #4a23a9, #5cdde5)",
@@ -212,22 +214,24 @@ function Community() {
                   Publish your name and your country where you live, it is
                   optional, you can write anonymously.
                </p>
-               <p>Write your name, email and your answer.</p>
-               <input
-                  type="text"
-                  className="px-4 py-1 mt-4"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-               />
-               <input
-                  type="email"
-                  required
-                  className="px-4 py-1 mt-4"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-               />
+               <div className={`${currentUser ? "hidden" : ""} flex flex-col`}>
+                  <p>Write your name, email and your answer.</p>
+                  <input
+                     type="text"
+                     className="px-4 py-1 mt-4"
+                     placeholder="Name"
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                  />
+                  <input
+                     type="email"
+                     required
+                     className="px-4 py-1 mt-4"
+                     placeholder="Email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                  />
+               </div>
                <label className="flex my-4 font-medium">
                   <input
                      type="checkbox"
@@ -238,7 +242,11 @@ function Community() {
                      <p className="inline mr-1">Send anonymously</p>
                   </span>
                </label>
-               <label className="flex my-4 font-medium">
+               <label
+                  className={`${
+                     currentUser ? "hidden" : ""
+                  } flex my-4 font-medium`}
+               >
                   <input type="checkbox" required />
                   <span className="pl-2 text-sm">
                      <p className="inline mr-1">
@@ -254,7 +262,7 @@ function Community() {
                   </span>
                </label>
                <p className="mb-6">
-                  By checking this box, you are giving Daya the permission to
+                  By sharing your history, you are giving Daya the permission to
                   use what you wrote and sent to her email to be published on
                   her artwork, social networks, upcoming projects such as books,
                   video podcasts etc.

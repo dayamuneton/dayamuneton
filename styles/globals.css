@@ -15,6 +15,50 @@
    background: gray;
 }
 
+.authInputBox {
+   width: 100%;
+   margin: auto;
+   position: relative;
+   display: flex;
+   align-items: center;
+   margin-block: 0.5rem;
+   /* border-color: #a9d1ff; */
+   /* border-width: 2px; */
+   border-radius: 2px;
+   padding-right: 0.3rem;
+}
+.authInputBox input {
+   width: 100%;
+   display: flex;
+   cursor: pointer;
+   padding: 0.5rem;
+   margin: auto;
+   outline: none;
+   background-color: transparent;
+}
+
+.authInputBox label {
+   position: absolute;
+   top: -0.25rem;
+   left: 0.5rem;
+   transform: translate(0, 50%);
+   /* color: white; */
+   padding: 0.1rem;
+   font-size: 16px;
+   pointer-events: none;
+   transition: 0.3s;
+   height: fit-content;
+   font-size: 0.9rem;
+   z-index: 100;
+}
+.authInputBox input:focus ~ label,
+.authInputBox input:not([value=""]) ~ label {
+   transform: translate(0, -50%);
+   /* color: #03a9f4; */
+
+   /* background-color: white; */
+}
+
 @keyframes wiggle {
    0%,
    75%,

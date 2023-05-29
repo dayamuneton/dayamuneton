@@ -1,5 +1,5 @@
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 import Head from "next/head";
 import Image from "next/image";
@@ -10,11 +10,18 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import MakeAnOffer from "@/components/makeAnOffer";
 import ImageIcon from "@mui/icons-material/Image";
+import { useShop } from "@/context/shopContext";
+import { addItemToCart } from "@/integrations/firebase/shoppingCart/addItemToShoppingCart";
+import { useAuth } from "@/context/authContext";
+import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemFromShoppingCart";
 
 export async function getServerSideProps(context: any) {
    const { category, artWork } = context.query;
 
-   const product = await getProductByHandle("products", artWork || "");
+   const product = await getProductByHandle(
+      "products",
+      decodeURIComponent(artWork) || ""
+   );
    if (product === null) {
       return {
          redirect: {
@@ -35,6 +42,29 @@ function ArtWork({ product }: { product: any }) {
    const [openImage, setOpenImage] = useState(
       product.featuredImage || product.images[0]
    );
+   const { shoppingCart } = useShop();
+   const { currentUser } = useAuth();
+   const router = useRouter();
+   const redirectToCheckout = async () => {
+      if (product.price && product.price < 0.5) return;
+      const response = await fetch(`/api/stripe/create-checkout-session`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+         },
+         body: JSON.stringify({
+            lineItems: [product],
+            cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/shop/${
+               product.category
+            }/${encodeURIComponent(product.handle)}`,
+         }),
+      });
+      const data = await response.json();
+      if (data.url) {
+         router.push(data.url);
+      }
+   };
 
    return (
       <div
@@ -127,11 +157,41 @@ function ArtWork({ product }: { product: any }) {
                   })}
                </p>
                <button
-                  className="w-full px-4 py-2 mt-4 text-lg text-white bg-[#4a23a9] rounded-md cursor-not-allowed"
-                  disabled
+                  className="w-full px-4 py-2 mt-4 text-lg text-white bg-[#4a23a9] rounded-md hover:scale-[1.01] cursor-not-allowed"
                   title="Original Piece Sold Out"
+                  disabled
+
+                  // onClick={redirectToCheckout}
                >
                   Acquire this artwork
+               </button>
+               <button
+                  className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
+                  hidden={
+                     !currentUser ||
+                     shoppingCart?.cartItems?.some(
+                        (item) => item.handle === product.handle
+                     )
+                  }
+                  onClick={() =>
+                     addItemToCart(shoppingCart, product, currentUser.email)
+                  }
+                  title="Original Piece Sold Out"
+               >
+                  Add To Cart
+               </button>
+               <button
+                  className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
+                  hidden={
+                     !currentUser ||
+                     !shoppingCart?.cartItems?.some(
+                        (item) => item.handle === product.handle
+                     )
+                  }
+                  onClick={() => removeCartItem(shoppingCart, product)}
+                  title="Original Piece Sold Out"
+               >
+                  Remove from Cart
                </button>
                <MakeAnOffer initialPrice={product.price} />
 

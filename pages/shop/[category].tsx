@@ -1,5 +1,5 @@
 import Modal from "@/components/ui/modal";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import Head from "next/head";
@@ -25,7 +25,7 @@ import Link from "next/link";
 export async function getServerSideProps(context: any) {
    const { category } = context.query;
    const response = await fetch(
-      `${process.env.MY_DOMAIN}/shopdata/${category}.json`
+      `${process.env.NEXT_PUBLIC_MY_DOMAIN}/shopdata/${category}.json`
    );
    const data = await response.json();
    const galleryContent: any[] = [];
@@ -82,7 +82,9 @@ function Shop({ data }: { data: any }) {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
                   <Link
-                     href={`/shop/${item.category}/${item.handle || item.id}`}
+                     href={`/shop/${item.category}/${
+                        encodeURIComponent(item.handle) || item.id
+                     }`}
                      key={item.id}
                      className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden"
                   >

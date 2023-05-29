@@ -2,7 +2,7 @@
 import Head from "next/head";
 import React from "react";
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 
 function PrivacyPolicy() {
    return (

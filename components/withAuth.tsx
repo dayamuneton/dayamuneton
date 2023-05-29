@@ -16,14 +16,14 @@ const WithAuth = ({ Component, props }: WithAuthComponentProps) => {
 
    useEffect(() => {
       if (!currentUser) {
-         router.push("/login");
+         router.push("/auth/login");
          return;
       }
       const checkAdminStatus = async () => {
          const adminDoc = doc(db, "admins", currentUser.email);
          const adminSnapshot = await getDoc(adminDoc);
          if (!adminSnapshot.exists()) {
-            await logout();
+            router.replace("/");
          }
       };
       checkAdminStatus();

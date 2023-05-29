@@ -22,6 +22,7 @@
     "eslint-config-next": "13.3.4",
     "firebase": "^9.21.0",
     "googleapis": "^118.0.0",
+    "micro": "^10.0.1",
     "next": "13.3.4",
     "nodemailer": "^6.9.1",
     "postcss": "8.4.23",

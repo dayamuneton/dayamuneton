@@ -5,12 +5,12 @@ import SquareImageHover from "@/components/SquareImageHover";
 import Link from "next/link";
 import ContactLinks from "@/components/contactLinks";
 import SupportMyWork from "@/components/supportMyWork";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 
 export default function Home() {
    return (
       <main
-         className="flex flex-col items-center justify-center min-h-screen text-lg text-gray-300"
+         className="flex flex-col items-center justify-center h-full min-h-screen text-lg text-gray-300 "
          style={{
             backgroundImage:
                "radial-gradient(circle at center, #4a23a9, #5cdde5)",

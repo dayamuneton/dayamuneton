@@ -4,7 +4,7 @@ import Head from "next/head";
 import SquareImageHover from "@/components/SquareImageHover";
 import Link from "next/link";
 import ContactLinks from "@/components/contactLinks";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 
 export default function Home() {
    return (
@@ -81,9 +81,15 @@ export default function Home() {
          </div>
          <Link
             href="/shop/memorials"
-            className="mb-20 mt-4 py-2 text-base text-black bg-gradient-to-r from-[#5bdde5] to-[#034daf] rounded-full w-[90vw] max-w-xl drop-shadow-md uppercase font-bold px-4 sm:px-20 animate-wiggle text-center"
+            className=" mt-4 py-3 text-base text-black bg-gradient-to-r from-[#5bdde5] to-[#034daf] rounded-full w-[90vw] max-w-xl drop-shadow-md uppercase font-bold px-4 sm:px-20 text-center"
          >
-            commemorative art for music legends of latin music culture.
+            Memorials
+         </Link>
+         <Link
+            href="/shop/custom"
+            className="mb-20 mt-4 py-3 text-base text-black bg-gradient-to-r from-[#5bdde5] to-[#034daf] rounded-full w-[90vw] max-w-xl drop-shadow-md uppercase font-bold px-4 sm:px-20 animate-wiggle text-center"
+         >
+            Custom Art
          </Link>
       </div>
    );

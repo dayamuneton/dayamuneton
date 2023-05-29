@@ -21,7 +21,7 @@ interface AuthContextProps {
    setCurrentUser: React.Dispatch<React.SetStateAction<any>>;
    currentUser: any;
    loginWithGoogle: () => Promise<unknown>;
-   registerUserWithEmailAndPassword: (
+   signUpUserWithEmailAndPassword: (
       email: string,
       password: string,
       name: string
@@ -56,14 +56,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
    }
 
-   async function registerUserWithEmailAndPassword(
+   async function signUpUserWithEmailAndPassword(
       email: string,
       password: string,
       name: string
    ) {
       try {
          await createUserWithEmailAndPassword(auth, email, password);
-         console.log(auth.currentUser);
 
          if (!auth.currentUser) return;
 
@@ -146,7 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCurrentUser,
       currentUser,
       loginWithGoogle,
-      registerUserWithEmailAndPassword,
+      signUpUserWithEmailAndPassword,
       signInWithEmail,
       logout,
       user,

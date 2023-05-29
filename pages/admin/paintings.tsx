@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import WithAuth from "@/components/withAuth";
 import Head from "next/head";
 import React, { useState, useEffect } from "react";
@@ -48,7 +48,7 @@ function Admin(props: any) {
          <Navbar />
          <LogoutIcon
             onClick={logout}
-            className="absolute cursor-pointer right-2 top-2"
+            className="absolute cursor-pointer right-8 top-2"
             sx={{ fontSize: "2rem" }}
          />
          <div className="flex flex-col mt-12 mb-auto">

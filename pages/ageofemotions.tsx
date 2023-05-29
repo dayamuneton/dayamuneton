@@ -1,5 +1,5 @@
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import SquareImageHover from "@/components/SquareImageHover";
 import Head from "next/head";
 import Image from "next/image";
