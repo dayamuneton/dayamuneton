@@ -36,15 +36,19 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
    }
 
-   switch (event.type) {
-      case "checkout.session.completed":
-         await checkoutSessionCompletedEvent(event.data.object);
-         break;
+   try {
+      switch (event.type) {
+         case "checkout.session.completed":
+            await checkoutSessionCompletedEvent(event.data.object);
+            break;
 
-      default:
-         break;
+         default:
+            break;
+      }
+      res.status(200).send("OK");
+   } catch (error) {
+      res.status(500).send(error);
    }
-   res.status(200).send("OK");
 };
 
 export default webhook;
