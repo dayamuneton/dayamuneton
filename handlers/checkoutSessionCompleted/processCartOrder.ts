@@ -33,6 +33,6 @@ export const processCartOrder = async ({ orderId }: { orderId: string }) => {
       console.log("log", "pdfs order processed", orderId, order);
    } catch (error) {
       console.error("Error processing pdfs order: ", error);
-      throw new Error("Could not process cart order.");
+      throw error;
    }
 };
