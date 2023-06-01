@@ -1,3 +1,4 @@
+import { OrderType } from "@/handlers/checkoutSessionCompleted/event";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
@@ -45,6 +46,12 @@ export default async function handler(
          success_url: success_url || `${req.headers.origin}/`,
          cancel_url: cancel_url || `${req.headers.origin}/`,
          customer_email: email,
+         client_reference_id: order_id || "no_cart_id",
+         metadata: {
+            order_type: (metadata?.order_type as OrderType) ?? "guias_pdf",
+            customerName: metadata?.customerName?.toLowerCase() ?? "no_name",
+            customerEmail: metadata?.customerEmail ?? "no_email",
+         },
       });
 
       res.status(200).json(session);
