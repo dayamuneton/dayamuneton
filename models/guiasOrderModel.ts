@@ -6,7 +6,7 @@ export class GuiaOrder {
    name: string;
    type: string;
    cartItems: any[];
-   isProcessed: boolean;
+   isProcessed: boolean | string;
 
    constructor({
       id,
@@ -21,7 +21,7 @@ export class GuiaOrder {
       name: string;
       type: string;
       cartItems: any[];
-      isProcessed: boolean;
+      isProcessed: boolean | string;
    }) {
       this.id = id || "";
       this.email = email || "";

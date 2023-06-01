@@ -8,6 +8,9 @@ export const processCartOrder = async ({ orderId }: { orderId: string }) => {
       const orderDoc = doc(db, "orders", orderId).withConverter(
          guiaOrderConverter
       );
+      await updateDoc(orderDoc, {
+         isProcessed: "inProcess",
+      });
 
       const orderSnapshot = await getDoc(orderDoc);
 
