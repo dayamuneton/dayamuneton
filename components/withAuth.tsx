@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useAuth } from "@/context/authContext";
 import { doc, getDoc } from "firebase/firestore";
@@ -13,6 +13,7 @@ interface WithAuthComponentProps {
 const WithAuth = ({ Component, props }: WithAuthComponentProps) => {
    const { currentUser, logout } = useAuth();
    const router = useRouter();
+   const [isAdmin, setIsAdmin] = useState(false);
 
    useEffect(() => {
       if (!currentUser) {
@@ -24,12 +25,14 @@ const WithAuth = ({ Component, props }: WithAuthComponentProps) => {
          const adminSnapshot = await getDoc(adminDoc);
          if (!adminSnapshot.exists()) {
             router.replace("/");
+         } else {
+            setIsAdmin(true);
          }
       };
       checkAdminStatus();
    }, [currentUser, router, logout]);
 
-   return currentUser ? <Component {...props} /> : null;
+   return isAdmin ? <Component {...props} /> : <p>Loading...</p>;
 };
 
 export default WithAuth;
