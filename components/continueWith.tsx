@@ -26,7 +26,7 @@ function ContinueWith({ className }: { className?: string }) {
             By continuing, you agree to our
             <Link
                className="mx-1 underline"
-               href="/terms-of-use"
+               href="/legal/terms-of-service"
                target="_blank"
             >
                Terms of Service
@@ -34,7 +34,7 @@ function ContinueWith({ className }: { className?: string }) {
             and
             <Link
                className="mx-1 underline"
-               href="/privacy-policy"
+               href="/legal/privacy-policy"
                target="_blank"
             >
                Privacy Policy.

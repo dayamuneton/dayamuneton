@@ -12,13 +12,13 @@ function Footer() {
             <span className="flex flex-col items-center justify-center w-full gap-1 sm:flex-row sm:ml-1">
                <Link
                   className="pr-2 border-r"
-                  href="/privacy-policy"
+                  href="/legal/privacy-policy"
                   target="_blank"
                >
                   Privacy Policy
                </Link>
 
-               <Link href="/terms-of-use" target="_blank">
+               <Link href="/legal/terms-of-service" target="_blank">
                   Terms Of Use
                </Link>
             </span>

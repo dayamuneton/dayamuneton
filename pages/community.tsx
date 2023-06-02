@@ -253,7 +253,7 @@ function Community() {
                         I accept the terms and conditions
                      </p>
                      <Link
-                        href="/terms-of-use"
+                        href="/legal/terms-of-service"
                         target="_blank"
                         className="underline"
                      >
