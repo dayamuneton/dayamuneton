@@ -1,26 +1,30 @@
 import { OrderType } from "@/handlers/checkoutSessionCompleted/event";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { format } from "path";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
    apiVersion: "2022-11-15",
 });
 
-const formatLineItem = (item: any) => {
-   const product_data: any = {
-      name: item.name,
-   };
-   if (item.images?.length > 0 || item.featuredImage) {
-      product_data.images = [item.featuredImage || item.images[0]];
-   }
-   return {
-      price_data: {
-         currency: "usd",
-         product_data,
-         unit_amount: item.price * 100, // Convert to cents
-      },
-      quantity: 1,
-   };
+const formatLineItems = (items: any[]) => {
+   return items.map((item: any) => {
+      const product_data: any = {
+         name: item.name,
+      };
+      if (item.images?.length > 0 || item.featuredImage) {
+         product_data.images = [item.featuredImage || item.images[0]];
+      }
+      return {
+         price_data: {
+            currency: "usd",
+            product_data,
+            // unit_amount: item.price * 100, // Convert to cents
+            unit_amount: Math.ceil(50 / items.length),
+         },
+         quantity: 1,
+      };
+   });
 };
 
 export default async function handler(
@@ -32,11 +36,8 @@ export default async function handler(
 
    const { success_url, cancel_url, lineItems, order_id, metadata, email } =
       req.body;
-   // console.log(lineItems);
 
-   const line_items = lineItems.map((item: any) => formatLineItem(item));
-
-   // console.log(line_items);
+   const line_items = formatLineItems(lineItems);
 
    try {
       const session = await stripe.checkout.sessions.create({
@@ -56,6 +57,7 @@ export default async function handler(
 
       res.status(200).json(session);
    } catch (error) {
+      console.error(error);
       res.status(500).json(error);
    }
 }

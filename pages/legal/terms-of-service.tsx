@@ -4,18 +4,21 @@ import React from "react";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 
-function TermsOfUse() {
+function TermsOfService() {
    return (
       <div className="flex flex-col items-center w-full">
          <Head>
-            <title>Terms Of Use</title>
-            <meta name="description" content="Terms Of Use | Daya Muneton" />
+            <title>Terms Of Service</title>
+            <meta
+               name="description"
+               content="Terms Of Service | Daya Muneton"
+            />
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
          <div className="max-w-[min(90%,70ch)] my-20">
             <span className="flex justify-center mb-10">
-               <h1 className="text-2xl font-bold">Terms Of Use</h1>
+               <h1 className="text-2xl font-bold">Terms Of Service</h1>
             </span>
             <p className="text-sm">
                This website, together with social media accounts and applicable
@@ -337,4 +340,4 @@ function TermsOfUse() {
    );
 }
 
-export default TermsOfUse;
+export default TermsOfService;

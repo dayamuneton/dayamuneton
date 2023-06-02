@@ -42,7 +42,6 @@ export const addItemToCart = async (
       } else if (language === "english") {
          data.mailerlite_group = data.englishPDF;
       }
-      data.price = 0.5;
 
       await updateDoc(cartDoc, {
          cartItems: arrayUnion(data),

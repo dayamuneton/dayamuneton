@@ -6,8 +6,11 @@ import {
    AcordionContent,
    AcordionIcon,
 } from "@/components/ui/acordion";
+import { sendWaMessageURL } from "@/utils/sendWaMessageURL";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 function Custom() {
@@ -29,14 +32,14 @@ function Custom() {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <h1 className="mb-4 text-2xl font-bold">Custom Art Commisions</h1>
+         <h1 className="mb-4 text-2xl font-bold">Custom Art Commissions</h1>
          <div className="w-[95vw] max-w-xl mb-20">
             <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full text-center">Digital Art Format</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2">
+               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
                   <div className="flex items-center w-full max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
@@ -55,9 +58,15 @@ function Custom() {
                         <p className="text-xl text-white">$175 USD</p>
                      </div>
                   </div>
-                  <button className="text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md">
+                  <Link
+                     target="_blank"
+                     href={sendWaMessageURL(
+                        "Daya, I want a custom digital art"
+                     )}
+                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                  >
                      Daya, I want a custom digital art
-                  </button>
+                  </Link>
                </AcordionContent>
             </Acordion>
             <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
@@ -65,7 +74,7 @@ function Custom() {
                   <p className="w-full text-center">Acrylic On Canvas</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2">
+               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
@@ -88,19 +97,23 @@ function Custom() {
                         </p>
                      </div>
                   </div>
-                  <button className="text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md">
+                  <Link
+                     target="_blank"
+                     href={sendWaMessageURL(
+                        "Daya, I want a custom art on canvas"
+                     )}
+                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                  >
                      Daya, I want a custom art on canvas
-                  </button>
+                  </Link>
                </AcordionContent>
             </Acordion>
             <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
-                  <p className="w-full leading-5 text-center">
-                     Digital Art Format
-                  </p>
+                  <p className="w-full leading-5 text-center">Art Prints</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2">
+               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
@@ -118,7 +131,7 @@ function Custom() {
                         </p>
                         <p className="mt-2">
                            Giclée, use pigments instead of dyes which are
-                           archival and have a longevity of 200+ years.
+                           archival and have a longevity of hundreds of years
                         </p>
 
                         <p className="mt-2 text-xl leading-5 text-white">
@@ -126,12 +139,22 @@ function Custom() {
                         </p>
                      </div>
                   </div>
-                  <button className="text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md">
+                  <Link
+                     target="_blank"
+                     href={sendWaMessageURL(
+                        "Daya, I want a reproduction of your art"
+                     )}
+                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                  >
                      Daya, I want a reproduction of your art
-                  </button>
-                  <button className="text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md">
+                  </Link>
+                  <Link
+                     target="_blank"
+                     href={sendWaMessageURL("Daya, I want a custom art print")}
+                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                  >
                      Daya, I want a custom art print
-                  </button>
+                  </Link>
                </AcordionContent>
             </Acordion>
          </div>
