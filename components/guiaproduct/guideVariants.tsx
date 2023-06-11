@@ -19,7 +19,7 @@ function GuideVariants({
 
    useEffect(() => {
       const variant = router.query.variant as string;
-      setSelectedVariant(product.variants.find((v) => v.title === variant)!);
+      setSelectedVariant(product.variants?.find((v) => v.title === variant)!);
    }, [product.variants, router, setSelectedVariant]);
 
    const handleSetSelectedVariant = (variant: GuiaProductVariant) => {
@@ -33,7 +33,7 @@ function GuideVariants({
       );
       setSelectedVariant(variant);
       if (variant.image !== "") {
-         setImage(variant.image);
+         setImage(variant.image || "");
       }
    };
 
