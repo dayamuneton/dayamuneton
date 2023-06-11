@@ -3,6 +3,7 @@ import { db } from "@/integrations/firebase/firebaseConfig";
 import { OrderType } from "../checkoutSessionCompleted/event";
 import { reportInitializeCheckoutEvent } from "@/integrations/convertions/events";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
+import { GuiaProductVariant } from "@/models/guiaProductModel";
 
 export const createPdfsCheckout = async ({
    cartItems,
@@ -11,7 +12,6 @@ export const createPdfsCheckout = async ({
    cancel_url,
    success_url,
    cartId,
-   language,
 }: {
    cartItems: any[];
    email: string;
@@ -19,7 +19,6 @@ export const createPdfsCheckout = async ({
    cancel_url: string;
    success_url: string;
    cartId?: string;
-   language?: string;
 }) => {
    try {
       const ordersRef = collection(db, "orders");
@@ -27,16 +26,6 @@ export const createPdfsCheckout = async ({
       let cartItemsFormatted = cartItems.map((item) => {
          return removeUndefinedEntriesFromObject(item);
       });
-
-      if (language) {
-         cartItemsFormatted = cartItemsFormatted.map((item) => ({
-            ...item,
-            name: `${item.name} ${
-               language === "spanish" ? "(spanish)" : "(English)"
-            }`,
-         }));
-      }
-      // console.log(cartItemsFormatted);
 
       const orderRef = await addDoc(ordersRef, {
          cartItems: cartItemsFormatted,

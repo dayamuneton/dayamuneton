@@ -30,7 +30,7 @@ import WithAuth from "@/components/withAuth";
 
 export async function getServerSideProps(context: any) {
    const { product } = context.query;
-   if (product === "addProduct") {
+   if (product === "new") {
       return {
          props: {
             product: null,
@@ -174,7 +174,7 @@ function Product(props: any) {
 
       if (product === null) {
          const newProduct = await addDoc(collection(db, "products"), data);
-         router.push(`/admin/paintings/${newProduct.id}`);
+         router.replace(`/admin/paintings/${newProduct.id}`);
       } else {
          await updateDoc(doc(db, "products", product.id), data);
       }
@@ -341,7 +341,7 @@ function Product(props: any) {
                   <button
                      onClick={() => setShowDeleteModal(true)}
                      className={`px-4 py-2 mr-1 bg-gray-100 rounded-lg hover:text-red-600 hover:scale-[1.03] ${
-                        router.query.product === "addProduct" && "hidden"
+                        router.query.product === "new" && "hidden"
                      }`}
                   >
                      <DeleteIcon />

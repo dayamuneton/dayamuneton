@@ -26,11 +26,13 @@ function CartItems({ className }: { className?: string }) {
       <div className={`${className} text-gray-100 `}>
          {shoppingCart?.cartItems?.map((item) => (
             <div
-               key={item.handle}
+               key={item.name}
                className="w-full flex flex-col p-4 mb-2 bg-gradient-to-l to-[#5cdde5] from-[#4a23a9] drop-shadow-md rounded-lg hover:scale-[1.005] "
             >
                <Link
-                  href={item.handle}
+                  href={`/${item.variants ? "ageofemotions" : "shop"}/${
+                     item.category
+                  }/${item.handle}`}
                   className="flex flex-col items-center w-full sm:items-start sm:flex-row"
                >
                   <span className="relative flex min-w-[7rem] w-[7rem] aspect-square sm:mr-3">

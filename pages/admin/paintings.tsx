@@ -4,7 +4,6 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "@/context/authContext";
-import AddProduct from "@/components/addProduct";
 import ProductsTable from "@/components/productsTable";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
@@ -61,7 +60,7 @@ function Admin(props: any) {
                </Link>
 
                <Link
-                  href="/admin/paintings/addProduct"
+                  href="/admin/paintings/new"
                   className="px-6 py-2 mb-1 ml-auto font-medium rounded bg-slate-100"
                >
                   Add Product

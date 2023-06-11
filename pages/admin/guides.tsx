@@ -4,7 +4,6 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "@/context/authContext";
-import AddProduct from "@/components/addProduct";
 import ProductsTable from "@/components/productsTable";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
@@ -31,7 +30,6 @@ export async function getServerSideProps() {
 }
 
 function AdminGuides(props: any) {
-   const { logout } = useAuth();
    const { products } = props;
 
    return (
@@ -46,11 +44,7 @@ function AdminGuides(props: any) {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <LogoutIcon
-            onClick={logout}
-            className="absolute cursor-pointer right-8 top-2"
-            sx={{ fontSize: "2rem" }}
-         />
+
          <div className="flex flex-col mt-12 mb-auto">
             {/* <AddProduct /> */}
             <div>
@@ -62,7 +56,7 @@ function AdminGuides(props: any) {
                </Link>
 
                <Link
-                  href="/admin/guides/addProduct"
+                  href="/admin/guides/new"
                   className="px-6 py-2 mb-1 ml-auto font-medium rounded bg-slate-100"
                >
                   Add Product

@@ -7,7 +7,7 @@ import { db } from "@/integrations/firebase/firebaseConfig";
 
 interface WithAuthComponentProps {
    Component: any;
-   props: any;
+   props?: any;
 }
 
 const WithAuth = ({ Component, props }: WithAuthComponentProps) => {

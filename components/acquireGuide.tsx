@@ -1,15 +1,17 @@
 import { useAuth } from "@/context/authContext";
 import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
+import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
+import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Acordion, AcordionButton, AcordionContent } from "./ui/acordion";
 
 function AcquireGuide({
    product,
-   language,
+   variant,
 }: {
-   product: any;
-   language: string;
+   product: GuiaProduct;
+   variant?: GuiaProductVariant;
 }) {
    const { currentUser } = useAuth();
    const [name, setName] = useState(currentUser?.displayName || "");
@@ -17,15 +19,20 @@ function AcquireGuide({
 
    const redirectToCheckout = async (e: any) => {
       e.preventDefault();
+      const data = removeUndefinedEntriesFromObject(product);
+      if (variant) {
+         data.name = `${product.name} (${variant.title})`;
+         data.mailerlite_group = variant.mailerlite_group;
+      }
+
       const response = await createPdfsCheckout({
-         cartItems: [product],
+         cartItems: [data],
          cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/ageofemotions/${
             product.category
-         }/${encodeURIComponent(product.handle)}`,
+         }/${encodeURIComponent(product.handle || "")}`,
          email,
          name,
          success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/ageofemotions/`,
-         language,
       });
 
       if (response.url) {

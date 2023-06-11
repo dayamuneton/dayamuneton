@@ -11,6 +11,8 @@ import { useShop } from "@/context/shopContext";
 import { useAuth } from "@/context/authContext";
 import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemFromShoppingCart";
 import { useRouter } from "next/router";
+import GuideVariants from "@/components/guiaproduct/guideVariants";
+import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
 
 export async function getServerSideProps(context: any) {
    const { category, pdfproduct } = context.query;
@@ -35,19 +37,20 @@ export async function getServerSideProps(context: any) {
    };
 }
 
-function PdfProduct({ product }: { product: any }) {
+function PdfProduct({ product }: { product: GuiaProduct }) {
    const router = useRouter();
    const { shoppingCart } = useShop();
    const { currentUser } = useAuth();
-   const [language, setLanguage] = useState(
-      (router.query.lang as string) || "english"
-   );
+   // const [language, setLanguage] = useState(
+   // (router.query.lang as string) || "english"
+   // );
    const [openImage, setOpenImage] = useState(
-      product.featuredImage || product.images[0]
+      product.featuredImage || product.images?.[0] || ""
    );
-   const handleLanguageChange = (lang: string) => {
-      setLanguage(lang);
-   };
+   const [selectedVariant, setSelectedVariant] = useState<GuiaProductVariant>();
+   // const handleLanguageChange = (lang: string) => {
+   //    setLanguage(lang);
+   // };
 
    return (
       <div
@@ -73,10 +76,10 @@ function PdfProduct({ product }: { product: any }) {
                   <div className="flex flex-col-reverse items-center gap-1 md:items-start md:flex-row ">
                      <div
                         className={`${
-                           product.images.length > 1 ? "flex" : "hidden"
-                        } flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto custom-scrollbar max-w-[90vw] md:w-fit md:h-[15vw]`}
+                           (product.images?.length || 0) > 1 ? "flex" : "hidden"
+                        } flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto custom-scrollbar max-w-[90vw] md:w-fit md:max-h-[35vw]`}
                      >
-                        {product.images.map((image: string) => (
+                        {product.images?.map((image: string) => (
                            <span
                               key={image}
                               onClick={() => setOpenImage(image)}
@@ -84,7 +87,7 @@ function PdfProduct({ product }: { product: any }) {
                            >
                               <Image
                                  src={image}
-                                 alt={product.name}
+                                 alt={product.name || ""}
                                  fill
                                  className="object-cover"
                               />
@@ -95,7 +98,7 @@ function PdfProduct({ product }: { product: any }) {
                      <span className="relative flex w-[85vw] h-[85vw] max-w-[30rem] md:w-[35vw] md:h-[35vw]   max-h-[30rem] aspect-square">
                         <Image
                            src={openImage}
-                           alt={product.name}
+                           alt={product.name || ""}
                            fill
                            className="object-cover"
                         />
@@ -112,55 +115,24 @@ function PdfProduct({ product }: { product: any }) {
                   <h1 className="text-2xl font-bold text-center">
                      {product.name}
                   </h1>
-                  <span className="flex gap-1 my-3">
-                     <button
-                        className={`bg-gray-100 hover:scale-[1.03] px-4 py-1 rounded-full ${
-                           language === "english" && "border-2 border-black"
-                        }`}
-                        onClick={() => {
-                           router.replace(
-                              {
-                                 pathname: router.pathname,
-                                 query: { ...router.query, lang: "english" },
-                              },
-                              undefined,
-                              {
-                                 shallow: true,
-                              }
-                           );
-                           handleLanguageChange("english");
-                        }}
-                     >
-                        English
-                     </button>
-                     <button
-                        className={`bg-gray-100 hover:scale-[1.03] px-4 py-1 rounded-full ${
-                           language === "spanish" && "border-2 border-black"
-                        }`}
-                        onClick={() => {
-                           router.replace(
-                              {
-                                 pathname: router.pathname,
-                                 query: { ...router.query, lang: "spanish" },
-                              },
-                              undefined,
-                              { shallow: true }
-                           );
-                           handleLanguageChange("spanish");
-                        }}
-                     >
-                        Spanish
-                     </button>
-                  </span>
+                  <GuideVariants
+                     product={product}
+                     setImage={setOpenImage}
+                     setSelectedVariant={setSelectedVariant}
+                     selectedVariant={selectedVariant}
+                  />
 
                   <p className="text-lg font-bold">
-                     {product.price.toLocaleString("en-US", {
+                     {product.price?.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                      })}
                      USD
                   </p>
-                  <AcquireGuide product={product} language={language} />
+                  <AcquireGuide
+                     product={product}
+                     variant={selectedVariant || product.variants?.[0]}
+                  />
 
                   <button
                      className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
@@ -175,9 +147,7 @@ function PdfProduct({ product }: { product: any }) {
                            shoppingCart,
                            product,
                            currentUser.email,
-                           router.asPath,
-                           `${product.name} (${language})`,
-                           language
+                           selectedVariant || product.variants?.[0]
                         )
                      }
                      title="Original Piece Sold Out"
@@ -202,7 +172,11 @@ function PdfProduct({ product }: { product: any }) {
                   <p className="mb-3 text-lg font-bold text-center capitalize">
                      The Beneficts of Reading and Viewing this Guide
                   </p>
-                  <p dangerouslySetInnerHTML={{ __html: product.beneficts }} />
+                  <span
+                     dangerouslySetInnerHTML={{
+                        __html: product.beneficts || "",
+                     }}
+                  />
                </div>
             </div>
          </div>

@@ -104,7 +104,7 @@ function PDFCategory({ data }: { data: any }) {
                   <Link
                      href={`/ageofemotions/${item.category}/${
                         encodeURIComponent(item.handle) || item.id
-                     }?lang=english`}
+                     }`}
                      key={item.id}
                      className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden"
                   >

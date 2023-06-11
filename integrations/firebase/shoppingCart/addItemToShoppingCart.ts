@@ -9,21 +9,25 @@ import {
 import { createShoppingCart } from "./createShoppingCart";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import { ShoppingCart } from "@/models/shoppingCartModel";
+import { GuiaProductVariant } from "@/models/guiaProductModel";
 // import { GuiaProduct } from "@/models/guiaProductModel";
 
 export const addItemToCart = async (
    shoppingCart: ShoppingCart | null,
    item: any,
    email: string,
-   customHandle?: string,
-   customName?: string,
-   language?: string
+   variant?: GuiaProductVariant
 ) => {
    try {
       let cart: any = shoppingCart || (await createShoppingCart(email));
+      const data = removeUndefinedEntriesFromObject(item);
+      if (variant) {
+         data.name = `${item.name} (${variant.title})`;
+         data.mailerlite_group = variant.mailerlite_group;
+      }
 
       const itemExists = cart.cartItems.some(
-         (product: any) => product.handle === item.handle
+         (product: any) => product.name === data.name
       );
 
       if (itemExists) {
@@ -34,22 +38,13 @@ export const addItemToCart = async (
 
       const cartDoc = doc(db, "shoppingCarts", cart.id);
 
-      const data = removeUndefinedEntriesFromObject(item);
-      data.handle = customHandle || item.handle;
-      data.name = customName || item.name;
-      if (language === "spanish") {
-         data.mailerlite_group = data.spanishPDF;
-      } else if (language === "english") {
-         data.mailerlite_group = data.englishPDF;
-      }
-
       await updateDoc(cartDoc, {
          cartItems: arrayUnion(data),
          subTotal: increment(data.price as number),
          updatedAt: serverTimestamp(),
       });
 
-      const cartItems = [...cart.cartItems, item];
+      const cartItems = [...cart.cartItems, data];
       const cartData = { ...cart, cartItems };
 
       return new ShoppingCart(cartData);
