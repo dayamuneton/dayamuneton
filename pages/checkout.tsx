@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import CartItems from "@/components/checkout/cartItems";
 import Navbar from "@/components/navbar/navbar";
 import Footer from "@/components/footer";
@@ -9,12 +9,20 @@ import { ShoppingCart } from "@/components/navbar/shoppingCart";
 import { useShop } from "@/context/shopContext";
 import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
 import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/router";
 // import FooterBottom from "@/components/footer/footerBottom";
 // import ShopNowButton from "@/components/checkout/shopNowButton";
 
 function Checkout() {
    const { shoppingCart } = useShop();
    const { currentUser } = useAuth();
+   const router = useRouter();
+
+   useEffect(() => {
+      if (!currentUser) {
+         router.push("/auth/login");
+      }
+   }, [currentUser, router]);
 
    const redirectToCheckout = async (e: any) => {
       e.preventDefault();
@@ -24,6 +32,7 @@ function Checkout() {
          email: currentUser.email,
          name: currentUser.displayName,
          success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}`,
+         cartId: shoppingCart?.id,
       });
 
       if (response.url) {

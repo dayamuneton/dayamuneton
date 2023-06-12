@@ -22,7 +22,9 @@ export const subscribeCustomerToGroups = async (
    }
 
    let filteredGroups = typeof groups === "string" ? [groups] : groups;
-   filteredGroups = filteredGroups.filter((group) => group !== undefined);
+   filteredGroups = filteredGroups.filter(
+      (group) => group !== undefined || group !== ""
+   );
 
    const payload = {
       email: email,

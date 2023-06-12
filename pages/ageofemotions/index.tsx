@@ -67,7 +67,7 @@ function Ageofemotions() {
             >
                <span className="aspect-[1/1.2] relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
                   <Image
-                     src="/AOEEmotions.png"
+                     src="/FreebiesNewImage.png"
                      alt="Stories behind the songs"
                      fill
                      className="group-hover:scale-[1.05] object-cover"
@@ -85,7 +85,7 @@ function Ageofemotions() {
             >
                <span className="aspect-[1/2] relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
                   <Image
-                     src="/AOEChemistry.png"
+                     src="/FreebiesNewImage.png"
                      alt="Stories behind the songs"
                      fill
                      className="group-hover:scale-[1.05] object-cover"

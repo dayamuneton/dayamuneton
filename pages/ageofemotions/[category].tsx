@@ -12,7 +12,8 @@ const validCategories = [
    {
       category: "freebies",
       title: "Freebies",
-      subTitle: "Gifts for you",
+      subTitle:
+         "All Because We Care! We're Gifting You Free Guides to Help Unleash Your Emotions Through Art.",
    },
    {
       category: "colors",
@@ -69,7 +70,13 @@ function PDFCategory({ data }: { data: any }) {
    // console.log(data);
 
    return (
-      <div className="flex flex-col items-center min-h-screen overflow-hidden bg-[#ddf2f1]">
+      <div
+         className="flex flex-col items-center min-h-screen overflow-hidden "
+         style={{
+            backgroundImage:
+               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
+         }}
+      >
          <Head>
             <title>{data.title} | Daya Muneton</title>
             <meta name="description" content="Daya Muneton" />
@@ -101,14 +108,14 @@ function PDFCategory({ data }: { data: any }) {
             <p className="max-w-sm mb-8 text-sm font-medium text-center">
                {data.subTitle}
             </p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 mb-12 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
                   <Link
                      href={`/ageofemotions/${item.category}/${
                         encodeURIComponent(item.handle) || item.id
                      }`}
                      key={item.id}
-                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden"
+                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-gradient-to-r from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg"
                   >
                      <span className="relative flex w-full aspect-square">
                         <Image
@@ -123,7 +130,7 @@ function PDFCategory({ data }: { data: any }) {
                            Sold Out
                         </p>
                      )}
-                     <p className="text-xl font-medium capitalize">
+                     <p className="px-4 py-1 my-auto text-lg font-medium text-center capitalize">
                         {item.name}
                      </p>
                   </Link>

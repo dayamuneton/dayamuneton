@@ -41,16 +41,11 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
    const router = useRouter();
    const { shoppingCart } = useShop();
    const { currentUser } = useAuth();
-   // const [language, setLanguage] = useState(
-   // (router.query.lang as string) || "english"
-   // );
+
    const [openImage, setOpenImage] = useState(
       product.featuredImage || product.images?.[0] || ""
    );
    const [selectedVariant, setSelectedVariant] = useState<GuiaProductVariant>();
-   // const handleLanguageChange = (lang: string) => {
-   //    setLanguage(lang);
-   // };
 
    return (
       <div
@@ -122,7 +117,7 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
                      selectedVariant={selectedVariant}
                   />
 
-                  <p className="text-lg font-bold">
+                  <p className="text-lg font-bold" hidden={product.price === 0}>
                      {product.price?.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",

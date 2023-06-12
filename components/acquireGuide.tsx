@@ -40,6 +40,10 @@ function AcquireGuide({
       }
    };
    // console.log(language);
+   let buttonText = "Buy this guide";
+   if (product.price === 0) {
+      buttonText = "Acquire Guide";
+   }
 
    if (currentUser) {
       return (
@@ -47,14 +51,14 @@ function AcquireGuide({
             onClick={redirectToCheckout}
             className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md hover:scale-[1.005] px-4 py-2"
          >
-            Buy this guide
+            {buttonText}
          </button>
       );
    }
    return (
       <Acordion className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md hover:scale-[1.005]">
          <AcordionButton className="w-full px-4 py-2 ">
-            Buy this guide
+            {buttonText}
          </AcordionButton>
          <AcordionContent>
             <form
