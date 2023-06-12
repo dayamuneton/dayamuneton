@@ -1,8 +1,5 @@
 import { storage } from "@/integrations/firebase/firebaseConfig";
-import {
-   GuiaProductVariant,
-   GuiaProductVariantClass,
-} from "@/models/guiaProductModel";
+import { GuiaProductVariant } from "@/models/guiaProductModel";
 import { dataURLtoBlob } from "@/utils/dataURLtoBlob";
 import { randomRange } from "@/utils/random";
 import {
@@ -14,18 +11,6 @@ import {
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface AdminProductContextProps {
-   // formatedFiles: {
-   //    dataURL: string | ArrayBuffer | null;
-   //    name: string;
-   // }[];
-   // setFormatedFiles: React.Dispatch<
-   //    React.SetStateAction<
-   //       {
-   //          dataURL: string | ArrayBuffer | null;
-   //          name: string;
-   //       }[]
-   //    >
-   // >;
    setFeaturedImage: React.Dispatch<React.SetStateAction<string>>;
    featuredImage: string;
    images: string[];
@@ -55,31 +40,13 @@ export function AdminProductProvider({
    children: React.ReactNode;
    product: any;
 }) {
-   const [formatedFiles, setFormatedFiles] = useState<
-      {
-         dataURL: string | ArrayBuffer | null;
-         name: string;
-      }[]
-   >([]);
-
    const [images, setImages] = useState<string[]>(product?.images || []);
    const [featuredImage, setFeaturedImage] = useState(
       product?.featuredImage || product?.images[0] || ""
    );
 
    const [variants, setVariants] = useState<GuiaProductVariant[]>(
-      product?.variants || [
-         new GuiaProductVariantClass({
-            id: `${Math.floor(randomRange(0, 1000000))}`,
-            mailerlite_group: product.englishPDF,
-            title: "english",
-         }),
-         new GuiaProductVariantClass({
-            id: `${Math.floor(randomRange(0, 1000000))}`,
-            mailerlite_group: product.spanishPDF,
-            title: "spanish",
-         }),
-      ]
+      product?.variants || []
    );
 
    const uploadToStorage = async (
@@ -166,8 +133,6 @@ export function AdminProductProvider({
    };
 
    const value = {
-      // formatedFiles,
-      // setFormatedFiles,
       images,
       setImages,
       featuredImage,

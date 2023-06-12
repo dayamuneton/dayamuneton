@@ -75,7 +75,7 @@ function Ageofemotions() {
                </span>
                <span className="flex flex-col items-center w-full mt-2 font-bold text-center text-black uppercase cursor-pointer ">
                   <p className="flex mb-1 text-base leading-4 text-center">
-                     Emotions Through Colors
+                     Art Your Emotions
                   </p>
                </span>
             </Link>

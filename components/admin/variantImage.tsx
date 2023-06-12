@@ -1,8 +1,5 @@
 import { useAdminProduct } from "@/context/adminGuidesContext";
-import {
-   GuiaProductVariant,
-   GuiaProductVariantClass,
-} from "@/models/guiaProductModel";
+import { GuiaProductVariant } from "@/models/guiaProductModel";
 import Image from "next/image";
 import React, { useState } from "react";
 import Modal from "../ui/modal";
@@ -17,13 +14,12 @@ function VariantImage({ variant }: { variant: GuiaProductVariant }) {
    const [showModal, setShowModal] = useState(false);
    const openModal = () => setShowModal(true);
    const closeModal = () => setShowModal(false);
-   // console.log(variant.image);
 
    const setVariantImage = (image: string) => {
       setVariants((prev) => {
          return prev.map((v) => {
             if (v.id === variant.id) {
-               return new GuiaProductVariantClass({ ...v, image: image });
+               return new GuiaProductVariant({ ...v, image: image });
             }
             return v;
          });

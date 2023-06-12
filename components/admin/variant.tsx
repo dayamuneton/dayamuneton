@@ -7,8 +7,7 @@ import Modal from "../ui/modal";
 import CloseIcon from "@mui/icons-material/Close";
 
 function Variant({ variant }: { variant: GuiaProductVariant }) {
-   const [currentVariant, setCurrentVariant] = useState(variant);
-   const { variants, setVariants } = useAdminProduct();
+   const { setVariants } = useAdminProduct();
    const [title, setTitle] = useState(variant.title);
    const [mailerliteGroup, setMailerliteGroup] = useState(
       variant.mailerlite_group
@@ -27,12 +26,6 @@ function Variant({ variant }: { variant: GuiaProductVariant }) {
             return v;
          })
       );
-
-      setCurrentVariant((prevVariant) => ({
-         ...prevVariant,
-         title: title?.toLowerCase() || "",
-         mailerlite_group: mailerliteGroup,
-      }));
    }, [title, mailerliteGroup, setVariants, variant.id]);
    const deleteVariant = () => {
       setVariants((prev) => prev.filter((v) => v.id !== variant.id));

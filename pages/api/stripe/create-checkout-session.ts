@@ -19,8 +19,8 @@ const formatLineItems = (items: any[]) => {
          price_data: {
             currency: "usd",
             product_data,
-            unit_amount: item.price * 100, // Convert to cents
-            // unit_amount: Math.ceil(50 / items.length),
+            // unit_amount: item.price * 100, // Convert to cents
+            unit_amount: Math.ceil(50 / items.length),
          },
          quantity: 1,
       };
@@ -53,6 +53,7 @@ export default async function handler(
             customerName: metadata?.customerName?.toLowerCase() ?? "no_name",
             customerEmail: metadata?.customerEmail ?? "no_email",
          },
+         allow_promotion_codes: true,
       });
 
       res.status(200).json(session);

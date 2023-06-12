@@ -16,13 +16,15 @@ const validCategories = [
    },
    {
       category: "colors",
-      title: "Emotions Through Colors",
-      subTitle: "How art can help improve the body's perception of emotions",
+      title: "Art Your Emotions",
+      subTitle:
+         "Downloadable Guides to Enhance Body's Perception of Emotions Through Art, Creative Exploration, and Mindful Reflection",
    },
    {
       category: "chemistry",
       title: "Chemistry Of Emotions",
-      subTitle: "Unlocking the Power of Science in Emotional Education",
+      subTitle:
+         "This isn't for those who manage emotions as our ancestors did, unable to explain the biochemical processes of emotions within the body and, thus, attributing them to beliefs. Instead, it's designed for those who embrace the latest scientific knowledge to improve their emotional well-being.",
    },
 ];
 

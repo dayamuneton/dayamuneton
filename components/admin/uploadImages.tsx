@@ -6,16 +6,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAdminProduct } from "@/context/adminGuidesContext";
 import ImageUpload from "./imageUpload";
 
-function UploadImages({ product }: { product: any }) {
-   const {
-      setImages,
-      images,
-      setFeaturedImage,
-      featuredImage,
-      setVariants,
-      handleImageUpload,
-      deleteImage,
-   } = useAdminProduct();
+function UploadImages() {
+   const { images, setFeaturedImage, featuredImage, deleteImage } =
+      useAdminProduct();
 
    return (
       <div>

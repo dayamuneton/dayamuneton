@@ -1,53 +1,49 @@
 import { QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 
-export interface GuiaProduct {
-   id?: string;
-   name?: string;
-   description?: string;
-   price?: number;
-   priceForMembers?: number;
-   images?: string[];
-   category?: string;
-   handle?: string;
-   variants?: GuiaProductVariant[];
-   mailerlite_group?: string;
-   date?: number;
-   beneficts?: string;
-   featuredImage?: string;
-}
-
-export class GuiaProductClass implements GuiaProduct {
-   id = "";
-   name = "";
-   description = "";
-   price = 0;
-   priceForMembers = 0;
-   images: string[] = [];
-   category = "";
-   handle = "";
-   variants: GuiaProductVariant[] = [];
-   mailerlite_group = "";
-   beneficts = "";
+export class GuiaProduct {
+   id: string;
+   name: string;
+   description: string;
+   price: number;
+   priceForMembers: number;
+   images: string[];
+   category: string;
+   handle: string;
+   variants: GuiaProductVariant[];
+   mailerlite_group: string;
+   beneficts: string;
    date: number;
-   featuredImage = "";
+   featuredImage: string;
 
-   constructor(
-      {
-         id,
-         name,
-         description,
-         price,
-         priceForMembers,
-         images,
-         category,
-         handle,
-         variants,
-         mailerlite_group,
-         beneficts,
-         date,
-         featuredImage,
-      }: GuiaProduct = {} as GuiaProduct
-   ) {
+   constructor({
+      id,
+      name,
+      description,
+      price,
+      priceForMembers,
+      images,
+      category,
+      handle,
+      variants,
+      mailerlite_group,
+      beneficts,
+      date,
+      featuredImage,
+   }: {
+      id: string;
+      name?: string;
+      description?: string;
+      price?: number;
+      priceForMembers?: number;
+      images?: string[];
+      category?: string;
+      handle?: string;
+      variants?: GuiaProductVariant[];
+      mailerlite_group?: string;
+      beneficts?: string;
+      date?: number;
+      featuredImage?: string;
+   }) {
       this.id = id || "";
       this.name = name || "";
       this.description = description || "";
@@ -64,29 +60,25 @@ export class GuiaProductClass implements GuiaProduct {
    }
 }
 
-export interface GuiaProductVariant {
-   title?: string;
-   image?: string;
-   id?: string;
-   price?: number;
-   mailerlite_group?: string;
-}
-
-export class GuiaProductVariantClass implements GuiaProductVariant {
-   title = "";
-   image = "";
-   id = "";
-   price = 0;
-   mailerlite_group = "";
-   constructor(
-      {
-         title,
-         image,
-         id,
-         price,
-         mailerlite_group,
-      }: GuiaProductVariant = {} as GuiaProductVariant
-   ) {
+export class GuiaProductVariant {
+   id: string;
+   title: string;
+   image: string;
+   price: number;
+   mailerlite_group: string;
+   constructor({
+      title,
+      image,
+      id,
+      price,
+      mailerlite_group,
+   }: {
+      id: string;
+      title?: string;
+      image?: string;
+      price?: number;
+      mailerlite_group?: string;
+   }) {
       this.id = id || "";
       this.title = title || "";
       this.image = image || "";
@@ -95,7 +87,7 @@ export class GuiaProductVariantClass implements GuiaProductVariant {
    }
 }
 export const productConverter = {
-   toFirestore: (product: GuiaProductClass) => {
+   toFirestore: (product: GuiaProduct) => {
       return product;
    },
    fromFirestore: (
@@ -103,10 +95,10 @@ export const productConverter = {
       options: SnapshotOptions
    ) => {
       const data = snapshot.data(options) as GuiaProduct;
-      const product = new GuiaProductClass({
+      const product = new GuiaProduct({
          ...data,
          variants: data.variants?.map(
-            (variant) => new GuiaProductVariantClass(variant)
+            (variant) => new GuiaProductVariant(variant)
          ),
       });
 

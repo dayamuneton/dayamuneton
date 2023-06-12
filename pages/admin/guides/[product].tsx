@@ -1,12 +1,10 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
-import { db, storage } from "@/integrations/firebase/firebaseConfig";
+import { db } from "@/integrations/firebase/firebaseConfig";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import Head from "next/head";
 import React, { useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { replaceSpacesWithDashes } from "@/utils/replaceSpacesWithDashes";
-import { dataURLtoBlob } from "@/utils/dataURLtoBlob";
 import Link from "next/link";
 import { CgSpinner } from "react-icons/cg";
 import { capitalizeWords } from "@/utils/capitalizeWords";
@@ -22,19 +20,7 @@ import {
    AdminProductProvider,
    useAdminProduct,
 } from "@/context/adminGuidesContext";
-import VariantImage from "@/components/admin/variantImage";
-import {
-   GuiaProduct,
-   GuiaProductVariant,
-   GuiaProductVariantClass,
-} from "@/models/guiaProductModel";
-import Variant from "@/components/admin/variant";
-import {
-   Acordion,
-   AcordionButton,
-   AcordionContent,
-   AcordionIcon,
-} from "@/components/ui/acordion";
+import { GuiaProduct } from "@/models/guiaProductModel";
 import Variants from "@/components/admin/variants";
 
 export async function getServerSideProps(context: any) {
@@ -211,7 +197,7 @@ function Product({ product }: { product: GuiaProduct }) {
                      onChange={(e) => setDescription(e.target.value)}
                   />
                </label>
-               <UploadImages product={product} />
+               <UploadImages />
 
                <label className="flex mt-4">
                   <p className="mr-4">Price:</p>

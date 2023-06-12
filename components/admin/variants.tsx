@@ -1,8 +1,5 @@
 import { useAdminProduct } from "@/context/adminGuidesContext";
-import {
-   GuiaProductVariant,
-   GuiaProductVariantClass,
-} from "@/models/guiaProductModel";
+import { GuiaProductVariant } from "@/models/guiaProductModel";
 import { randomRange } from "@/utils/random";
 import React, { useState } from "react";
 import Variant from "./variant";
@@ -11,7 +8,7 @@ function Variants({ className }: { className: string }) {
    const { variants, setVariants } = useAdminProduct();
    const addVariant = () => {
       setVariants([
-         new GuiaProductVariantClass({
+         new GuiaProductVariant({
             id: `${Math.floor(randomRange(1, 1000000))}`,
          }),
          ...variants,
