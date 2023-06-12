@@ -16,7 +16,7 @@ import React from "react";
 function Custom() {
    return (
       <div
-         className="flex flex-col items-center min-h-screen overflow-hidden pt-14"
+         className="flex flex-col items-center min-h-screen overflow-hidden text-[#d7d7d7] pt-14"
          style={{
             backgroundImage:
                "radial-gradient(circle at center, #4a23a9, #5cdde5)",
@@ -33,13 +33,18 @@ function Custom() {
          </Head>
          <Navbar />
          <h1 className="mb-4 text-2xl font-bold">Custom Art Commissions</h1>
-         <div className="w-[95vw] max-w-xl mb-20">
+         <div className="w-[95vw] max-w-xl mb-20 text-center">
+            <p>
+               {
+                  "Hi, thank you for your interest in my art! I'd be delighted to discuss your commission request. Check the following link if WhatsApp isn't available for you, please feel free to email me directly at info@dayamuneton.com or here in Instagram. I look forward to creating something special for you."
+               }
+            </p>
             <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full text-center">Digital Art Format</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
+               <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center w-full max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
@@ -74,7 +79,7 @@ function Custom() {
                   <p className="w-full text-center">Acrylic On Canvas</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
+               <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
@@ -113,7 +118,7 @@ function Custom() {
                   <p className="w-full leading-5 text-center">Art Prints</p>
                   <AcordionIcon className="text-white" />
                </AcordionButton>
-               <AcordionContent className="px-4 pb-2 flex flex-col items-center">
+               <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
