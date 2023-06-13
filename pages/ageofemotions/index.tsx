@@ -50,7 +50,7 @@ function Ageofemotions() {
                href="/ageofemotions/freebies"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
                      src="/Freebies.png"
                      alt="Stories behind the songs"
@@ -68,7 +68,7 @@ function Ageofemotions() {
                href="/ageofemotions/colors"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
                      src="/ArtEmotions.png"
                      alt="Stories behind the songs"
@@ -86,7 +86,7 @@ function Ageofemotions() {
                href="/ageofemotions/chemistry"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
                      src="/ChemistryEmotions.png"
                      alt="Stories behind the songs"
