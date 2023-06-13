@@ -32,7 +32,7 @@ function AcquireGuide({
          }/${encodeURIComponent(product.handle || "")}`,
          email,
          name,
-         success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/ageofemotions/`,
+         success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/thankyou/`,
       });
 
       if (response.url) {

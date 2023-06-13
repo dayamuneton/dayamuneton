@@ -107,7 +107,7 @@ function Shop({ data }: { data: any }) {
                            Sold Out
                         </p>
                      )}
-                     <p className="text-xl font-medium capitalize">
+                     <p className="text-lg font-medium capitalize">
                         {item.name}
                      </p>
                   </Link>

@@ -58,7 +58,9 @@ export const createPdfsCheckout = async ({
       });
 
       if (cartItemsFormatted.length === 0) {
-         return {};
+         return {
+            url: success_url,
+         };
       }
 
       const orderRef = await addDoc(ordersRef, {

@@ -46,7 +46,7 @@ function Navbar() {
                href="/ageofemotions"
                className="hover:underline hover:scale-[1.01]"
             >
-               My Notes
+               Emotional Education
             </Link>
          </ul>
       </nav>

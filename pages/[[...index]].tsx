@@ -26,11 +26,20 @@ export default function Home() {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
-            <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
+         <Link href="/about" className="flex flex-col items-center">
+            <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
+               <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
+            </span>
+            <p>@DayaMuneton</p>
+         </Link>
+         {/* <p className="my-2">Hi, thank you for supporting by</p> */}
+         <span className="my-6 w-[95vw] max-w-md text-center text-base">
+            <p>Welcome to my art gallery!</p>
+
+            <p>Each art acquisition supports free emotional education.</p>
+            <p>{"Together, we're empowering individuals through art."}</p>
+            <p> Thanks for joining this transformative journey.</p>
          </span>
-         <p>@DayaMuneton</p>
-         <p className="my-2">Hi, thank you for supporting by</p>
          {/* <div className="text-center py-2 text-lg text-black bg-gradient-to-r from-[#5bdde5] to-[#034daf] rounded-full w-[90vw] max-w-xl hover:scale-[1.01] drop-shadow-md">
             Click here to support my work
          </div> */}
@@ -48,7 +57,7 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem] overflow-hidden"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
                   <p>Community</p>
                </span>
             </Link>
@@ -62,7 +71,7 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem] overflow-hidden"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
                   <p>Shop</p>
                </span>
             </Link>
@@ -76,9 +85,9 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem] overflow-hidden"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
-                  <p>My</p>
-                  <p>Notes</p>
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
+                  <p>Emotional</p>
+                  <p>Education</p>
                </span>
             </Link>
          </div>

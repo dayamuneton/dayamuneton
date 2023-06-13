@@ -34,11 +34,14 @@ function Custom() {
          <Navbar />
          <h1 className="mb-4 text-2xl font-bold">Custom Art Commissions</h1>
          <div className="w-[95vw] max-w-xl mb-20 text-center">
-            <p>
-               {
-                  "Hi, thank you for your interest in my art! I'd be delighted to discuss your commission request. Check the following link if WhatsApp isn't available for you, please feel free to email me directly at info@dayamuneton.com or here in Instagram. I look forward to creating something special for you."
-               }
-            </p>
+            <span>
+               <p>Hello, and thanks for your interest in my art! </p>
+               <p>
+                  {
+                     "I'm excited to discuss your commission request. If WhatsApp isn't accessible, please feel free to directly email me at info@dayamuneton.com."
+                  }
+               </p>
+            </span>
             <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full text-center">Digital Art Format</p>
@@ -48,7 +51,7 @@ function Custom() {
                   <div className="flex items-center w-full max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
-                           src="/CustomArtPainting.png"
+                           src="/DigitalArtFormat.png"
                            fill
                            alt=""
                            className="object-cover"
@@ -68,7 +71,7 @@ function Custom() {
                      href={sendWaMessageURL(
                         "Daya, I want a custom digital art"
                      )}
-                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                     className="text-center text-white bg-gradient-to-l to-[#4a23a9] from-[#5cdde5] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
                   >
                      Daya, I want a custom digital art
                   </Link>
@@ -83,7 +86,7 @@ function Custom() {
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
-                           src="/CustomArtPainting.png"
+                           src="/AcrylicOnCanvas.png"
                            fill
                            alt=""
                            className="object-cover"
@@ -122,7 +125,7 @@ function Custom() {
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
                         <Image
-                           src="/CustomArtPainting.png"
+                           src="/ArtPrints.png"
                            fill
                            alt=""
                            className="object-cover"

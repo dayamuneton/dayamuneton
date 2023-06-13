@@ -10,7 +10,7 @@ import StarIcon from "@mui/icons-material/Star";
 function Ageofemotions() {
    return (
       <div
-         className="flex flex-col items-center min-h-screen text-lg "
+         className="flex flex-col items-center min-h-screen text-lg text-gray-300"
          style={{
             backgroundImage:
                "radial-gradient(circle at center, #4a23a9, #5cdde5)",
@@ -26,9 +26,12 @@ function Ageofemotions() {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
+         <Link
+            href="/about"
+            className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md"
+         >
             <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
-         </span>
+         </Link>
          <span className="flex flex-col items-center max-w-xs text-sm text-center w-[95vw]">
             <p className="text-lg">@DayaMuneton</p>
             <p>Artist</p>
@@ -47,9 +50,9 @@ function Ageofemotions() {
                href="/ageofemotions/freebies"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-[1/1.2] relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
                   <Image
-                     src="/FreebiesNewImage.png"
+                     src="/Freebies.png"
                      alt="Stories behind the songs"
                      fill
                      className="group-hover:scale-[1.05] object-cover"
@@ -65,9 +68,9 @@ function Ageofemotions() {
                href="/ageofemotions/colors"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-[1/1.2] relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
                   <Image
-                     src="/FreebiesNewImage.png"
+                     src="/ArtEmotions.png"
                      alt="Stories behind the songs"
                      fill
                      className="group-hover:scale-[1.05] object-cover"
@@ -83,9 +86,9 @@ function Ageofemotions() {
                href="/ageofemotions/chemistry"
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
-               <span className="aspect-[1/2] relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
+               <span className="aspect-square relative flex h-[30vw] sm:h-[10vw] max-h-[20rem] my-[10%] ">
                   <Image
-                     src="/FreebiesNewImage.png"
+                     src="/ChemistryEmotions.png"
                      alt="Stories behind the songs"
                      fill
                      className="group-hover:scale-[1.05] object-cover"

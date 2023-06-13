@@ -7,6 +7,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Link from "next/link";
+import Footer from "@/components/footer";
 
 const validCategories = [
    {
@@ -71,7 +72,7 @@ function PDFCategory({ data }: { data: any }) {
 
    return (
       <div
-         className="flex flex-col items-center min-h-screen overflow-hidden "
+         className="flex flex-col items-center min-h-screen overflow-hidden text-gray-300"
          style={{
             backgroundImage:
                "radial-gradient(circle at center, #4a23a9, #5cdde5)",
@@ -87,13 +88,16 @@ function PDFCategory({ data }: { data: any }) {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
+         <Link
+            href="/about"
+            className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md"
+         >
             <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
-         </span>
+         </Link>
          <span className="flex flex-col items-center max-w-xs text-sm text-center w-[95vw]">
             <p className="text-lg">@DayaMuneton</p>
             <p>Artist</p>
-            <p className="my-2">
+            {/* <p className="my-2">
                Inspired by a deeply personal experience, I created this
                PDF-Guides as a means to overcome the difficult period when my
                son grappled with a lack of interest in life.
@@ -101,7 +105,7 @@ function PDFCategory({ data }: { data: any }) {
             <p>
                Now, I am committed to sharing the invaluable lessons we have
                learned, offering them to you for guidance and support. ​
-            </p>
+            </p> */}
          </span>
          <div className="flex flex-col items-center w-[95vw] max-w-3xl h-full mt-8 ">
             <h1 className="text-3xl font-bold tracking-wider">{data.title}</h1>
@@ -115,7 +119,7 @@ function PDFCategory({ data }: { data: any }) {
                         encodeURIComponent(item.handle) || item.id
                      }`}
                      key={item.id}
-                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-gradient-to-r from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg"
+                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-gradient-to-r from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg text-black"
                   >
                      <span className="relative flex w-full aspect-square">
                         <Image
@@ -136,7 +140,19 @@ function PDFCategory({ data }: { data: any }) {
                   </Link>
                ))}
             </div>
+            <span className="flex flex-col items-center max-w-xs text-sm text-center w-[95vw]">
+               <p className="my-2">
+                  Inspired by a deeply personal experience, I created this
+                  PDF-Guides as a means to overcome the difficult period when my
+                  son grappled with a lack of interest in life.
+               </p>
+               <p>
+                  Now, I am committed to sharing the invaluable lessons we have
+                  learned, offering them to you for guidance and support. ​
+               </p>
+            </span>
          </div>
+         <Footer />
       </div>
    );
 }

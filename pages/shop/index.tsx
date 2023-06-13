@@ -25,10 +25,12 @@ export default function Home() {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
-            <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
-         </span>
-         <p>@DayaMuneton</p>
+         <Link href="/about" className="flex flex-col items-center">
+            <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
+               <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
+            </span>
+            <p>@DayaMuneton</p>
+         </Link>
 
          <ContactLinks />
          <div className="flex flex-col gap-3 mt-4 sm:flex-row">
