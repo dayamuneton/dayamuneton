@@ -27,7 +27,7 @@ const formatLineItems = (items: any[]) => {
          price_data: {
             currency: "usd",
             product_data,
-            unit_amount,
+            unit_amount: itemPriceForDevEnv,
          },
          quantity: 1,
       };

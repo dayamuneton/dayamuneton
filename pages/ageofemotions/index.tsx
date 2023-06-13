@@ -102,7 +102,7 @@ function Ageofemotions() {
             </Link>
          </div>
          <span className="text-center my-14">
-            <p>PDF GUIDES -Digital download</p>
+            <p>PDF GUIDES - Digital download</p>
             <p>
                817 Sales | <StarIcon />
                <StarIcon />
