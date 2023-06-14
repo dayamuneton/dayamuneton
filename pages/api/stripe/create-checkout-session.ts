@@ -1,33 +1,22 @@
 import { OrderType } from "@/handlers/checkoutSessionCompleted/event";
 import type { NextApiRequest, NextApiResponse } from "next";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-   apiVersion: "2022-11-15",
-});
+import { stripe } from "@/integrations/stripe/stripeConfig";
 
 const formatLineItems = (items: any[]) => {
    return items.map((item: any) => {
       const product_data: any = {
          name: item.name,
       };
-      if (item.images?.length > 0 || item.featuredImage) {
+      if (item.images?.length > 0) {
          product_data.images = [item.featuredImage || item.images[0]];
       }
       const priceInCents = item.price * 100;
-      // Calculate a price per item for the development environment, such that the total
-      // cost of all items will be arround 50 cents. This is done to ensure a fixed, low total
-      // cost during testing.
-      const itemPriceForDevEnv = Math.ceil(50 / items.length);
-      const unit_amount =
-         process.env.NODE_ENV === "development"
-            ? itemPriceForDevEnv
-            : priceInCents;
+
       return {
          price_data: {
             currency: "usd",
             product_data,
-            unit_amount,
+            unit_amount: priceInCents,
          },
          quantity: 1,
       };

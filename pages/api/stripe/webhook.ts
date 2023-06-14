@@ -3,7 +3,10 @@ import { stripe } from "@/integrations/stripe/stripeConfig";
 import { buffer } from "micro";
 import checkoutSessionCompletedEvent from "@/handlers/checkoutSessionCompleted/event";
 
-const signingSecret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET;
+const signingSecret =
+   process.env.NODE_ENV === "production"
+      ? process.env.STRIPE_WEBHOOK_SIGNING_SECRET
+      : process.env.STRIPE_TEST_WEBHOOK_SIGNING_SECRET;
 
 export const config = {
    api: {
@@ -40,6 +43,10 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
       switch (event.type) {
          case "checkout.session.completed":
             await checkoutSessionCompletedEvent(event.data.object);
+            break;
+         case "payment_intent.succeeded":
+            console.log(event);
+
             break;
 
          default:

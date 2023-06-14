@@ -36,7 +36,7 @@ function Checkout() {
       });
 
       if (response.url) {
-         window.open(response.url, "_blank");
+         router.push(response.url);
       }
    };
 

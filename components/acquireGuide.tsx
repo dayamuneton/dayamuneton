@@ -3,6 +3,7 @@ import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
 import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Acordion, AcordionButton, AcordionContent } from "./ui/acordion";
 
@@ -13,6 +14,7 @@ function AcquireGuide({
    product: GuiaProduct;
    variant?: GuiaProductVariant;
 }) {
+   const router = useRouter();
    const { currentUser } = useAuth();
    const [name, setName] = useState(currentUser?.displayName || "");
    const [email, setEmail] = useState(currentUser?.email || "");
@@ -36,7 +38,7 @@ function AcquireGuide({
       });
 
       if (response.url) {
-         window.open(response.url, "_blank");
+         router.push(response.url);
       }
    };
    // console.log(language);
