@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import StarIcon from "@mui/icons-material/Star";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const testimonies = [
    {
@@ -27,70 +25,28 @@ const testimonies = [
 ];
 
 function Testimonies() {
-   const [currentTestimonyIndex, setCurrentTestimonyIndex] = useState(0);
-   const [previousTestimonyIndex, setPreviousTestimonyIndex] = useState(0);
-
-   const goToPreviousTestimony = () => {
-      setPreviousTestimonyIndex(currentTestimonyIndex);
-      setCurrentTestimonyIndex((prevIndex) =>
-         prevIndex > 0 ? prevIndex - 1 : testimonies.length - 1
-      );
-   };
-
-   const goToNextTestimony = () => {
-      setPreviousTestimonyIndex(currentTestimonyIndex);
-      setCurrentTestimonyIndex((prevIndex) =>
-         prevIndex < testimonies.length - 1 ? prevIndex + 1 : 0
-      );
-   };
-
-   let transitionDirection =
-      currentTestimonyIndex > previousTestimonyIndex ? "forward" : "backward";
-
-   transitionDirection =
-      currentTestimonyIndex === 0 &&
-      previousTestimonyIndex === testimonies.length - 1
-         ? "forward"
-         : transitionDirection;
-
-   transitionDirection =
-      currentTestimonyIndex === testimonies.length - 1 &&
-      previousTestimonyIndex === 0
-         ? "backward"
-         : transitionDirection;
-
    return (
-      <div className="flex w-[90vw] max-w-xl gap-4 overflow-hidden justify-center items-center flex-col">
-         <div
-            key={currentTestimonyIndex}
-            style={{
-               backgroundImage:
-                  "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-            }}
-            className={`flex flex-col min-w-[23vw] max-w-sm rounded-xl px-8 pt-12 pb-8 transition-all duration-500 drop-shadow-md ${
-               transitionDirection === "forward"
-                  ? "animate-slide-in-right"
-                  : "animate-slide-in-left"
-            }`}
-         >
-            <p>{testimonies[currentTestimonyIndex].message}</p>
-            <p className="ml-auto">{testimonies[currentTestimonyIndex].name}</p>
-            <span className="text-yellow-300">
-               <StarIcon />
-               <StarIcon />
-               <StarIcon />
-               <StarIcon />
-               <StarIcon />
-            </span>
-         </div>
-         <div className="flex justify-between w-full max-w-sm mb-4">
-            <button onClick={goToPreviousTestimony}>
-               <ChevronLeftIcon style={{ fontSize: "2.5rem" }} />
-            </button>
-            <button onClick={goToNextTestimony}>
-               <ChevronRightIcon style={{ fontSize: "2.5rem" }} />
-            </button>
-         </div>
+      <div className="grid md:w-[90vw] md:max-w-2xl md:auto-cols-[60%] lg:auto-cols-[40%] auto-cols-[95%] grid-flow-col max-w-[90vw] lg:w-[90vw] lg:max-w-5xl gap-4  overflow-x-auto  overscroll-x-contain snap-mandatory snap-x hide-scrollbar px-4 rounded-xl mb-8">
+         {testimonies.map((testimony) => (
+            <div
+               key={testimony.message}
+               style={{
+                  backgroundImage:
+                     "radial-gradient(circle at center, #4a23a9, #5cdde5)",
+               }}
+               className={`flex flex-col  w-full  rounded-xl px-8 pt-12 pb-8 transition-all duration-500 drop-shadow-md snap-start mx-auto `}
+            >
+               <p>{testimony.message}</p>
+               <p className="ml-auto">{testimony.name}</p>
+               <span className="text-yellow-300">
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+                  <StarIcon />
+               </span>
+            </div>
+         ))}
       </div>
    );
 }
