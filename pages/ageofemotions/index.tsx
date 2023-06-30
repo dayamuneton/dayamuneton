@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
+import Testimonies from "@/components/testimonies";
 
 function Ageofemotions() {
    return (
@@ -150,6 +151,8 @@ function Ageofemotions() {
                {" It's"} time to embrace a more evolved way of life.
             </p>
          </div>
+
+         <Testimonies />
 
          <Footer />
       </div>
