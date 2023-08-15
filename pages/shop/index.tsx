@@ -44,7 +44,7 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem]"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
                   <p>FORGOTTEN BODIES</p>
                   {/* <p className="text-sm">ART COLLECTION</p> */}
                </span>
@@ -59,17 +59,19 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem]"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-center cursor-pointer">
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute top-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-center cursor-pointer">
                   {/* <p>Shop</p> */}
                   <p>CELEBRATING OUR </p>
                   <p>MUSICAL HERITAGE</p>
                   {/* <p>ART COLLECTION</p> */}
                </span>
             </Link>
-            <Link
-               href="/shop/abstracts"
-               className="relative group drop-shadow-lg bg-gradient-to-r to-[#5bdde5] from-[#034daf] rounded-3xl overflow-hidden"
+            <button
+               // href="/shop"
+               className="relative group drop-shadow-lg bg-gradient-to-r to-[#5bdde5] from-[#034daf] rounded-3xl overflow-hidden cursor-not-allowed"
+               title="Coming Soon"
                // target="_blank"
+               disabled
             >
                <SquareImageHover
                   src="/newshopdayashop.png"
@@ -77,11 +79,11 @@ export default function Home() {
                   width="w-[80vw] sm:w-[27vw] max-w-[20rem] rounded-[2rem]"
                   scale="group-hover:scale-[1.05]"
                />
-               <span className="text-xl text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
+               <span className="text-lg text-black whitespace-nowrap max-w-[25vw] font-bold uppercase absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
                   {/* <p></p> */}
                   <p>{`DAYA'S SHOP`}</p>
                </span>
-            </Link>
+            </button>
          </div>
          {/* <Link
             href="/shop/memorials"
