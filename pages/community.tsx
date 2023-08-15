@@ -98,8 +98,9 @@ function Community() {
                   className="bg-gradient-to-tr from-[#754af1] to-[#51eace] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     ¿ What songs make you feel that love is bad and it is
-                     better not to fall in love?
+                     Which song makes you believe that love is harmful, {`it's`}
+                     better not to feel it, and even better to avoid falling in
+                     love?
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
                      <Image
@@ -113,8 +114,9 @@ function Community() {
                      47+ people feel confused about love
                   </span>
                   <p className="mb-auto text-sm">
-                     Share what you feel when you listen to that song. ¿Do you
-                     feel that love makes you feel weak?​
+                     Describe your emotions when that song plays. Does it stir
+                     up feelings of vulnerability or weakness associated with
+                     love?
                   </p>
                </CommunityColumn>
                <CommunityColumn
@@ -122,8 +124,8 @@ function Community() {
                   className="bg-gradient-to-br to-[#a78ef9] from-[#51eace] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     ¿ What song makes you feel that if your loved one goes
-                     away, he takes your love with him/her?
+                     Which song gives you the feeling that if your loved one
+                     departs, they take your love along with them?
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
                      <Image
@@ -137,9 +139,10 @@ function Community() {
                      39+ people feel emptiness
                   </span>
                   <p className="mb-auto text-sm">
-                     Share if you feel an emptiness when you listen to that song
-                     that reminds your loved one which is gone ¿What did your
-                     partner do to make you feel so much love?
+                     Share your feelings of emptiness when you listen to that
+                     song, the one that brings back memories of your departed
+                     loved one. What special things did they do to stir up such
+                     intense love within you?
                   </p>
                </CommunityColumn>
                <CommunityColumn
@@ -147,8 +150,9 @@ function Community() {
                   className="bg-gradient-to-tr from-[#a78ef9] to-[#c7f7db] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     ¿ What special song do you feel that a good love heals you,
-                     motivates you, makes you feel inspired and excited?
+                     {"What's"} that special song that makes you feel as if a
+                     good partner/lover/companion heals you, motivates you,
+                     inspires you, and excites you?
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
                      <Image
@@ -162,10 +166,10 @@ function Community() {
                      54+ people feel love heels
                   </span>
                   <p className="mb-auto text-sm">
-                     Share how good you feel when you listen to that song that
-                     reminds you of that love that inspires you, makes you feel
-                     strong and brave to move forward. ¿Do you feel that love
-                     makes you feel alive?
+                     Reflect on the warmth and strength you feel when you listen
+                     to that song that reminds you of an inspiring love, a love
+                     that emboldens you and pushes you forward. Does this love
+                     fill you with a sense of vitality?
                   </p>
                </CommunityColumn>
             </div>
@@ -175,7 +179,7 @@ function Community() {
                <h2 className="mx-auto mb-4 text-2xl font-medium tracking-wider text-center">
                   What is this activity about?
                </h2>
-               <div className="flex flex-col sm:flex-row">
+               <div className="flex flex-col items-center sm:flex-row">
                   <span className="!aspect-square !min-w-[15rem] relative  max-w-[70vw] mx-auto mb-8">
                      <Image
                         src="/MujerYourCanvas1.png"
@@ -185,34 +189,49 @@ function Community() {
                   </span>
                   <div className="flex flex-col px-8">
                      <p>
-                        Registration will give you access to share what you
-                        feel, you will be part of a collective work of art.
+                        By registering, {"you're"} not only gaining the chance
+                        to share your feelings but also becoming part of a
+                        collective art masterpiece.
                      </p>
                      <p>
-                        The purpose of this activity is for you to discover what
-                        has been the cultural impact of music in your life and
-                        how it has influenced the way you love
+                        This activity is designed to help you uncover the
+                        cultural impact of music on your life and how it has
+                        shaped your concept of love. What does your unique
+                        perception of love look like?
                      </p>
-                     <p>¿What does your vision of love look like?</p>
+                     <p>
+                        Your participation is invaluable as it fuels the
+                        creation of art and literature, all grounded in
+                        authentic, real-life narratives. Thank you for
+                        contributing to this meaningful cause.
+                     </p>
+                     {/* <p>¿What does your vision of love look like?</p>
                      <p>
                         Thanks to your participation I can make art and books,
                         based on real stories. ​ ​
-                     </p>
+                     </p> */}
                   </div>
                </div>
             </div>
             <form
                onSubmit={sendEmail}
                ref={scrollRef}
-               className="flex flex-col max-w-xl px-14 rounded-3xl drop-shadow bg-[#E8E6E6] py-10 text-sm"
+               className="flex flex-col max-w-xl px-14 rounded-3xl drop-shadow bg-gradient-to-r  from-[#754af1] to-[#51eace] py-10 text-sm"
             >
                <p className="font-semibold">
-                  Write your story here, ( you are allowed to write many
-                  different stories with different songs)
+                  Feel free to write your story here. {"You're"} welcome to
+                  share as many different stories, linked with different songs,
+                  as you wish.
+               </p>
+               <p className="my-2 text-sm">
+                  Including your name and the country where you live is entirely
+                  optional. If you prefer, you can choose to share your
+                  experiences anonymously.
                </p>
                <p className="mb-6 text-sm">
-                  Publish your name and your country where you live, it is
-                  optional, you can write anonymously.
+                  By choosing to share your story, you grant Daya permission to
+                  use your submitted content for her artwork, social media,
+                  future projects like books, video podcasts, and more.
                </p>
                <div className={`${currentUser ? "hidden" : ""} flex flex-col`}>
                   <p>Write your name, email and your answer.</p>
@@ -278,51 +297,73 @@ function Community() {
                <p className="mx-auto">Thank You!</p>
             </form>
             <p className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
-               {`"The information collected in the artistic activities will be used to create art that helps people feel better about life" and also it allowas me to continue doing practices based on the real experiences that we share here in this space"`}
+               {`"The insights gathered from these artistic activities will serve to craft art aimed at enhancing life's appreciation, while also enabling me to continue developing practices rooted in the authentic experiences we collectively share in this space."`}
             </p>
-            <div className="bg-[#E8E6E6] rounded-3xl drop-shadow  flex flex-col items-center w-full py-6 mb-4">
+            <div className="bg-gradient-to-r from-[#754af1] to-[#51eace] rounded-3xl drop-shadow  flex flex-col items-center w-full py-6 mb-4">
                <div className="flex flex-col items-center gap-3 sm:flex-row">
                   <span className="flex relative mx-auto min-w-[20rem]  sm:min-w-[15rem] h-[23rem]">
                      <Image
-                        src="/LeoMujer.png"
+                        src="/ESCUCHA_LA_MUSICA_DE_TU_LIENZO.png"
                         fill
                         alt=""
                         className="object-cover object-top"
                      />
                   </span>
 
-                  <div className="flex flex-col max-w-[90vw] gap-2 px-2 sm:max-w-xs">
-                     <p className="text-2xl font-semibold">In this community</p>
-                     <p className="leading-5">
-                        The more we talk about what hurts us, the faster we will
-                        find what is hurting us.
-                     </p>
-                     <p className="text-sm">
-                        Expressing what you feel helps you discover how you got
-                        to that point that just doesn`t feel right.
-                     </p>
-                     <p className="text-sm">
-                        Learning what other people did to struggle is a way you
-                        can help yourself.
-                     </p>
-                     <p className="text-sm">
-                        Do not be indifferent to what you feel and much less be
-                        ashamed express what bother you, we are humans learning
-                        to live.
-                     </p>
-                     <p className="text-sm">
-                        ¿Do you imagine that you can help someone feel better
-                        with your story ?
-                     </p>
-                     <p className="text-sm">
-                        Do not stop!!! Read and share your vision of love.
-                     </p>
+                  <div className="flex flex-col max-w-[90vw]  px-2 sm:max-w-xs flex-1">
+                     <div>
+                        <p className="text-2xl font-semibold text-[#edff05]">
+                           ESCUCHA LA MÚSICA DE
+                        </p>
+                        <p className="text-2xl font-semibold text-white">
+                           TU LIENZO
+                        </p>
+                        <p className="leading-4">
+                           Tu cultura musical, un molde invisible que ha
+                           configurado tus emociones
+                        </p>
+                     </div>
+                     <div className="mt-12">
+                        <p
+                           className={`${dancingScript.className} text-4xl font-bold text-[#5225d7] rotate-[-5deg] mb-2 `}
+                        >
+                           WORKSHOP
+                        </p>
+                        <p className="leading-4">
+                           Explora a través del arte y canciones herramientas
+                           mentales que te ayudan a remodelar y mejorar tu
+                           bienestar emocional.
+                        </p>
+                     </div>
                   </div>
                </div>
-               <p
-                  className={`${dancingScript.className} max-w-[95vw] mt-10 mb-4 text-4xl font-bold`}
-               >
-                  Your story is the art that inspires me.
+               <p className={` max-w-[95vw] mt-10 mb-4 text-white font-bold`}>
+                  Daya Muneton © Todos Los Derechos Reservados
+               </p>
+            </div>
+            <div className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
+               <p className="font-bold">
+                  We believe that the more we talk about what hurts us, the
+                  quicker we can locate the source of our pain.
+               </p>
+               <p>
+                  Expressing what you feel can help you understand how you ended
+                  up in this unsettling place. Gaining insight from {`other's`}{" "}
+                  struggles can serve as a roadmap to your own healing.
+               </p>
+               <p>
+                  Remember, {`it's`} essential to pay attention to your feelings
+                  and not be ashamed to express your troubles. After all, we are
+                  humans learning to navigate life.
+               </p>
+               <p>
+                  Can you envision your story potentially aiding someone{" "}
+                  {`else's`}
+                  journey towards healing?
+               </p>
+               <p>
+                  {`Don't`} hold back - write and share your unique perspective
+                  on love.
                </p>
             </div>
          </div>
