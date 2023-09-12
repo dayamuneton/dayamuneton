@@ -13,6 +13,7 @@ import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemF
 import { useRouter } from "next/router";
 import GuideVariants from "@/components/guiaproduct/guideVariants";
 import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
+import Link from "next/link";
 
 export async function getServerSideProps(context: any) {
    const { category, pdfproduct } = context.query;
@@ -124,10 +125,20 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
                      })}
                      USD
                   </p>
-                  <AcquireGuide
-                     product={product}
-                     variant={selectedVariant || product.variants?.[0]}
-                  />
+                  {product.externalLink === "" ||
+                  product.externalLink === undefined ? (
+                     <AcquireGuide
+                        product={product}
+                        variant={selectedVariant || product.variants?.[0]}
+                     />
+                  ) : (
+                     <Link
+                        href={product.externalLink || ""}
+                        className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md hover:scale-[1.005] px-4 py-2 text-center"
+                     >
+                        {product.externalLinkText || "Buy Now"}
+                     </Link>
+                  )}
 
                   <button
                      className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"

@@ -65,6 +65,14 @@ function Product({ product }: { product: GuiaProduct }) {
 
    const [beneficts, setBeneficts] = useState(product?.beneficts || "");
 
+   const [externalLink, setExternalLink] = useState(
+      product?.externalLink || ""
+   );
+
+   const [externalLinkText, setExternalLinkText] = useState(
+      product?.externalLinkText || ""
+   );
+
    const saveProduct = async (e: any) => {
       setLoading(true);
       e.preventDefault();
@@ -120,6 +128,8 @@ function Product({ product }: { product: GuiaProduct }) {
          handle: replaceSpacesWithDashes(formatedName),
          beneficts: beneficts || "",
          variants: formatedVariants,
+         externalLink: externalLink || "",
+         externalLinkText: externalLinkText || "",
       };
       // console.log(product, data, variants);
 
@@ -222,6 +232,27 @@ function Product({ product }: { product: GuiaProduct }) {
                   />
                </label>
 
+               <label>
+                  <p className="text-lg font-medium">External Link:</p>
+
+                  <input
+                     type="text"
+                     value={externalLink}
+                     onChange={(e) => setExternalLink(e.target.value)}
+                     className="flex w-full px-2 py-1 capitalize bg-gray-100"
+                  />
+               </label>
+               <label>
+                  <p className="text-lg font-medium">External Link Text:</p>
+
+                  <input
+                     type="text"
+                     value={externalLinkText}
+                     onChange={(e) => setExternalLinkText(e.target.value)}
+                     className="flex w-full px-2 py-1 capitalize bg-gray-100"
+                  />
+               </label>
+
                <select
                   className="my-4 border-b-2 border-gray-300"
                   autoComplete="on"
@@ -234,6 +265,7 @@ function Product({ product }: { product: GuiaProduct }) {
                   <option value="chemistry">Chemistry</option>
                </select>
             </div>
+
             <Variants className="flex flex-col w-full p-4 mb-4 bg-white rounded-xl" />
          </div>
 
