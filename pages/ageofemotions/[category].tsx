@@ -47,8 +47,8 @@ export async function getServerSideProps(context: any) {
    const galleryContent: any[] = [];
    const galleryQuery = query(
       collection(db, "pdfproducts"),
-      where("category", "==", category),
-      orderBy("status", "desc")
+      where("category", "==", category)
+      // orderBy("status", "desc")
    );
    const gallerySnapshot = await getDocs(galleryQuery);
    gallerySnapshot.forEach((doc) => {

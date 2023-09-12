@@ -79,7 +79,7 @@ function Ageofemotions() {
                </span>
                <span className="flex flex-col items-center w-full mt-2 font-bold text-center text-black uppercase cursor-pointer ">
                   <p className="flex mb-1 text-base leading-4 text-center">
-                     Art Your Emotions
+                     PDFS & Guides
                   </p>
                </span>
             </Link>
@@ -97,7 +97,7 @@ function Ageofemotions() {
                </span>
                <span className="flex flex-col items-center mt-2 font-bold text-center text-black uppercase cursor-pointer ">
                   <p className="flex mb-1 text-base leading-4 text-center">
-                     Chemistry of Emotions
+                     Workshops
                   </p>
                </span>
             </Link>
