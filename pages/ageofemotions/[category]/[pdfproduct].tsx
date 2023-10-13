@@ -139,27 +139,29 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
                         {product.externalLinkText || "Buy Now"}
                      </Link>
                   )}
-
-                  <button
-                     className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
-                     hidden={
-                        !currentUser ||
-                        shoppingCart?.cartItems?.some(
-                           (item) => item.handle === router.asPath
-                        )
-                     }
-                     onClick={() =>
-                        addItemToCart(
-                           shoppingCart,
-                           product,
-                           currentUser.email,
-                           selectedVariant || product.variants?.[0]
-                        )
-                     }
-                     title="Original Piece Sold Out"
-                  >
-                     Add To Cart
-                  </button>
+                  {(product.externalLink === "" ||
+                     product.externalLink === undefined) && (
+                     <button
+                        className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
+                        hidden={
+                           !currentUser ||
+                           shoppingCart?.cartItems?.some(
+                              (item) => item.handle === router.asPath
+                           )
+                        }
+                        onClick={() =>
+                           addItemToCart(
+                              shoppingCart,
+                              product,
+                              currentUser.email,
+                              selectedVariant || product.variants?.[0]
+                           )
+                        }
+                        title="Original Piece Sold Out"
+                     >
+                        Add To Cart
+                     </button>
+                  )}
                   <button
                      className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
                      hidden={
