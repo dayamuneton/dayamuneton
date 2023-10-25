@@ -66,12 +66,11 @@ export default function Home() {
                   {/* <p>ART COLLECTION</p> */}
                </span>
             </Link>
-            <button
-               // href="/shop"
-               className="relative group drop-shadow-lg bg-gradient-to-r to-[#5bdde5] from-[#034daf] rounded-3xl overflow-hidden cursor-not-allowed"
+            <Link
+               href="https://ageofemotions.com/"
+               className="relative group drop-shadow-lg bg-gradient-to-r to-[#5bdde5] from-[#034daf] rounded-3xl overflow-hidden "
                title="Coming Soon"
-               // target="_blank"
-               disabled
+               target="_blank"
             >
                <SquareImageHover
                   src="/newshopdayashop.png"
@@ -83,7 +82,7 @@ export default function Home() {
                   {/* <p></p> */}
                   <p>{`DAYA'S SHOP`}</p>
                </span>
-            </button>
+            </Link>
          </div>
          {/* <Link
             href="/shop/memorials"
