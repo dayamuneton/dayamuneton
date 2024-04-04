@@ -85,7 +85,7 @@ function Shop({ data }: { data: any }) {
                {" "}
                {data.category === "memorials" ? "A LATIN GIFT" : "Gallery"}
             </h1>
-            <p className="max-w-sm mb-8 text-sm font-medium text-center">
+            <p className="max-w-sm sm:max-w-[90vw] mb-8 text-sm font-medium text-center">
                {data.category !== "memorials"
                   ? "With your purchase or custom art commissions, you are helping me financially strengthen my current project: ART FOR EMOTIONAL EDUCATION."
                   : "A Latin Gift is a mosaic where each piece represents the life experiences of the Latin community through a journey across our musical history. With your purchase or custom art commissions, you are helping me financially strengthen this initiative, directly supporting the continuation and expansion of this unique cultural project"}

@@ -292,9 +292,10 @@ function Community() {
                   video podcasts etc.
                </p> */}
                <p className="mb-6">
-                  Your agreement to the terms and conditions, which includes a
-                  release allowing the use of your story across various
-                  platforms and media, is required to participate.
+                  To participate, you must agree to the terms and conditions.
+                  This includes a release allowing the use of your story across
+                  various platforms and media, and your agreement will serve as
+                  your signature.
                </p>
                <textarea
                   className="h-[7rem]"

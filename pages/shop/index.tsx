@@ -67,10 +67,10 @@ export default function Home() {
                </span>
             </Link>
             <Link
-               href="https://ageofemotions.com/"
+               href="#"
                className="relative group drop-shadow-lg bg-gradient-to-r to-[#5bdde5] from-[#034daf] rounded-3xl overflow-hidden "
                title="Coming Soon"
-               target="_blank"
+               // target="_blank"
             >
                <SquareImageHover
                   src="/newshopdayashop.png"
