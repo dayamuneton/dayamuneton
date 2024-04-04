@@ -28,6 +28,8 @@ const validCategories = [
       category: "memorials",
       bannerImg: "/BannerConmemorativeArt.png",
       title: "Memorials",
+      subtitle:
+         "A Latin Gift is a mosaic where each piece represents the life experiences of the Latin community through a journey across our musical history.With your purchase or custom art commissions, you are helping me financially strengthen this initiative, directly supporting the continuation and expansion of this unique cultural project",
    },
 ];
 
@@ -79,11 +81,24 @@ function Shop({ data }: { data: any }) {
             className="transition-all duration-300 ease-in-out hover:scale-[1.01]"
          />
          <div className="flex flex-col items-center w-[95vw] max-w-3xl h-full mt-8 ">
-            <h1 className="text-3xl font-bold tracking-wider">Gallery</h1>
+            <h1 className="text-3xl font-bold tracking-wider">
+               {" "}
+               {data.category === "memorials" ? "A LATIN GIFT" : "Gallery"}
+            </h1>
             <p className="max-w-sm mb-8 text-sm font-medium text-center">
-               With your purchase or custom art commissions, you are helping
-               mefinancially strengthen my current project: ART FOR EMOTIONAL
+               With your purchase or custom art commissions, you are helping me
+               financially strengthen my current project: ART FOR EMOTIONAL
                EDUCATION.
+               <p className={data.category === "memorials" ? "" : "hidden"}>
+                  Discover more about this project and how you can contribute{" "}
+                  <Link
+                     href="www.unregalolatino.com"
+                     className="text-blue-400 "
+                  >
+                     click here
+                  </Link>{" "}
+                  for further details.
+               </p>
             </p>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
