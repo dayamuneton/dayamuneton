@@ -92,7 +92,10 @@ function Shop({ data }: { data: any }) {
 
                <p className={data.category === "memorials" ? "" : "hidden"}>
                   Discover more about this project and how you can contribute{" "}
-                  <a href="www.unregalolatino.com" className="text-blue-400 ">
+                  <a
+                     href="https://unregalolatino.com/"
+                     className="text-blue-400 "
+                  >
                      click here
                   </a>{" "}
                   for further details.
