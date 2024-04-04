@@ -86,17 +86,15 @@ function Shop({ data }: { data: any }) {
                {data.category === "memorials" ? "A LATIN GIFT" : "Gallery"}
             </h1>
             <p className="max-w-sm mb-8 text-sm font-medium text-center">
-               With your purchase or custom art commissions, you are helping me
-               financially strengthen my current project: ART FOR EMOTIONAL
-               EDUCATION.
+               {data.category !== "memorials"
+                  ? "With your purchase or custom art commissions, you are helping me financially strengthen my current project: ART FOR EMOTIONAL EDUCATION."
+                  : "A Latin Gift is a mosaic where each piece represents the life experiences of the Latin community through a journey across our musical history. With your purchase or custom art commissions, you are helping me financially strengthen this initiative, directly supporting the continuation and expansion of this unique cultural project"}
+
                <p className={data.category === "memorials" ? "" : "hidden"}>
                   Discover more about this project and how you can contribute{" "}
-                  <Link
-                     href="www.unregalolatino.com"
-                     className="text-blue-400 "
-                  >
+                  <a href="www.unregalolatino.com" className="text-blue-400 ">
                      click here
-                  </Link>{" "}
+                  </a>{" "}
                   for further details.
                </p>
             </p>
