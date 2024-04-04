@@ -46,6 +46,31 @@ function TermsOfService() {
                responsible for said treatment.
             </p>
             <h2 className="my-4 text-xl font-bold">
+               AUTHORIZATION FOR CONTENT USE.
+            </h2>
+            <p className="text-sm">
+               I, [Full Name], hereby authorize [Dahyana Muneton], henceforth
+               referred to as "Daya Muneton", to use the stories, anecdotes, and
+               any other content that I share, related to my personal
+               experiences and favorite songs. I recognize and agree that this
+               content may be linked with different songs and be part of
+               multiple stories. I understand that including my name and the
+               country where I live in the shared content is completely
+               optional, and I have the right to share my experiences
+               anonymously if I prefer. By signing this document, I grant Daya
+               irrevocable permission to use the content I provide to be
+               included in her artwork, social media publications, and any
+               future projects Daya decides to undertake, which may include, but
+               is not limited to, books, video podcasts, art exhibitions, and
+               other forms of creative expression and cultural dissemination. I
+               acknowledge that by sharing my story, I am not guaranteed any
+               financial compensation or direct benefit, and my contribution is
+               made voluntarily, with the understanding that my story may help
+               enrich Daya's artistic and cultural project. Date: [Date] By
+               accepting the terms and conditions, it will be interpreted as a
+               signature.
+            </p>
+            <h2 className="my-4 text-xl font-bold">
                Classification of Personal Data.
             </h2>
             <span className="text-sm">
