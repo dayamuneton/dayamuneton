@@ -1,27 +1,52 @@
 {
-  "name": "dayaportfolio",
+  "name": "dayamuneton",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "cross-env NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next dev --hostname 127.0.0.1",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "build:local": "cross-env LOCAL_NEXT_BUILD=1 NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next build",
+    "start": "cross-env LOCAL_NEXT_BUILD=1 NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next start --hostname 127.0.0.1",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "tsx --test tests/unit/*.test.ts",
+    "artwork:generate": "node scripts/generate-artwork.mjs",
+    "test:browser": "cross-env NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 playwright test",
+    "seed:local": "cross-env NEXT_PUBLIC_SITE_ENV=local tsx scripts/seed-local-catalog.ts",
+    "firebase:local": "firebase emulators:start --config firebase.local.json --project demo-dayamuneton --only auth,firestore,storage",
+    "test:local": "npm run build:local && firebase emulators:exec --config firebase.local.json --project demo-dayamuneton --only auth,firestore,storage \"npm run test:browser\"",
+    "check": "npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.3"
+    "firebase": "^12",
+    "google-auth-library": "^10",
+    "next": "16.4.6",
+    "nodemailer": "^8",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-icons": "^5",
+    "sanitize-html": "^2.17.5",
+    "stripe": "^22"
+  },
+  "engines": {
+    "node": "24.x"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@playwright/test": "^1",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^24",
+    "@types/nodemailer": "^7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.3",
-    "@eslint/eslintrc": "^3"
+    "@types/sanitize-html": "^2.16.2",
+    "cross-env": "^10",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.6",
+    "firebase-tools": "14.8.0",
+    "postcss": "^8",
+    "sharp": "0.35.5",
+    "tailwindcss": "^4.3.5",
+    "tsx": "^4",
+    "typescript": "~6.0.0"
   }
 }
