@@ -9,13 +9,19 @@ import { app, auth, db, storage } from "../../integrations/firebase/firebaseConf
 test("homepage is readable without JavaScript or Firebase Auth", async ({ browser, baseURL }) => {
    const page = await browser.newPage({ javaScriptEnabled: false, baseURL });
    await page.goto("/");
-   await expect(page.getByText("Welcome to my art gallery!")).toBeVisible();
-   await expect(page.getByRole("link", { name: "Stories behind the songs Community" })).toHaveAttribute("href", "/community");
-   await expect(page.getByRole("img", { name: "Shop My Art" })).toHaveAttribute("sizes", /27vw/);
+   await expect(page.getByRole("heading", { name: "Daya Muneton", level: 1 })).toBeVisible();
+   await expect(page.getByRole("link", { name: "Community Stories behind the songs" })).toHaveAttribute("href", "/community");
+   const portrait = page.locator(".portfolio-portrait img");
+   await expect(portrait).toHaveAttribute("fetchpriority", "high");
+   await expect(portrait).toHaveAttribute("sizes", "112px");
+   await expect(page.locator(".portfolio-tile img[loading=lazy]")).toHaveCount(2);
+   await expect.poll(() => portrait.evaluate((element) => (
+      element instanceof HTMLImageElement ? new URL(element.currentSrc).pathname : ""
+   ))).toMatch(/^\/artwork\/.+\.(webp|jpg)$/);
    await page.close();
 });
 
-test("support accordion works with the keyboard and uses the local checkout", async ({ page }) => {
+test("support dialog stays in place and uses local checkout", async ({ page, isMobile }) => {
    const externalRequests: string[] = [];
    await page.route("**/*", async (route) => {
       const { hostname } = new URL(route.request().url());
@@ -26,22 +32,76 @@ test("support accordion works with the keyboard and uses the local checkout", as
       }
       await route.continue();
    });
-   await page.emulateMedia({ reducedMotion: "reduce" });
+   if (isMobile) await page.emulateMedia({ reducedMotion: "reduce" });
    await page.goto("/");
-   await expect(page.getByRole("main")).toHaveCSS("color", "rgb(209, 213, 219)");
-   await expect(page.getByRole("main")).toHaveCSS("background-image", /rgb\(74, 35, 169\).*rgb\(92, 221, 229\)/);
-   const support = page.getByRole("button", { name: "Click here to support my work" });
-   await expect(support).toHaveAttribute("aria-expanded", "false");
+   const support = page.getByRole("button", { name: "Support my work" });
+   const explore = page.getByRole("heading", { name: "Explore", exact: true });
+   const before = await explore.boundingBox();
    await support.press("Enter");
-   await expect(support).toHaveAttribute("aria-expanded", "true");
-   await page.getByRole("spinbutton").fill("0");
-   await page.getByRole("button", { name: "Send", exact: true }).click();
-   await expect(page.getByRole("alert").filter({ hasText: "Enter an amount" })).toBeVisible();
-   await page.getByRole("button", { name: "$10", exact: true }).click();
-   await expect(page.getByRole("spinbutton")).toHaveValue("10");
-   await page.getByRole("button", { name: "Send", exact: true }).click();
-   await expect(page).toHaveURL(/\/thankyou\?checkout=local$/);
+   const dialog = page.getByRole("dialog", { name: "Support my work" });
+   await expect(dialog).toBeVisible();
+   const after = await page.locator("#explore-heading").boundingBox();
+   expect(after?.x).toBeCloseTo(before?.x ?? 0, 0);
+   expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);
+   await dialog.getByRole("button", { name: "Close support" }).press("Escape");
+   await expect(dialog).toBeHidden();
+   await expect(support).toBeFocused();
+   await support.press("Enter");
+   const amount = dialog.getByRole("textbox", { name: "Tip amount (USD)" });
+   await amount.fill("0");
+   await dialog.getByRole("button", { name: "Continue to checkout" }).click();
+   await expect(dialog.getByRole("alert")).toContainText("Enter an amount");
+   await dialog.getByRole("button", { name: "$10", exact: true }).click();
+   await expect(amount).toHaveValue("10");
+   await amount.fill("5,50");
+   await amount.press("Enter");
+   await expect(page).toHaveURL(/\/support\/thanks$/);
+   await expect(page.getByRole("heading", { name: "Thank you for your support" })).toBeVisible();
    expect(externalRequests).toEqual([]);
+});
+
+test("a slow collection navigation shows feedback and delivers a responsive banner", async ({ page }) => {
+   await page.route(/\/_next\/data\/.*\/shop\/heads\.json/, async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 550));
+      await route.continue();
+   });
+   await page.goto("/shop");
+   await page.getByRole("link", { name: /Forgotten Bodies/ }).click();
+   await expect(page.getByText("Loading page…", { exact: true })).toBeVisible();
+   await expect(page.getByRole("heading", { name: "Gallery", exact: true })).toBeVisible();
+   await expect(page.getByText("Loading page…", { exact: true })).toBeHidden();
+   const banner = page.locator(".gallery-banner img");
+   await expect.poll(() => banner.evaluate((element) => (
+      element instanceof HTMLImageElement && element.complete ? element.naturalWidth : 0
+   ))).toBeGreaterThan(0);
+   const source = await banner.evaluate((element) => (element as HTMLImageElement).currentSrc);
+   expect(new URL(source).pathname).toMatch(/^\/artwork\/bannerheads-/);
+   const response = await page.request.get(source);
+   expect((await response.body()).byteLength).toBeLessThan(450_000);
+});
+
+test("story form keeps the draft after a failure and confirms a successful retry", async ({ page }) => {
+   await page.route("**/api/send-email", (route) => route.fulfill({ status: 503, json: { error: "Unavailable" } }), { times: 1 });
+   await page.goto("/community");
+   await page.getByLabel("Email", { exact: true }).fill("demo@example.test");
+   const story = page.getByLabel("Your story");
+   await story.fill("A local test story.");
+   await page.getByRole("checkbox", { name: /accept the terms/i }).check();
+   await page.getByRole("button", { name: "Send story" }).click();
+   await expect(page.getByRole("alert").filter({ hasText: "Couldn’t send your story" })).toBeVisible();
+   await expect(story).toHaveValue("A local test story.");
+   await page.getByRole("button", { name: "Send story" }).click();
+   await expect(page.getByText("Thank you. Your story was submitted.")).toBeVisible();
+   await expect(story).toHaveValue("");
+});
+
+test("public landing pages fit a 320 pixel viewport", async ({ page }) => {
+   await page.setViewportSize({ width: 320, height: 700 });
+   for (const route of ["/", "/shop", "/shop/custom", "/community", "/ageofemotions"]) {
+      await page.goto(route);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, `Horizontal overflow on ${route}`).toBeLessThanOrEqual(1);
+   }
 });
 
 test("mobile navigation opens with the keyboard and returns focus on Escape", async ({ page, isMobile }) => {
@@ -94,7 +154,9 @@ test("Auth, Firestore, and Storage work using only demo data", async ({ page }, 
       status: "available",
       available: 1,
       price: 125,
-      images: [imageUrl],
+      description: "Local sample for gallery testing.",
+      techniques: ["Mixed media"],
+      images: [imageUrl, "/DayaMunetonB&WArt.jpg"],
    });
    expect((await getDoc(artwork)).data()?.price).toBe(125);
    await page.goto("/shop/heads");
@@ -103,6 +165,11 @@ test("Auth, Firestore, and Storage work using only demo data", async ({ page }, 
    await expect.poll(() => art.locator("img").evaluate(
       (element) => element instanceof HTMLImageElement ? element.naturalWidth : 0,
    )).toBeGreaterThan(0);
+   await art.click();
+   const secondView = page.getByRole("button", { name: "View image 2" });
+   await secondView.press("Enter");
+   await expect(secondView).toHaveAttribute("aria-pressed", "true");
+   await expect(page.locator(".product-gallery-main img")).toHaveAttribute("src", /\/artwork\/dayamunetonb-wart-/);
    await deleteDoc(artwork);
    await deleteObject(object);
    await signOut(auth);

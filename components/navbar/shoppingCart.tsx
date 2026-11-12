@@ -16,12 +16,12 @@ export function ShoppingCart({
    const cartQty = itemCount > 9 ? "9+" : itemCount || null;
 
    return (
-      <div className={`${!currentUser ? "hidden" : ""}  ${className}`}>
+      <div className={`${!currentUser ? "hidden" : ""} ${className ?? ""}`}>
          <div className="flex !aspect-square relative">
             <Link
                href="/checkout"
                aria-label="Shopping cart"
-               className="flex items-center justify-center !min-h-full  cursor-pointer !aspect-square  "
+               className="site-nav-icon"
             >
                <ShoppingCartIcon
                   className="flex text-gray-700"

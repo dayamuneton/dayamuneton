@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/context/authContext";
 import { ShopProvider } from "@/context/shopContext";
+import RouteFeedback from "@/components/ui/RouteFeedback";
 import "@/styles/globals.css";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 
@@ -14,6 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AuthProvider>
          <ShopProvider>
             <Component {...pageProps} />
+            <RouteFeedback />
          </ShopProvider>
       </AuthProvider>
    );

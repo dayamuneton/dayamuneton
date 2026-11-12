@@ -1,6 +1,6 @@
 # Daya Muneton
 
-The portfolio, art shop, community, and emotional education guides share the Next.js Pages Router. The original artwork is in `public/`. The shared styles retain the original palette and gradient interpolation.
+The portfolio, art shop, community, and emotional education guides share the Next.js Pages Router. The home and shop use the same navigation and artwork cards.
 
 ## Run locally
 
@@ -28,7 +28,15 @@ npm run test:local
 
 Stop any standalone emulator or preview before running `test:local`. It builds the local app, starts all three emulators, and runs browser tests at desktop and mobile widths. Tests insert synthetic artwork, create a demo account, and exercise Storage and the simulated APIs. You can set `PLAYWRIGHT_CHANNEL=msedge` to use an installed Edge browser.
 
+For the cross-browser run, install Firefox and WebKit with `npx playwright install firefox webkit`, then set `PLAYWRIGHT_ALL_BROWSERS=1`. Set `PLAYWRIGHT_PORT` to use a different local test port. With the demo emulators already running, use `npm run build:local` and `npm run test:browser`.
+
 Set `NEXT_PUBLIC_REPORT_VITALS=1` in `.env.local` to log Web Vitals in the browser console. The reports are local and have no analytics vendor or paid service dependency.
+
+## Artwork
+
+The original artwork stays in `public/`. The bundled gallery assets use prebuilt responsive WebP images with JPEG or PNG fallbacks. Image URLs are versioned so browsers can reuse cached copies. Product photos added through Firebase still use Next.js image optimization.
+
+Run `npm run artwork:generate` after changing a bundled artwork source. Commit the updated image variants in `public/artwork/` and the manifest in `lib/artwork/variants.json` together. The generator runs locally.
 
 ## Code layout
 

@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
 import Footer from "@/components/footer";
 import type { GetServerSideProps } from "next";
@@ -89,7 +89,7 @@ function PDFCategory({ data }: { data: any }) {
             href="/about"
             className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md"
          >
-            <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
+            <ArtworkImage src="/DayaMunetonB&WArt.jpg" fill sizes="112px" alt="Daya Muneton" />
          </Link>
          <span className="flex flex-col items-center max-w-xs text-sm text-center w-[95vw]">
             <p className="text-lg">@DayaMuneton</p>
@@ -109,6 +109,12 @@ function PDFCategory({ data }: { data: any }) {
             <p className="max-w-sm mb-8 text-sm font-medium text-center">
                {data.subTitle}
             </p>
+            {data.galleryContent.length === 0 && (
+               <p className="mb-6 rounded-lg bg-white px-5 py-4 text-center text-[#35204f]">
+                  No guides are listed in this category right now.{" "}
+                  <Link href="/ageofemotions" className="font-semibold text-[#4a23a9] underline">Browse other categories</Link>.
+               </p>
+            )}
             <div className="grid grid-cols-2 gap-3 mb-12 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
                   <Link
@@ -119,8 +125,8 @@ function PDFCategory({ data }: { data: any }) {
                      className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-linear-to-r/srgb from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg text-black"
                   >
                      <span className="relative flex w-full aspect-square">
-                        <Image
-                           src={item.featuredImage || item.images[0]}
+                        <ArtworkImage
+                           src={item.featuredImage || item.images?.[0]} sizes="(min-width: 768px) 240px, 42vw"
                            alt={item.name}
                            fill
                            className="object-cover"

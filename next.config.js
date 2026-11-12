@@ -3,6 +3,12 @@ const local = process.env.NEXT_PUBLIC_SITE_ENV !== "production";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    reactStrictMode: true,
+   async headers() {
+      return [{
+         source: "/artwork/:path*",
+         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      }];
+   },
    distDir: process.env.LOCAL_NEXT_BUILD === "1" ? ".next-local" : ".next",
    images: {
       dangerouslyAllowLocalIP: local,

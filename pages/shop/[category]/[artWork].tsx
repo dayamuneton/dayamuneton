@@ -2,7 +2,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkGallery from "@/components/ui/ArtworkGallery";
 import { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -39,7 +39,7 @@ export async function getServerSideProps(context: any) {
 
 function ArtWork({ product }: { product: any }) {
    const [openImage, setOpenImage] = useState(
-      product.featuredImage || product.images[0]
+      product.featuredImage || product.images?.[0]
    );
    const { shoppingCart } = useShop();
    const { currentUser } = useAuth();
@@ -64,37 +64,7 @@ function ArtWork({ product }: { product: any }) {
          <Navbar />
          <div className="flex flex-col items-center justify-center w-[95vw] max-w-5xl bg-white py-6 md:pt-8 px-8 md:items-start md:flex-row mt-14 overflow-hidden rounded-3xl drop-shadow-md mb-4">
             <div className="flex flex-col items-center justify-center w-full">
-               <div className="flex flex-col-reverse items-center gap-1 md:items-start md:flex-row ">
-                  <div
-                     className={`${
-                        product.images.length > 1 ? "flex" : "hidden"
-                     } flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto custom-scrollbar max-w-[90vw] md:w-fit md:h-[35vw]`}
-                  >
-                     {product.images.map((image: string) => (
-                        <span
-                           key={image}
-                           onClick={() => setOpenImage(image)}
-                           className="relative min-w-[3.5rem] !max-w-[3.5rem] min-h-[3.5rem] aspect-square cursor-pointer"
-                        >
-                           <Image
-                              src={image}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                           />
-                        </span>
-                     ))}
-                  </div>
-
-                  <span className="relative flex w-[85vw] h-[85vw] max-w-[30rem] md:w-[35vw] md:h-[35vw]   max-h-[30rem] aspect-square">
-                     <Image
-                        src={openImage}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                     />
-                  </span>
-               </div>
+               <ArtworkGallery images={product.images} selected={openImage} title={product.name || ""} onSelect={setOpenImage} />
                <div className="flex flex-col w-full gap-2 py-3 mt-2 border-t-2 border-gray-200 md:flex-row">
                   <p className="min-w-[9rem] text-xl font-bold">
                      {product.name}

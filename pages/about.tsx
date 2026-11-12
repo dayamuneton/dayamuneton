@@ -1,7 +1,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 
 function About() {
    return (
@@ -21,10 +21,11 @@ function About() {
                   <p className="translate-x-4">Artist & Entrepreneur</p>
                </span>
                <span className="relative !aspect-square w-[65%] max-w-[90vh] mx-auto my-auto">
-                  <Image
-                     src="/DayaAbout1.png"
+                  <ArtworkImage
+                     src="/DayaAbout1.png" sizes="(min-width: 768px) 40vw, 65vw"
                      alt="Daya Muneton"
                      fill
+                     priority
                      className="object-cover"
                   />
                </span>

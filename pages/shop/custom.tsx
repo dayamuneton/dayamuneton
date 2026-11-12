@@ -8,7 +8,7 @@ AcordionIcon,
 } from "@/components/ui/acordion";
 import { sendWaMessageURL } from "@/utils/sendWaMessageURL";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
 
 function Custom() {
@@ -48,8 +48,8 @@ function Custom() {
                <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center w-full max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/DigitalArtFormat.png"
+                        <ArtworkImage
+                           src="/DigitalArtFormat.png" sizes="160px"
                            fill
                            alt=""
                            className="object-cover"
@@ -83,8 +83,8 @@ function Custom() {
                <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/AcrylicOnCanvas.png"
+                        <ArtworkImage
+                           src="/AcrylicOnCanvas.png" sizes="160px"
                            fill
                            alt=""
                            className="object-cover"
@@ -122,8 +122,8 @@ function Custom() {
                <AcordionContent className="flex flex-col items-center px-4 pb-2">
                   <div className="flex items-center justify-center max-w-md gap-6">
                      <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/ArtPrints.png"
+                        <ArtworkImage
+                           src="/ArtPrints.png" sizes="160px"
                            fill
                            alt=""
                            className="object-cover"

@@ -3,7 +3,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkGallery from "@/components/ui/ArtworkGallery";
 import { useState } from "react";
 import { addItemToCart } from "@/integrations/firebase/shoppingCart/addItemToShoppingCart";
 import { useShop } from "@/context/shopContext";
@@ -68,37 +68,7 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
          <div className="flex flex-col items-center bg-white justify-center w-[95vw] max-w-4xl  h-full py-8  mt-14 rounded-xl drop-shadow-sm mb-8 px-4">
             <div className="flex flex-col md:flex-row">
                <div>
-                  <div className="flex flex-col-reverse items-center gap-1 md:items-start md:flex-row ">
-                     <div
-                        className={`${
-                           (product.images?.length || 0) > 1 ? "flex" : "hidden"
-                        } flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto custom-scrollbar max-w-[90vw] md:w-fit md:max-h-[35vw]`}
-                     >
-                        {product.images?.map((image: string) => (
-                           <span
-                              key={image}
-                              onClick={() => setOpenImage(image)}
-                              className="relative min-w-[3.5rem] !max-w-[3.5rem] min-h-[3.5rem] aspect-square cursor-pointer"
-                           >
-                              <Image
-                                 src={image}
-                                 alt={product.name || ""}
-                                 fill
-                                 className="object-cover"
-                              />
-                           </span>
-                        ))}
-                     </div>
-
-                     <span className="relative flex w-[85vw] h-[85vw] max-w-[30rem] md:w-[35vw] md:h-[35vw]   max-h-[30rem] aspect-square">
-                        <Image
-                           src={openImage}
-                           alt={product.name || ""}
-                           fill
-                           className="object-cover"
-                        />
-                     </span>
-                  </div>
+                  <ArtworkGallery images={product.images} selected={openImage} title={product.name || ""} onSelect={setOpenImage} />
                   <div className="px-6 my-4">
                      <p className="mb-2 text-xl font-bold ">{product.name}</p>
                      <div>

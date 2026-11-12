@@ -1,6 +1,6 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import ContactLinks from "@/components/contactLinks";
 import Navbar from "@/components/navbar/navbar";
 import SupportMyWork from "@/components/supportMyWork";
@@ -8,33 +8,31 @@ import HomeTiles from "@/features/home/HomeTiles";
 
 export default function Home() {
    return (
-      <main
-         className="flex flex-col items-center justify-center h-full min-h-screen text-lg text-gray-300"
-         style={{ backgroundImage: "radial-gradient(circle at center, #4a23a9, #5cdde5)" }}
-      >
+      <div className="portfolio-home">
          <Head>
-            <title>Daya Muneton</title>
-            <meta name="description" content="Daya Muneton" />
-            <meta name="keywords" content="Arte, Ciencia, Tecnología, Amor, Liberate, Regalo" />
+            <title>Daya Muneton | Art &amp; Emotional Education</title>
+            <meta name="description" content="Explore Daya Muneton’s artwork, stories behind the songs, and resources for emotional education." />
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <Link href="/about" className="flex flex-col items-center">
-            <span className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md">
-               <Image src="/DayaMunetonB&WArt.jpg" fill sizes="112px" alt="Daya Muneton" />
-            </span>
-            <p>@DayaMuneton</p>
-         </Link>
-         <div className="my-6 w-[95vw] max-w-md text-center text-base">
-            <p>Welcome to my art gallery!</p>
-            <p>Each art acquisition supports free emotional education.</p>
-            <p>{"Together, we're empowering individuals through art."}</p>
-            <p>Thanks for joining this transformative journey.</p>
-         </div>
-         <SupportMyWork />
-         <p className="mt-8 uppercase">My socials</p>
-         <ContactLinks />
-         <HomeTiles />
-      </main>
+         <main id="main-content" className="portfolio-content">
+            <section aria-labelledby="portfolio-title" className="portfolio-intro">
+               <Link href="/about" className="portfolio-portrait" aria-label="About Daya Muneton">
+                  <ArtworkImage src="/DayaMunetonB&WArt.jpg" fill sizes="112px" alt="" priority className="object-cover" />
+               </Link>
+               <h1 id="portfolio-title">Daya Muneton</h1>
+               <p className="portfolio-intro-copy">Explore my art and the stories behind it. Every acquisition helps make emotional education freely available.</p>
+               <div className="portfolio-actions">
+                  <Link href="/shop" className="portfolio-button portfolio-button-primary">Explore the shop</Link>
+                  <SupportMyWork />
+               </div>
+            </section>
+            <HomeTiles />
+            <footer className="portfolio-socials" aria-label="Social links">
+               <p className="text-sm font-semibold">Follow Daya</p>
+               <ContactLinks />
+            </footer>
+         </main>
+      </div>
    );
 }

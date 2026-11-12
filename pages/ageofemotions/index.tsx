@@ -1,8 +1,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
-// import SquareImageHover from "@/components/SquareImageHover";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
 import StarIcon from "@mui/icons-material/Star";
 import Testimonies from "@/components/testimonies";
@@ -30,7 +29,7 @@ function Ageofemotions() {
             href="/about"
             className="relative flex overflow-hidden w-[7rem] rounded-full aspect-square mt-12 mb-4 drop-shadow-md"
          >
-            <Image src="/DayaMunetonB&WArt.jpg" fill alt="Daya Muneton" />
+            <ArtworkImage src="/DayaMunetonB&WArt.jpg" fill sizes="112px" alt="Daya Muneton" />
          </Link>
          <span className="flex flex-col items-center max-w-xs text-sm text-center w-[95vw]">
             <p className="text-lg">@DayaMuneton</p>
@@ -51,9 +50,9 @@ function Ageofemotions() {
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
-                  <Image
-                     src="/Freebies.png"
-                     alt="Stories behind the songs"
+                  <ArtworkImage
+                     src="/Freebies.png" sizes="(min-width: 640px) 12vw, 30vw"
+                     alt=""
                      fill
                      className="group-hover:scale-[1.05] object-cover"
                   />
@@ -69,9 +68,9 @@ function Ageofemotions() {
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
-                  <Image
-                     src="/ArtEmotions.png"
-                     alt="Stories behind the songs"
+                  <ArtworkImage
+                     src="/ArtEmotions.png" sizes="(min-width: 640px) 12vw, 30vw"
+                     alt=""
                      fill
                      className="group-hover:scale-[1.05] object-cover"
                   />
@@ -87,9 +86,9 @@ function Ageofemotions() {
                className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
-                  <Image
-                     src="/ChemistryEmotions.png"
-                     alt="Stories behind the songs"
+                  <ArtworkImage
+                     src="/ChemistryEmotions.png" sizes="(min-width: 640px) 12vw, 30vw"
+                     alt=""
                      fill
                      className="group-hover:scale-[1.05] object-cover"
                   />
@@ -135,7 +134,7 @@ function Ageofemotions() {
             </p>
          </div>
          <span className="relative flex aspect-square h-[7rem]  my-10">
-            <Image src="/LogoAgeOfEmotions.png" alt="Logo" fill />
+            <ArtworkImage src="/LogoAgeOfEmotions.png" sizes="112px" alt="Logo" fill />
          </span>
          <div className="max-w-lg text-sm text-center mb-14 w-[95vw]">
             <p className="mb-2">

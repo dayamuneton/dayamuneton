@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
 import type { GetServerSideProps } from "next";
 
@@ -72,12 +72,9 @@ function Shop({ data }: { data: any }) {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         {/* eslint-disable-next-line @next/next/no-img-element */}
-         <img
-            src={data.bannerImg}
-            alt="banner"
-            className="transition-all duration-300 ease-in-out hover:scale-[1.01]"
-         />
+         <div className="gallery-banner">
+            <ArtworkImage src={data.bannerImg} alt="" sizes="100vw" priority />
+         </div>
          <div className="flex flex-col items-center w-[95vw] max-w-3xl h-full mt-8 ">
             <h1 className="text-3xl font-bold tracking-wider">
                {" "}
@@ -99,7 +96,13 @@ function Shop({ data }: { data: any }) {
                   for further details.
                </p>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {data.galleryContent.length === 0 && (
+               <p className="mb-6 rounded-lg bg-white px-5 py-4 text-center">
+                  No artworks are listed in this collection right now.{" "}
+                  <Link href="/shop/custom" className="font-semibold text-[#4a23a9] underline">Ask about a commission</Link>.
+               </p>
+            )}
+            <div className="grid grid-cols-2 gap-3 pb-10 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
                   <Link
                      href={`/shop/${item.category}/${
@@ -109,8 +112,8 @@ function Shop({ data }: { data: any }) {
                      className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden"
                   >
                      <span className="relative flex w-full aspect-square">
-                        <Image
-                           src={item.featuredImage || item.images[0]}
+                        <ArtworkImage
+                           src={item.featuredImage || item.images?.[0]}
                            alt={item.name}
                            fill
                            sizes="(min-width: 800px) 240px, (min-width: 640px) 30vw, (min-width: 600px) 240px, 40vw"

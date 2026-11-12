@@ -1,105 +1,135 @@
-import React, { useState } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/router";
+import { supportThanksPath } from "@/features/home/support";
 import { dollarsToCents } from "@/integrations/stripe/line-items";
-import {
-Acordion,
-AcordionButton,
-AcordionContent,
-AcordionIcon,
-} from "./ui/acordion";
 
-function TipOption({
-   setAmount,
-   amount,
-}: {
-   setAmount: React.Dispatch<React.SetStateAction<number>>;
-   amount: number;
-}) {
-   return (
-      <button
-         onClick={() => setAmount(amount)}
-         className="hover:scale-[1.01] px-4 py-2 text-white border-2 w-[30%] sm:w-full text-center border-white rounded-full focus:outline-hidden"
-      >
-         ${amount}
-      </button>
-   );
-}
 const tipOptions = [3, 5, 10, 20, 50];
 
-const SupportMyWork: React.FC = () => {
+export default function SupportMyWork() {
    const router = useRouter();
-   const [amount, setAmount] = useState(5);
+   const dialog = useRef<HTMLDialogElement>(null);
+   const trigger = useRef<HTMLButtonElement>(null);
+   const activeRequest = useRef<AbortController | null>(null);
+   const titleId = useId();
+   const amountId = useId();
+   const errorId = useId();
+   const [amount, setAmount] = useState("5");
    const [pending, setPending] = useState(false);
    const [error, setError] = useState("");
 
-   const redirectToCheckout = async () => {
-      if (pending) return;
-      if (dollarsToCents(amount) === null) {
-         setError("Enter an amount of at least $0.50 in dollars and cents.");
+   useEffect(() => () => activeRequest.current?.abort(), []);
+
+   function updateAmount(value: string) {
+      setAmount(value);
+      setError("");
+   }
+
+   function handleClose() {
+      activeRequest.current?.abort();
+      activeRequest.current = null;
+      setPending(false);
+      setError("");
+      trigger.current?.focus({ preventScroll: true });
+   }
+
+   async function startCheckout(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      if (activeRequest.current) return;
+      const value = amount.trim().replace(",", ".");
+      const price = /^\d*(\.\d{1,2})?$/.test(value) ? Number(value) : NaN;
+      if (dollarsToCents(price) === null) {
+         setError("Enter an amount of at least $0.50, with up to two decimal places.");
          return;
       }
+
+      const request = new AbortController();
+      activeRequest.current = request;
       setPending(true);
       setError("");
       try {
          const response = await fetch("/api/stripe/create-checkout-session", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            signal: request.signal,
             body: JSON.stringify({
+               success_url: supportThanksPath,
+               metadata: { order_type: "tip" },
                lineItems: [{
-                  price: amount,
+                  price,
                   images: ["https://www.dayamuneton.com/DayaMunetonB&WArt.jpg"],
                   name: "Support My Work",
                }],
             }),
          });
          const data = await response.json();
+         if (request.signal.aborted) return;
          if (!response.ok || typeof data.url !== "string") throw new Error("Checkout unavailable");
-         await router.push(data.url);
+         if (data.url.startsWith("/") && !data.url.startsWith("//")) {
+            if (await router.push(data.url)) dialog.current?.close();
+         } else {
+            const checkout = new URL(data.url);
+            if (checkout.protocol !== "https:") throw new Error("Invalid checkout URL");
+            window.location.assign(checkout.href);
+         }
       } catch {
-         setError("Checkout is unavailable. Please try again.");
+         if (!request.signal.aborted) setError("Checkout is unavailable. Please try again.");
       } finally {
-         setPending(false);
+         if (activeRequest.current === request) {
+            activeRequest.current = null;
+            setPending(false);
+         }
       }
-   };
+   }
 
    return (
-      <Acordion className="flex flex-col items-center justify-center rounded-xl bg-linear-to-r/srgb from-[#4a23a9] to-[#5cdde5] drop-shadow-md w-[90vw] max-w-xl">
-         <AcordionButton className="relative w-full scale-[1.01] px-4 py-2 text-white  rounded-lg flex">
-            <p className="w-full text-center">Click here to support my work</p>
-            <AcordionIcon className="absolute right-4" />
-         </AcordionButton>
-         <AcordionContent className="flex  flex-col  justify-center w-[90%] mx-auto px-6 pb-4 ">
-            <h3 className="mb-4">Tip (in USD)</h3>
-            <div className="flex flex-wrap w-full gap-2 mx-auto sm:justify-between sm:flex-nowrap ">
-               {tipOptions.map((tip) => (
-                  <TipOption key={tip} setAmount={setAmount} amount={tip} />
-               ))}
+      <>
+         <button ref={trigger} type="button" aria-haspopup="dialog"
+            className="portfolio-button portfolio-button-secondary"
+            onClick={() => dialog.current?.showModal()}>
+            Support my work
+         </button>
+         <dialog ref={dialog} aria-labelledby={titleId} className="support-dialog"
+            onClose={handleClose} onClick={(event) => {
+               if (event.target === event.currentTarget) event.currentTarget.close();
+            }}>
+            <div className="support-dialog-body">
+               <header className="mb-5 flex items-start justify-between gap-3">
+                  <div>
+                     <h2 id={titleId} className="text-2xl font-bold">Support my work</h2>
+                     <p className="mt-1 text-sm text-[#503e68]">Your tip helps make emotional education freely available.</p>
+                  </div>
+                  <button type="button" className="support-close" aria-label="Close support"
+                     onClick={() => dialog.current?.close()}>
+                     <span aria-hidden="true">×</span>
+                  </button>
+               </header>
+               <form onSubmit={startCheckout} noValidate>
+                  <fieldset disabled={pending}>
+                     <legend className="mb-2 text-sm font-semibold">Choose an amount</legend>
+                     <div className="support-options">
+                        {tipOptions.map((tip) => (
+                           <button type="button" key={tip} aria-pressed={Number(amount.replace(",", ".")) === tip}
+                              onClick={() => updateAmount(String(tip))}>
+                              ${tip}
+                           </button>
+                        ))}
+                     </div>
+                     <label className="mt-4 block text-sm font-semibold" htmlFor={amountId}>Tip amount (USD)</label>
+                     <div className="support-input mt-2">
+                        <span aria-hidden="true">$</span>
+                        <input id={amountId} type="text" inputMode="decimal" autoComplete="off"
+                           value={amount} onChange={(event) => updateAmount(event.target.value)}
+                           aria-invalid={Boolean(error)} aria-describedby={error ? errorId : undefined} />
+                     </div>
+                     {error && <p id={errorId} role="alert" className="mt-2 text-sm font-medium text-[#9b203e]">{error}</p>}
+                     <button type="submit" className="portfolio-button portfolio-button-primary mt-5 w-full">
+                        {pending ? "Opening checkout…" : "Continue to checkout"}
+                     </button>
+                  </fieldset>
+                  <span className="sr-only" role="status">{pending ? "Opening checkout…" : ""}</span>
+               </form>
             </div>
-            <div className="flex w-full p-2 px-6 mt-4 bg-transparent border-2 border-white rounded-full">
-               <p>$</p>
-               <input
-                  value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                  type="number"
-                  aria-label="Tip amount in US dollars"
-                  min={0.5}
-                  step={0.01}
-                  placeholder="Or enter another amount"
-                  className="w-full pl-2 bg-transparent outline-hidden"
-               />
-            </div>
-            <button
-               type="button"
-               disabled={pending}
-               onClick={redirectToCheckout}
-               className="bg-[#5cdde5] mx-auto mt-4 w-full py-2 text-white rounded-full drop-shadow-md hover:scale-[1.01] "
-            >
-               {pending ? "Opening checkout…" : "Send"}
-            </button>
-            {error && <p role="alert" className="mt-2">{error}</p>}
-         </AcordionContent>
-      </Acordion>
+         </dialog>
+      </>
    );
-};
-
-export default SupportMyWork;
+}

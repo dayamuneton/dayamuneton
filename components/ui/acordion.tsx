@@ -73,11 +73,10 @@ export function AcordionContent({
       <div
          id={contentId}
          inert={!isOpen}
-         className={`overflow-hidden transition-all duration-300 ease-in-out w-full motion-reduce:transition-none ${
-            isOpen ? "max-h-[300vh]" : "max-h-[0vh]"
-         }`}
+         className="disclosure-content"
+         data-open={isOpen}
       >
-         <div className={className}>{children}</div>
+         <div className="disclosure-clip"><div className={className}>{children}</div></div>
       </div>
    );
 }

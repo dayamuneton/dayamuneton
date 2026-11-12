@@ -4,7 +4,7 @@ import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import { Acordion, AcordionButton, AcordionContent } from "./ui/acordion";
 
 function AcquireGuide({
@@ -18,9 +18,14 @@ function AcquireGuide({
    const { currentUser } = useAuth();
    const [name, setName] = useState(currentUser?.displayName || "");
    const [email, setEmail] = useState(currentUser?.email || "");
+   const [pending, setPending] = useState(false);
+   const [error, setError] = useState("");
 
-   const redirectToCheckout = async (e: any) => {
-      e.preventDefault();
+   const redirectToCheckout = async (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      if (pending) return;
+      setPending(true);
+      setError("");
       const data = removeUndefinedEntriesFromObject(product);
       if (variant) {
          data.name = `${product.name} (${variant.title})`;
@@ -28,21 +33,22 @@ function AcquireGuide({
          data.variantId = variant.id;
       }
 
-      const response = await createPdfsCheckout({
-         cartItems: [data],
-         cancel_url: `/ageofemotions/${
-            product.category
-         }/${encodeURIComponent(product.handle || "")}`,
-         email: currentUser?.email || email,
-         name: currentUser?.displayName || name,
-         success_url: "/thankyou",
-      });
-
-      if (response.url) {
-         router.push(response.url);
+      try {
+         const response = await createPdfsCheckout({
+            cartItems: [data],
+            cancel_url: `/ageofemotions/${product.category}/${encodeURIComponent(product.handle || "")}`,
+            email: currentUser?.email || email,
+            name: currentUser?.displayName || name,
+            success_url: "/thankyou",
+         });
+         if (!response.url) throw new Error("Missing checkout URL");
+         await router.push(response.url);
+      } catch {
+         setError("Couldn’t open checkout. Please try again.");
+      } finally {
+         setPending(false);
       }
    };
-   // console.log(language);
    let buttonText = "Buy this guide";
    if (product.price === 0) {
       buttonText = "Acquire Guide";
@@ -50,12 +56,15 @@ function AcquireGuide({
 
    if (currentUser) {
       return (
-         <button
-            onClick={redirectToCheckout}
-            className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md hover:scale-[1.005] px-4 py-2"
-         >
-            {buttonText}
-         </button>
+         <div className="w-full">
+            <button type="button" disabled={pending}
+               onClick={redirectToCheckout}
+               className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md px-4 py-2"
+            >
+               {pending ? "Opening checkout…" : buttonText}
+            </button>
+            {error && <p role="alert" className="text-sm text-[#9b203e]">{error}</p>}
+         </div>
       );
    }
    return (
@@ -105,9 +114,11 @@ function AcquireGuide({
                      </Link>
                   </span>
                </label>
-               <button className="w-[90%] my-4 px-4 py-2 text-white bg-[#4a23a9] border-2 border-white rounded-md">
-                  Buy
+               <button type="submit" disabled={pending}
+                  className="w-[90%] my-4 min-h-11 px-4 py-2 text-white bg-[#4a23a9] border-2 border-white rounded-md">
+                  {pending ? "Opening checkout…" : buttonText}
                </button>
+               {error && <p role="alert" className="mb-4 text-sm">{error}</p>}
             </form>
          </AcordionContent>
       </Acordion>

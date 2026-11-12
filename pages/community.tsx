@@ -2,13 +2,14 @@ import CommunityColumn from "@/components/communityColumn";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
-import Image from "next/image";
+import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
 import { useRef, useState, FormEvent } from "react";
 import { useAuth } from "@/context/authContext";
 
 function Community() {
    const [loading, setLoading] = useState(false);
+   const [status, setStatus] = useState<"sent" | "error">();
    const [name, setName] = useState("");
    const [email, setEmail] = useState("");
    const [message, setMessage] = useState("");
@@ -18,33 +19,36 @@ function Community() {
    const sendEmail = async (e: FormEvent) => {
       e.preventDefault();
       if (loading) return;
+      setLoading(true);
+      setStatus(undefined);
       try {
-         setLoading(true);
-         setName("");
-         setEmail("");
-         setMessage("");
-         setAnonymously(false);
-         await fetch("/api/send-email", {
+         const response = await fetch("/api/send-email", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
             },
             body: JSON.stringify({
-               name,
-               email,
-               message,
+               name: currentUser?.displayName || name.trim(),
+               email: currentUser?.email || email.trim(),
+               message: message.trim(),
                anonymously,
             }),
          });
+         if (!response.ok) throw new Error("Message could not be sent");
+         setMessage("");
+         setStatus("sent");
+      } catch {
+         setStatus("error");
+      } finally {
          setLoading(false);
-      } catch (error) {
-         console.error(error);
       }
    };
 
    const scrollRef = useRef<HTMLFormElement | null>(null);
    const scroll = () => {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      scrollRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+      scrollRef.current?.focus({ preventScroll: true });
    };
 
    return (
@@ -103,8 +107,8 @@ function Community() {
                      favorite song evoke?
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
-                     <Image
-                        src="/HeadPhonesCommunity1.png"
+                     <ArtworkImage
+                        src="/HeadPhonesCommunity1.png" sizes="(min-width: 768px) 22vw, 49vw"
                         alt="Headphones Community"
                         fill
                         className="object-cover"
@@ -129,8 +133,8 @@ function Community() {
                      Station of Dreams and Challenges:
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
-                     <Image
-                        src="/HeadPhonesCommunity2.png"
+                     <ArtworkImage
+                        src="/HeadPhonesCommunity2.png" sizes="(min-width: 768px) 22vw, 49vw"
                         alt="Headphones Community"
                         fill
                         className="object-cover"
@@ -156,8 +160,8 @@ function Community() {
                      Station of Journeys and Adventures:
                   </p>
                   <span className="aspect-square relative w-[70%] mx-auto">
-                     <Image
-                        src="/HeadPhonesCommunity3.png"
+                     <ArtworkImage
+                        src="/HeadPhonesCommunity3.png" sizes="(min-width: 768px) 22vw, 49vw"
                         alt="Headphones Community"
                         fill
                         className="object-cover"
@@ -183,8 +187,8 @@ function Community() {
                </h2>
                <div className="flex flex-col items-center sm:flex-row">
                   <span className="!aspect-square !min-w-[15rem] relative  max-w-[70vw] mx-auto mb-8">
-                     <Image
-                        src="/MujerYourCanvas1.png"
+                     <ArtworkImage
+                        src="/MujerYourCanvas1.png" sizes="(min-width: 768px) 360px, 70vw"
                         alt="Mujer Your Canvas"
                         fill
                      />
@@ -218,7 +222,8 @@ function Community() {
             <form
                onSubmit={sendEmail}
                ref={scrollRef}
-               className="flex flex-col max-w-xl px-14 rounded-3xl drop-shadow-sm bg-linear-to-r/srgb  from-[#754af1] to-[#51eace] py-10 text-sm"
+               tabIndex={-1}
+               className="flex flex-col w-full max-w-xl px-5 sm:px-10 rounded-3xl drop-shadow-sm bg-[#f6f0fc] py-7 text-[#35204f]"
             >
                <p className="font-semibold">
                   Please share your musical stories here. You are invited to
@@ -236,24 +241,27 @@ function Community() {
                   incorporation into her artwork, and use in future projects
                   such as books and audiovisual podcasts.
                </p>
-               <div className={`${currentUser ? "hidden" : ""} flex flex-col`}>
-                  <p>Write your name, email and your answer.</p>
+               {!currentUser?.email && <div className="flex flex-col gap-2">
+                  <label htmlFor="story-name">Name (optional)</label>
                   <input
+                     id="story-name"
                      type="text"
-                     className="px-4 py-1 mt-4"
-                     placeholder="Name"
+                     autoComplete="name"
+                     className="min-h-11 rounded border bg-white px-3"
                      value={name}
                      onChange={(e) => setName(e.target.value)}
                   />
+                  <label className="mt-2" htmlFor="story-email">Email</label>
                   <input
+                     id="story-email"
                      type="email"
                      required
-                     className="px-4 py-1 mt-4"
-                     placeholder="Email"
+                     autoComplete="email"
+                     className="min-h-11 rounded border bg-white px-3"
                      value={email}
                      onChange={(e) => setEmail(e.target.value)}
                   />
-               </div>
+               </div>}
                <label className="flex my-4 font-medium">
                   <input
                      type="checkbox"
@@ -265,9 +273,7 @@ function Community() {
                   </span>
                </label>
                <label
-                  className={`${
-                     currentUser ? "hidden" : ""
-                  } flex my-4 font-medium`}
+                  className="flex my-4 font-medium"
                >
                   <input type="checkbox" required />
                   <span className="pl-2 text-sm">
@@ -295,24 +301,29 @@ function Community() {
                   various platforms and media, and your agreement will serve as
                   your signature.
                </p>
+               <label htmlFor="story-message" className="mb-2 font-medium">Your story</label>
                <textarea
-                  className="h-[7rem]"
+                  id="story-message"
+                  required
+                  maxLength={10000}
+                  className="h-28 rounded border bg-white p-3"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                />
-               <button className="py-2 my-2 bg-white drop-shadow-sm" type="submit">
-                  SEND
+               <button className="portfolio-button portfolio-button-primary mt-4" type="submit" disabled={loading}>
+                  {loading ? "Sending…" : "Send story"}
                </button>
-               <p className="mx-auto">Thank You!</p>
+               {status === "sent" && <p className="mt-3" role="status">Thank you. Your story was submitted.</p>}
+               {status === "error" && <p className="mt-3 text-[#9b203e]" role="alert">Couldn’t send your story. Please try again.</p>}
             </form>
             {/* <p className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
                {`"The insights gathered from these artistic activities will serve to craft art aimed at enhancing life's appreciation, while also enabling me to continue developing practices rooted in the authentic experiences we collectively share in this space."`}
             </p> */}
             {/* <div className="bg-linear-to-r/srgb from-[#754af1] to-[#51eace] rounded-3xl drop-shadow-sm  flex flex-col items-center w-full py-6 mb-4">
                <div className="flex flex-col items-center gap-3 sm:flex-row">
-                  <span className="flex relative mx-auto min-w-[20rem]  sm:min-w-[15rem] h-[23rem]">
-                     <Image
-                        src="/ESCUCHA_LA_MUSICA_DE_TU_LIENZO.png"
+                  <span className="flex relative mx-auto w-full max-w-[20rem] min-h-[15rem] sm:w-[15rem] h-[23rem]">
+                     <ArtworkImage
+                        src="/ESCUCHA_LA_MUSICA_DE_TU_LIENZO.png" sizes="(min-width: 640px) 240px, min(320px, 90vw)"
                         fill
                         alt=""
                         className="object-cover object-top"
