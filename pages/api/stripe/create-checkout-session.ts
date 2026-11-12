@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 import { supportThanksPath } from "@/features/home/support";
 import { getStripe } from "@/integrations/stripe/stripeConfig";
 import { formatLineItems, sameOriginUrl } from "@/integrations/stripe/line-items";
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    const line_items = formatLineItems(lineItems);
    if (!line_items) return res.status(400).json({ message: "Invalid checkout items" });
 
-   if (isLocalSite) {
+   if (isTestSite) {
       const url = metadata?.order_type === "tip" && success_url === supportThanksPath
          ? supportThanksPath
          : "/thankyou?checkout=local";

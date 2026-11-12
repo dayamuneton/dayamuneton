@@ -1,7 +1,7 @@
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 
 export const makePostRequestToConvertionsAPI = async (payload: any) => {
-   if (isLocalSite) return;
+   if (isTestSite) return;
    try {
       const response = await fetch(
          `https://graph.facebook.com/v15.0/${process.env.CONVERTIONS_API_PIXEL_ID}/events`,

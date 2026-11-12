@@ -15,7 +15,7 @@ export const getServerSideProps = (async ({ params }) => {
    if (!category || typeof params?.artWork !== "string") return { notFound: true };
    const snapshot = await findCatalogItem("products", category.slug, params.artWork);
    if (!snapshot) return { notFound: true };
-   const data = snapshot.data();
+   const data = snapshot.data;
    return { props: { routeKey: snapshot.id, category, product: {
       id: snapshot.id,
       handle: data.handle || snapshot.id,

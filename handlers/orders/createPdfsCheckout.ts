@@ -1,5 +1,6 @@
 import { collection, doc, runTransaction } from "firebase/firestore/lite";
 import { db } from "@/integrations/firebase/firestore-lite";
+import { isPreviewSite } from "@/config/site-environment";
 import type { OrderType } from "../checkoutSessionCompleted/event";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 
@@ -42,6 +43,7 @@ async function removeOrderedItems(cartId: string, ordered: CheckoutRequest["cart
 }
 
 export async function createPdfsCheckout({ cartItems, email, name, cancel_url, success_url, cartId }: CheckoutRequest) {
+   if (isPreviewSite) return { url: "/thankyou?checkout=preview" };
    const items = cartItems.map(removeUndefinedEntriesFromObject);
    await claimFreeGuides(items, email, name);
 

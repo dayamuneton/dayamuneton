@@ -1,12 +1,12 @@
 import { firstLetterUpperCaseEachWord } from "@/utils/firstLetterUpperCase";
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 
 export const subscribeCustomerToGroups = async (
    email: string,
    fullName: string,
    groups: string | string[]
 ) => {
-   if (isLocalSite || !email || !fullName) return;
+   if (isTestSite || !email || !fullName) return;
 
    const name = fullName.toLowerCase();
 

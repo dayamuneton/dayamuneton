@@ -16,7 +16,7 @@ export const getServerSideProps = (async ({ params }) => {
    if (!category || typeof params?.pdfproduct !== "string") return { notFound: true };
    const snapshot = await findCatalogItem("pdfproducts", category.slug, params.pdfproduct);
    if (!snapshot) return { notFound: true };
-   const data = snapshot.data();
+   const data = snapshot.data;
    const product = { ...new GuiaProduct({ ...data, id: snapshot.id, handle: data.handle || snapshot.id }) };
    product.beneficts = sanitizeHtml(product.beneficts, {
       allowedTags: ["p", "br", "strong", "b", "em", "i", "ul", "ol", "li", "a"],

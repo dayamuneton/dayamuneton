@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    if (req.method !== "POST") {
@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        typeof message !== "string" || !message.trim() || message.length > 10_000) {
       return res.status(400).json({ error: "Invalid message" });
    }
-   if (isLocalSite) return res.status(200).json({ accepted: true, local: true });
+   if (isTestSite) return res.status(200).json({ accepted: true, local: true });
 
    const clientId = process.env.GOOGLE_APIS_CLIENT_ID;
    const clientSecret = process.env.GOOGLE_APIS_CLIENT_SECRET;

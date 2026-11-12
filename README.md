@@ -49,6 +49,12 @@ Run `npm run artwork:generate` after changing a bundled artwork source. Commit t
 - `integrations/` contains Firebase, Stripe, and email platform adapters. `handlers/` contains order workflows.
 - `tests/` contains unit tests, browser tests, and rules for the demo emulators.
 
+## Vercel Preview
+
+Vercel builds Preview deployments with the sample artwork and guides from the local seed. Preview checkout and email are simulated, and sign-in and admin are available in the local emulator build. A Preview needs no Firebase or payment credentials.
+
+To reproduce the Preview build locally, set `VERCEL_ENV=preview` and run `npm run build`, then `npx next start`.
+
 ## Production handoff
 
 Production requires an explicit `NEXT_PUBLIC_SITE_ENV=production` in the deployment environment. The repository does not contain live service credentials or production Firebase rules. Review the existing Firestore and Storage rules, server-side catalog price verification, and payment fulfillment against the owner's configuration before releasing. The tests use test doubles for Stripe, Gmail, and MailerLite, so they do not verify the live integrations.

@@ -1,7 +1,7 @@
 import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
-import { isLocalSite, localFirebase } from "@/config/site-environment";
+import { isLocalSite, isTestSite, localFirebase } from "@/config/site-environment";
 
-const firebaseConfig = isLocalSite ? {
+const firebaseConfig = isTestSite ? {
    apiKey: "demo-api-key",
    projectId: localFirebase.projectId,
    storageBucket: `${localFirebase.projectId}.appspot.com`,
@@ -15,7 +15,7 @@ const firebaseConfig = isLocalSite ? {
    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const appName = isLocalSite ? localFirebase.projectId : "[DEFAULT]";
+const appName = isTestSite ? localFirebase.projectId : "[DEFAULT]";
 const existingApp = getApps().find((app) => app.name === appName);
 export const app = existingApp ?? initializeApp(firebaseConfig, appName);
 

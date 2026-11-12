@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { User } from "firebase/auth";
+import { isPreviewSite } from "@/config/site-environment";
 
 interface AuthContextValue {
    currentUser: User | null;
@@ -61,9 +62,10 @@ async function logout() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
    const [currentUser, setCurrentUser] = useState<User | null>(null);
-   const [authReady, setAuthReady] = useState(false);
+   const [authReady, setAuthReady] = useState(isPreviewSite);
 
    useEffect(() => {
+      if (isPreviewSite) return;
       let active = true;
       let unsubscribe: (() => void) | undefined;
       loadAuth()

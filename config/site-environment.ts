@@ -1,4 +1,6 @@
-export const isLocalSite = process.env.NEXT_PUBLIC_SITE_ENV !== "production";
+export const isPreviewSite = process.env.NEXT_PUBLIC_SITE_ENV === "preview";
+export const isTestSite = process.env.NEXT_PUBLIC_SITE_ENV !== "production";
+export const isLocalSite = isTestSite && !isPreviewSite;
 
 export const localFirebase = {
    projectId: "demo-dayamuneton",

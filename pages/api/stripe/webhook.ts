@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 import checkoutSessionCompletedEvent from "@/handlers/checkoutSessionCompleted/event";
 import { getStripe } from "@/integrations/stripe/stripeConfig";
 
@@ -22,7 +22,7 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
       res.setHeader("Allow", "POST");
       return res.status(405).end();
    }
-   if (isLocalSite) return res.status(404).end();
+   if (isTestSite) return res.status(404).end();
 
    const secret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET;
    const signature = req.headers["stripe-signature"];

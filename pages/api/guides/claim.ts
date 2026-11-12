@@ -1,5 +1,6 @@
 import type { NextApiRequest,NextApiResponse } from "next";
-import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
+import { isPreviewSite } from "@/config/site-environment";
+import { demoCatalog } from "@/features/catalog/demo-data";
 import { subscribeCustomerToGroups } from "@/integrations/mailerlite/subscribeCustomerToGroups";
 import type { GuiaProduct } from "@/models/guiaProductModel";
 
@@ -15,7 +16,13 @@ export default async function claimGuide(req: NextApiRequest, res: NextApiRespon
       return res.status(400).json({ error: "Invalid guide claim" });
    }
 
+   if (isPreviewSite) {
+      const valid = items.every((item) => demoCatalog.pdfproducts.some((guide) => guide.price === 0 && guide.handle === item?.handle));
+      return valid ? res.status(200).json({ accepted: true }) : res.status(400).end();
+   }
+
    try {
+      const { getProductByHandle } = await import("@/integrations/firebase/getProductByHandle");
       const groups: string[] = [];
       for (const item of items) {
          if (!item || typeof item.handle !== "string") return res.status(400).end();

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import PageIntro from "@/components/layout/PageIntro";
-import { isLocalSite } from "@/config/site-environment";
+import { isTestSite } from "@/config/site-environment";
 
 export default function ThankYou() {
    return (
@@ -11,7 +11,7 @@ export default function ThankYou() {
             <PageIntro title="Welcome to your journey with art and emotions" />
             <div className="reading-flow">
                <p>Thank you for exploring the connection between emotions and art. Your support helps me bring emotional education to more people.</p>
-               {isLocalSite
+               {isTestSite
                   ? <p>This was a test checkout. No payment was made or email sent.</p>
                   : <p>If you ordered a guide, check your inbox. For help, email <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>.</p>}
                <p className="font-semibold text-ink">Daya Muneton</p>
