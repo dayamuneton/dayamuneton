@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isTestSite } from "@/config/site-environment";
 import checkoutSessionCompletedEvent from "@/handlers/checkoutSessionCompleted/event";
-import { getStripe } from "@/integrations/stripe/stripeConfig";
+import { verifyStripeWebhook } from "@/integrations/stripe/webhook-signature";
 
 export const config = { api: { bodyParser: false } };
 
@@ -30,7 +30,7 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
 
    let event;
    try {
-      event = getStripe().webhooks.constructEvent(await readBody(req), signature, secret);
+      event = verifyStripeWebhook(await readBody(req), signature, secret);
    } catch {
       return res.status(400).send("Invalid webhook");
    }
