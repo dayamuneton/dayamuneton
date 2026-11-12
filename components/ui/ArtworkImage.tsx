@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { memo, useState } from "react";
 import variants from "@/lib/artwork/variants.json";
 
 type Variant = (typeof variants)[keyof typeof variants];
@@ -19,11 +19,16 @@ function sourceSet(asset: Variant, format: string) {
    return widths.map((width) => `${asset.path}-${width}.${format} ${width}w`).join(", ");
 }
 
-export default function ArtworkImage({
+const artworkSources = new Map(Object.entries(variants).map(([src, asset]) => [
+   src, { asset, webp: sourceSet(asset, "webp"), fallback: sourceSet(asset, asset.fallback) },
+]));
+
+const ArtworkImage = memo(function ArtworkImage({
    src, alt, sizes, fill = false, eager = false, priority = false, className = "",
 }: ArtworkImageProps) {
    const [failedSrc, setFailedSrc] = useState<string>();
-   const asset = src ? (variants as Record<string, Variant>)[src] : undefined;
+   const sources = src ? artworkSources.get(src) : undefined;
+   const asset = sources?.asset;
    const imageClass = `${fill ? "artwork-fill" : "artwork-inline"} ${className}`;
    const loading = eager || priority ? "eager" : "lazy";
 
@@ -37,7 +42,7 @@ export default function ArtworkImage({
       );
    }
 
-   if (!asset) {
+   if (!asset || !sources) {
       return (
          <Image src={src} alt={alt} fill={fill} sizes={sizes} loading={loading}
             width={fill ? undefined : 960} height={fill ? undefined : 960}
@@ -48,11 +53,13 @@ export default function ArtworkImage({
 
    return (
       <picture>
-         <source type="image/webp" srcSet={sourceSet(asset, "webp")} sizes={sizes} />
+         <source type="image/webp" srcSet={sources.webp} sizes={sizes} />
          <img src={`${asset.path}-${asset.widths[0]}.${asset.fallback}`}
-            srcSet={sourceSet(asset, asset.fallback)} sizes={sizes} width={asset.width} height={asset.height}
+            srcSet={sources.fallback} sizes={sizes} width={asset.width} height={asset.height}
             alt={alt} loading={loading} decoding="async" fetchPriority={priority ? "high" : undefined}
             className={imageClass} onError={() => setFailedSrc(src)} />
       </picture>
    );
-}
+});
+
+export default ArtworkImage;

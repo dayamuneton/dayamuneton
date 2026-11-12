@@ -1,44 +1,36 @@
-import { useAuth } from "@/context/authContext";
-import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
-import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
-import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, type FormEvent, type MouseEvent } from "react";
-import { Acordion, AcordionButton, AcordionContent } from "./ui/acordion";
+import { useState, type FormEvent } from "react";
+import { useAuth } from "@/context/authContext";
+import type { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
+import Disclosure from "./ui/Disclosure";
 
-function AcquireGuide({
-   product,
-   variant,
-}: {
-   product: GuiaProduct;
-   variant?: GuiaProductVariant;
-}) {
+export default function AcquireGuide({ product, variant }: { product: GuiaProduct; variant?: GuiaProductVariant }) {
    const router = useRouter();
    const { currentUser } = useAuth();
-   const [name, setName] = useState(currentUser?.displayName || "");
-   const [email, setEmail] = useState(currentUser?.email || "");
    const [pending, setPending] = useState(false);
    const [error, setError] = useState("");
+   const label = product.price === 0 ? "Acquire Guide" : "Buy this guide";
 
-   const redirectToCheckout = async (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
+   async function startCheckout(email: string, name: string) {
       if (pending) return;
       setPending(true);
       setError("");
-      const data = removeUndefinedEntriesFromObject(product);
-      if (variant) {
-         data.name = `${product.name} (${variant.title})`;
-         data.mailerlite_group = variant.mailerlite_group;
-         data.variantId = variant.id;
-      }
 
       try {
+         const { createPdfsCheckout } = await import("@/handlers/orders/createPdfsCheckout");
          const response = await createPdfsCheckout({
-            cartItems: [data],
-            cancel_url: `/ageofemotions/${product.category}/${encodeURIComponent(product.handle || "")}`,
-            email: currentUser?.email || email,
-            name: currentUser?.displayName || name,
+            cartItems: [{
+               ...product,
+               ...(variant && {
+                  name: `${product.name} (${variant.title})`,
+                  mailerlite_group: variant.mailerlite_group,
+                  variantId: variant.id,
+               }),
+            }],
+            cancel_url: router.asPath,
+            email,
+            name: name.trim() || email.split("@")[0],
             success_url: "/thankyou",
          });
          if (!response.url) throw new Error("Missing checkout URL");
@@ -48,81 +40,41 @@ function AcquireGuide({
       } finally {
          setPending(false);
       }
-   };
-   let buttonText = "Buy this guide";
-   if (product.price === 0) {
-      buttonText = "Acquire Guide";
    }
 
-   if (currentUser) {
+   function submit(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      const fields = new FormData(event.currentTarget);
+      void startCheckout(String(fields.get("email") ?? "").trim(), String(fields.get("name") ?? ""));
+   }
+
+   const feedback = error && <p className="form-feedback" role="alert">{error}</p>;
+   if (currentUser?.email) {
+      const { email, displayName } = currentUser;
       return (
-         <div className="w-full">
-            <button type="button" disabled={pending}
-               onClick={redirectToCheckout}
-               className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md px-4 py-2"
-            >
-               {pending ? "Opening checkout…" : buttonText}
+         <div className="detail-actions">
+            <button type="button" disabled={pending} onClick={() => void startCheckout(email, displayName || "")}
+               className="portfolio-button portfolio-button-primary">
+               {pending ? "Opening checkout…" : label}
             </button>
-            {error && <p role="alert" className="text-sm text-[#9b203e]">{error}</p>}
+            {feedback}
          </div>
       );
    }
-   return (
-      <Acordion className="my-2 text-lg bg-[#4a23a9] text-white border-2 border-[#4a23a9] rounded-md hover:scale-[1.005]">
-         <AcordionButton className="w-full px-4 py-2 ">
-            {buttonText}
-         </AcordionButton>
-         <AcordionContent>
-            <form
-               onSubmit={redirectToCheckout}
-               className="flex flex-col items-center w-full px-4 overflow-hidden transition-all duration-300 ease-in-out"
-            >
-               <label className="flex flex-col w-full mt-2">
-                  <p>Name:</p>
-                  <input
-                     type="text"
-                     required
-                     value={name}
-                     onChange={(e) => setName(e.target.value)}
-                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
-                  />
-               </label>
-               <label className="flex flex-col w-full mt-2">
-                  <p>Email:</p>
-                  <input
-                     type="email"
-                     required
-                     value={email}
-                     // placeholder="Email"
-                     onChange={(e) => setEmail(e.target.value)}
-                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
-                  />
-               </label>
 
-               <label className="flex my-4 font-medium">
-                  <input type="checkbox" required />
-                  <span className="pl-2 text-sm">
-                     <p className="inline mr-1">
-                        I accept the terms and conditions
-                     </p>
-                     <Link
-                        href="/legal/terms-of-service"
-                        target="_blank"
-                        className="underline"
-                     >
-                        See Terms of Use
-                     </Link>
-                  </span>
-               </label>
-               <button type="submit" disabled={pending}
-                  className="w-[90%] my-4 min-h-11 px-4 py-2 text-white bg-[#4a23a9] border-2 border-white rounded-md">
-                  {pending ? "Opening checkout…" : buttonText}
-               </button>
-               {error && <p role="alert" className="mb-4 text-sm">{error}</p>}
-            </form>
-         </AcordionContent>
-      </Acordion>
+   return (
+      <Disclosure label={label}>
+         <form onSubmit={submit} className="form-stack">
+            <label>Name<input name="name" autoComplete="name" required /></label>
+            <label>Email<input name="email" type="email" autoComplete="email" required /></label>
+            <label className="check-field"><input type="checkbox" required />
+               <span>I accept the <Link href="/legal/terms-of-service" target="_blank" className="form-link">terms and conditions</Link>.</span>
+            </label>
+            <button type="submit" disabled={pending} className="portfolio-button portfolio-button-primary">
+               {pending ? "Opening checkout…" : label}
+            </button>
+            {feedback}
+         </form>
+      </Disclosure>
    );
 }
-
-export default AcquireGuide;

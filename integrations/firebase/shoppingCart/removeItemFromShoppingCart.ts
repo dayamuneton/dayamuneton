@@ -1,44 +1,25 @@
-import { GuiaProduct } from "@/models/guiaProductModel";
-import { ShoppingCart } from "@/models/shoppingCartModel";
-import { db } from "@/integrations/firebase/firebaseConfig";
-import {
-arrayRemove,
-doc,
-increment,
-serverTimestamp,
-updateDoc,
-} from "firebase/firestore";
+import type { ShoppingCart } from "@/models/shoppingCartModel";
+import { db } from "@/integrations/firebase/firestore-lite";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore/lite";
 
-export const removeCartItem = async (
+export async function removeCartItem(
    shoppingCart: ShoppingCart | null,
-   item: GuiaProduct,
-   customHandle?: string
-) => {
-   try {
-      if (!shoppingCart) return null;
+   item: { handle: string; name: string; variantId?: string },
+) {
+   if (!shoppingCart) return;
+   const reference = doc(db, "shoppingCarts", shoppingCart.id);
 
-      const cartDoc = doc(db, "shoppingCarts", shoppingCart.id);
-
-      const cartItems = shoppingCart.cartItems.filter(
-         (cartItem) => cartItem.handle !== (customHandle || item.handle)
-      );
-      const removedItem = shoppingCart?.cartItems?.find(
-         (cartItem) => cartItem.handle === (customHandle || item.handle)
-      );
-
-      if (removedItem === undefined) return null;
-
-      await updateDoc(cartDoc, {
-         cartItems: arrayRemove(removedItem),
-         subTotal: increment(-removedItem.price),
+   await runTransaction(db, async (transaction) => {
+      const snapshot = await transaction.get(reference);
+      if (!snapshot.exists() || !snapshot.get("isActive")) return;
+      const items: ShoppingCart["cartItems"] = snapshot.get("cartItems") ?? [];
+      const index = items.findIndex((entry) => entry.handle === item.handle && entry.name === item.name && entry.variantId === item.variantId);
+      if (index < 0) return;
+      const remaining = items.filter((_, position) => position !== index);
+      transaction.update(reference, {
+         cartItems: remaining,
+         subTotal: remaining.reduce((total, entry) => total + Number(entry.price || 0), 0),
          updatedAt: serverTimestamp(),
       });
-
-      const cartData = { ...shoppingCart, cartItems };
-
-      return new ShoppingCart(cartData);
-   } catch (error) {
-      console.error("Error removing item from cart: ", error);
-      throw new Error("Could not remove item from cart.");
-   }
-};
+   });
+}

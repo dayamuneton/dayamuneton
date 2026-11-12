@@ -12,15 +12,12 @@
     "test": "tsx --test tests/unit/*.test.ts",
     "artwork:generate": "node scripts/generate-artwork.mjs",
     "test:browser": "cross-env NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 playwright test",
+    "seed:local": "cross-env NEXT_PUBLIC_SITE_ENV=local tsx scripts/seed-local-catalog.ts",
     "firebase:local": "firebase emulators:start --config firebase.local.json --project demo-dayamuneton --only auth,firestore,storage",
     "test:local": "npm run build:local && firebase emulators:exec --config firebase.local.json --project demo-dayamuneton --only auth,firestore,storage \"npm run test:browser\"",
     "check": "npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
-    "@mui/icons-material": "^7",
-    "@mui/material": "^7",
     "firebase": "^12",
     "google-auth-library": "^10",
     "next": "16.4.6",
@@ -28,6 +25,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-icons": "^5",
+    "sanitize-html": "^2.17.5",
     "stripe": "^22"
   },
   "engines": {
@@ -40,6 +38,7 @@
     "@types/nodemailer": "^7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.2",
     "cross-env": "^10",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.4.6",

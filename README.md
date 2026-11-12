@@ -1,6 +1,6 @@
 # Daya Muneton
 
-The portfolio, art shop, community, and emotional education guides share the Next.js Pages Router. The home and shop use the same navigation and artwork cards.
+The portfolio, art shop, community, and emotional education guides share the Next.js Pages Router. Public pages, account screens, and admin share the navy layout, navigation, and loading feedback.
 
 ## Run locally
 
@@ -14,7 +14,7 @@ npm run firebase:local
 npm run dev
 ```
 
-Open [http://127.0.0.1:3000](http://127.0.0.1:3000). The app uses Auth, Firestore, and Storage on loopback for the `demo-dayamuneton` project. Its database starts empty. Checkout and email are simulated and MailerLite is disabled. No service credentials are needed.
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000). The app uses Auth, Firestore, and Storage on loopback for the `demo-dayamuneton` project. Its database starts empty. With the emulators running, use `npm run seed:local` to add sample artwork and guides for reviewing the collection and detail pages. Checkout and email are simulated and MailerLite is disabled. No service credentials are needed.
 
 To review the optimized build locally, use `npm run build:local` followed by `npm start`. The optimized local build uses its own output directory.
 
@@ -26,7 +26,7 @@ npx playwright install chromium
 npm run test:local
 ```
 
-Stop any standalone emulator or preview before running `test:local`. It builds the local app, starts all three emulators, and runs browser tests at desktop and mobile widths. Tests insert synthetic artwork, create a demo account, and exercise Storage and the simulated APIs. You can set `PLAYWRIGHT_CHANNEL=msedge` to use an installed Edge browser.
+Stop any standalone emulator or preview before running `test:local`. It builds the local app, starts all three emulators, and runs browser tests at desktop and mobile widths. Tests cover the public route families, cart and sign-in, catalog editing, Storage uploads, and simulated checkout and email. You can set `PLAYWRIGHT_CHANNEL=msedge` to use an installed Edge browser.
 
 For the cross-browser run, install Firefox and WebKit with `npx playwright install firefox webkit`, then set `PLAYWRIGHT_ALL_BROWSERS=1`. Set `PLAYWRIGHT_PORT` to use a different local test port. With the demo emulators already running, use `npm run build:local` and `npm run test:browser`.
 
@@ -41,8 +41,11 @@ Run `npm run artwork:generate` after changing a bundled artwork source. Commit t
 ## Code layout
 
 - `pages/` contains routes and API entry points.
-- `features/home/` contains the homepage gallery navigation.
-- `components/` contains shared UI, with admin, checkout, and navigation components grouped by purpose.
+- `features/home/` contains the homepage gallery and support flow.
+- `features/catalog/` contains collection data access and shared product UI.
+- `features/admin/` contains catalog management and editors.
+- `features/account/` contains the sign-in and registration form.
+- `components/` contains shared UI, with checkout and navigation components grouped by purpose.
 - `integrations/` contains Firebase, Stripe, and email platform adapters. `handlers/` contains order workflows.
 - `tests/` contains unit tests, browser tests, and rules for the demo emulators.
 

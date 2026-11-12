@@ -2,7 +2,7 @@ import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useId, useRef, useState } from "react";
-import PersonIcon from "@mui/icons-material/Person";
+import { MdPerson } from "react-icons/md";
 import { useClickOutside } from "@/hooks/clickOutside";
 
 export default function NavbarProfile({ size }: { size?: string }) {
@@ -16,9 +16,9 @@ export default function NavbarProfile({ size }: { size?: string }) {
 
    if (!currentUser) {
       return (
-         <Link href={{ pathname: "/auth/signup", query: { src: asPath } }}
+         <Link href={{ pathname: "/auth/login", query: { src: asPath } }}
             prefetch={false} aria-label="Sign in or create an account" className="site-nav-icon">
-            <PersonIcon sx={{ fontSize: size }} />
+            <MdPerson size={size} aria-hidden="true" />
          </Link>
       );
    }
@@ -32,11 +32,11 @@ export default function NavbarProfile({ size }: { size?: string }) {
       }}>
          <button ref={trigger} type="button" className="site-nav-icon" aria-label="Your account"
             aria-controls={panelId} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-            <PersonIcon sx={{ fontSize: size }} />
+            <MdPerson size={size} aria-hidden="true" />
          </button>
          <div id={panelId} hidden={!open} className="site-account-panel">
             <p className="break-all font-medium">{currentUser.email}</p>
-            <button type="button" className="mt-2 min-h-11 font-semibold text-[#4a23a9]" onClick={async () => {
+            <button type="button" className="mt-2 min-h-11 font-semibold text-accent" onClick={async () => {
                await logout();
                setOpen(false);
             }}>Log out</button>

@@ -1,4 +1,4 @@
-import { db } from "@/integrations/firebase/firebaseConfig";
+import { db } from "@/integrations/firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 
 export const processMembership = async ({ email }: { email: string }) => {

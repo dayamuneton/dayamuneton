@@ -1,79 +1,23 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Link from "next/link";
-import { Dancing_Script } from "next/font/google";
+import PageIntro from "@/components/layout/PageIntro";
+import { isLocalSite } from "@/config/site-environment";
 
-const dancingScript = Dancing_Script({
-   subsets: ["latin"],
-});
-
-function Thankyou() {
+export default function ThankYou() {
    return (
-      <div
-         className="flex flex-col items-center w-full h-full min-h-screen text-gray-300"
-         style={{
-            backgroundImage:
-               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-         }}
-      >
-         <Head>
-            <title>Thank You | Daya Muneton</title>
-            <meta name="description" content="Términos de uso Ama Y Liberate" />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-         <Navbar />
-         <div className="flex flex-col items-center pt-12 w-[95vw] max-w-md mb-8">
-            <h1 className="text-2xl font-bold text-center text-black">
-               <span className="block">Welcome to Your Journey </span>
-               <span className="block">with Art & Emotions</span>
-               <span className="block">THANK YOU!</span>
-            </h1>
-            <div className="flex flex-col gap-4 my-4 text-base leading-4">
-               <p>
-                  Thank you for choosing to embark on this transformative
-                  journey of enhancing your {"body's"} perception of emotions
-                  through art, creative exploration, and mindful reflection.​
-               </p>
-               <p>
-                  Your support helps advance our shared mission of promoting
-                  emotional wellbeing. By purchasing our downloadable guide,{" "}
-                  {"you've"} taken a step towards self-discovery and
-                  empowerment.
-               </p>
-               <p>
-                  Please kindly check your email for the guide. {"It's"} time to
-                  dive in and start exploring the profound connection between
-                  emotions and art. Remember, each step you take in this journey
-                  is a stride towards understanding and celebrating your unique
-                  emotional spectrum.
-               </p>
-               <span className="flex flex-col gap-2">
-                  <p>
-                     If you have any questions or require assistance along the
-                     way, please {"don't"} hesitate to get in touch.
-                  </p>
-                  <p>{"I'm"} here to support you on this exciting path.</p>
-                  <span>
-                     feel free to email me directly at
-                     <Link
-                        href="mailto:info@dayamuneton.com"
-                        className="mx-1 underline"
-                     >
-                        info@dayamuneton.com.
-                     </Link>
-                  </span>
-                  <p>Thank you once again for being a part of this journey.</p>
-                  <p>Best regards,</p>
-               </span>
-               <p className={`${dancingScript.className} text-4xl`}>
-                  Daya Muneton
-               </p>
+      <div className="portfolio-content page-content">
+         <Head><title>Thank You | Daya Muneton</title><meta name="robots" content="noindex" /></Head>
+         <section className="content-panel confirmation-panel">
+            <PageIntro title="Welcome to your journey with art and emotions" />
+            <div className="reading-flow">
+               <p>Thank you for exploring the connection between emotions and art. Your support helps me bring emotional education to more people.</p>
+               {isLocalSite
+                  ? <p>This was a test checkout. No payment was made or email sent.</p>
+                  : <p>If you ordered a guide, check your inbox. For help, email <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>.</p>}
+               <p className="font-semibold text-ink">Daya Muneton</p>
             </div>
-         </div>
-         <Footer />
+            <div className="portfolio-actions"><Link href="/ageofemotions" className="portfolio-button portfolio-button-primary">Explore emotional education</Link></div>
+         </section>
       </div>
    );
 }
-
-export default Thankyou;

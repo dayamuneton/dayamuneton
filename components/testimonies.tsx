@@ -1,4 +1,3 @@
-import StarIcon from "@mui/icons-material/Star";
 
 const testimonies = [
    {
@@ -23,31 +22,18 @@ const testimonies = [
    },
 ];
 
-function Testimonies() {
+export default function Testimonies() {
    return (
-      <div className="grid md:w-[90vw] md:max-w-2xl md:auto-cols-[60%] lg:auto-cols-[40%] auto-cols-[95%] grid-flow-col max-w-[90vw] lg:w-[90vw] lg:max-w-5xl gap-4  overflow-x-auto  overscroll-x-contain snap-mandatory snap-x hide-scrollbar px-4 rounded-xl mb-8">
-         {testimonies.map((testimony) => (
-            <div
-               key={testimony.message}
-               style={{
-                  backgroundImage:
-                     "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-               }}
-               className={`flex flex-col  w-full  rounded-xl px-8 pt-12 pb-8 transition-all duration-500 drop-shadow-md snap-start mx-auto `}
-            >
-               <p>{testimony.message}</p>
-               <p className="ml-auto">{testimony.name}</p>
-               <span className="text-yellow-300">
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-               </span>
-            </div>
-         ))}
-      </div>
+      <section className="testimonials" aria-labelledby="testimonials-heading">
+         <h2 className="section-title" id="testimonials-heading">What readers say</h2>
+         <div className="testimonials-grid">
+            {testimonies.map(({ name, message }, index) => (
+               <figure className="content-panel reading-flow" key={name}>
+                  <blockquote lang={index % 2 === 0 ? "en" : "es"}>{message}</blockquote>
+                  <figcaption className="text-ink font-semibold">{name}</figcaption>
+               </figure>
+            ))}
+         </div>
+      </section>
    );
 }
-
-export default Testimonies;

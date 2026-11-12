@@ -1,395 +1,99 @@
-import CommunityColumn from "@/components/communityColumn";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
-import ArtworkImage from "@/components/ui/ArtworkImage";
 import Link from "next/link";
-import { useRef, useState, FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import ArtworkImage from "@/components/ui/ArtworkImage";
+import PageIntro from "@/components/layout/PageIntro";
 import { useAuth } from "@/context/authContext";
 
-function Community() {
+const prompts = [
+   { title: "Feelings and flavors", image: "/HeadPhonesCommunity1.png", text: "What song makes you feel at home? Share the memory of love, friendship, or celebration that comes back when you hear it." },
+   { title: "Dreams and challenges", image: "/HeadPhonesCommunity2.png", text: "Think of a song that gave you strength when you faced a challenge or pursued a dream. What did it mean to you then?" },
+   { title: "Journeys and adventures", image: "/HeadPhonesCommunity3.png", text: "Which song takes you back to a trip or a spontaneous adventure? Share the story behind that memory." },
+];
+
+export default function Community() {
+   const { currentUser } = useAuth();
+   const storyTitle = useRef<HTMLHeadingElement>(null);
    const [loading, setLoading] = useState(false);
    const [status, setStatus] = useState<"sent" | "error">();
-   const [name, setName] = useState("");
-   const [email, setEmail] = useState("");
-   const [message, setMessage] = useState("");
-   const [anonymously, setAnonymously] = useState(false);
-   const { currentUser } = useAuth();
 
-   const sendEmail = async (e: FormEvent) => {
-      e.preventDefault();
+   function goToStory() {
+      const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+      storyTitle.current?.scrollIntoView({ behavior });
+      storyTitle.current?.focus({ preventScroll: true });
+   }
+
+   async function sendStory(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
       if (loading) return;
+      const form = event.currentTarget;
+      const data = new FormData(form);
       setLoading(true);
       setStatus(undefined);
       try {
          const response = await fetch("/api/send-email", {
             method: "POST",
-            headers: {
-               "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-               name: currentUser?.displayName || name.trim(),
-               email: currentUser?.email || email.trim(),
-               message: message.trim(),
-               anonymously,
+               name: currentUser?.displayName || String(data.get("name") ?? "").trim(),
+               email: currentUser?.email || String(data.get("email") ?? "").trim(),
+               message: String(data.get("story") ?? "").trim(),
+               anonymously: data.has("anonymously"),
             }),
          });
-         if (!response.ok) throw new Error("Message could not be sent");
-         setMessage("");
+         if (!response.ok) throw new Error("Story could not be sent");
+         form.reset();
          setStatus("sent");
       } catch {
          setStatus("error");
       } finally {
          setLoading(false);
       }
-   };
-
-   const scrollRef = useRef<HTMLFormElement | null>(null);
-   const scroll = () => {
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      scrollRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-      scrollRef.current?.focus({ preventScroll: true });
-   };
+   }
 
    return (
-      <div
-         className="flex flex-col items-center h-full min-h-screen text-lg "
-         style={{
-            backgroundImage:
-               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-         }}
-      >
-         <Head>
-            <title>Community | Daya Muneton</title>
-            <meta name="description" content="Daya Muneton" />
-            <meta
-               name="keywords"
-               content="Arte, Ciencia, Tecnología, Amor, Liberate, Regalo"
-            />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-         <Navbar />
-         <div className="flex flex-col items-center w-full py-6 ">
-            <h1 className="px-2 tracking-wider text-xl my-6 font-medium text-[#4642c5] bg-[#edff05] ">
-               {"Today's topic:"}
-            </h1>
-            <span className="mb-2 text-2xl font-bold leading-6 tracking-widest text-center uppercase max-w-[90vw]">
-               <p>Be the Voice of Your Song, Share Your Story in</p>
-               <p>{'"A Latin Gift"'} </p>
-            </span>
-            <p className="text-sm font-medium max-w-[90vw]">
-               Have you ever felt like a song was the story you never told? Our
-               collective artwork, {'"A Latin Gift"'}, cannot be completed
-               without your story. In your hands, you hold fragments of stories,
-               pieces of memories that together form the cultural tapestry of
-               our music. We invite you to share your story with your favorite
-               song.
-            </p>
-            <p className="text-sm font-medium"></p>
-         </div>
-         <div
-            className="flex flex-col items-center w-full pb-14 "
-            // style={{
-            //    backgroundImage:
-            //       "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-            // }}
-         >
-            <p className="my-8 font-medium text-sm max-w-[90vw]">
-               Some ideas that help you to write about your Story
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3  max-w-5xl w-[70vw] gap-3 md:w-[95vw] ">
-               <CommunityColumn
-                  scroll={scroll}
-                  className="bg-linear-to-tr/srgb from-[#754af1] to-[#51eace] h-full"
-               >
-                  <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     Station of Feelings and Flavors: What emotions does your
-                     favorite song evoke?
-                  </p>
-                  <span className="aspect-square relative w-[70%] mx-auto">
-                     <ArtworkImage
-                        src="/HeadPhonesCommunity1.png" sizes="(min-width: 768px) 22vw, 49vw"
-                        alt="Headphones Community"
-                        fill
-                        className="object-cover"
-                     />
-                  </span>
-                  <span className="my-4 text-sm underline">
-                     47+ joined this
-                  </span>
-                  <p className="mb-auto text-sm">
-                     Share with us that story of love, friendship, or
-                     celebration that comes to mind every time you hear those
-                     chords. Is there a song that makes you feel at home, no
-                     matter where you are? This is where your anecdote takes the
-                     stage.
-                  </p>
-               </CommunityColumn>
-               <CommunityColumn
-                  scroll={scroll}
-                  className="bg-linear-to-br/srgb to-[#a78ef9] from-[#51eace] h-full"
-               >
-                  <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     Station of Dreams and Challenges:
-                  </p>
-                  <span className="aspect-square relative w-[70%] mx-auto">
-                     <ArtworkImage
-                        src="/HeadPhonesCommunity2.png" sizes="(min-width: 768px) 22vw, 49vw"
-                        alt="Headphones Community"
-                        fill
-                        className="object-cover"
-                     />
-                  </span>
-                  <span className="my-4 text-sm underline">
-                     39+ joined this
-                  </span>
-                  <p className="mb-auto text-sm">
-                     Reflect on those moments when music gave you strength to
-                     face a challenge or accompanied you as you pursued a dream.
-                     Is there a tropical tune that symbolizes your resilience or
-                     the success {"you've"}
-                     achieved? Tell us how vibrant rhythms were the soundtrack
-                     to your personal struggle and victory.
-                  </p>
-               </CommunityColumn>
-               <CommunityColumn
-                  scroll={scroll}
-                  className="bg-linear-to-tr/srgb from-[#a78ef9] to-[#c7f7db] h-full"
-               >
-                  <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
-                     Station of Journeys and Adventures:
-                  </p>
-                  <span className="aspect-square relative w-[70%] mx-auto">
-                     <ArtworkImage
-                        src="/HeadPhonesCommunity3.png" sizes="(min-width: 768px) 22vw, 49vw"
-                        alt="Headphones Community"
-                        fill
-                        className="object-cover"
-                     />
-                  </span>
-                  <span className="my-4 text-sm underline">
-                     54+ joined this
-                  </span>
-                  <p className="mb-auto text-sm">
-                     We all have that song that reminds us of a memorable trip
-                     or a spontaneous adventure. What rhythms take you back to
-                     those beach vacations or unexpected getaways with friends?
-                     Share the musical journey that led you to explore new
-                     horizons.
-                  </p>
-               </CommunityColumn>
+      <div className="portfolio-content page-content">
+         <Head><title>Community | Daya Muneton</title><meta name="description" content="Share the story behind a song that matters to you and contribute to A Latin Gift." /></Head>
+         <PageIntro title="Stories behind the songs" description="Has a song ever told a story you hadn’t shared? Tell me about a song that matters to you and help shape A Latin Gift, a collective artwork about the music in our lives.">
+            <button type="button" className="portfolio-button portfolio-button-primary" onClick={goToStory}>Share your story</button>
+         </PageIntro>
+         <section className="portfolio-explore" aria-labelledby="prompts-heading">
+            <h2 id="prompts-heading">Find a place to start</h2>
+            <div className="catalog-grid">
+               {prompts.map(({ title, image, text }) => (
+                  <article className="content-panel commission-card" key={title}>
+                     <div className="catalog-image"><ArtworkImage src={image} alt="" fill sizes="(min-width: 800px) 28vw, 90vw" className="object-cover" /></div>
+                     <div className="reading-flow"><h3>{title}</h3><p>{text}</p></div>
+                  </article>
+               ))}
             </div>
-         </div>
-         <div className="flex flex-col items-center max-w-3xl mb-8 ">
-            <div className="bg-linear-to-r/srgb py-6 from-[#754af1] to-[#51eace] my-12 p-2 rounded-3xl drop-shadow-sm">
-               <h2 className="mx-auto mb-4 text-2xl font-medium tracking-wider text-center">
-                  What is this activity about?
-               </h2>
-               <div className="flex flex-col items-center sm:flex-row">
-                  <span className="!aspect-square !min-w-[15rem] relative  max-w-[70vw] mx-auto mb-8">
-                     <ArtworkImage
-                        src="/MujerYourCanvas1.png" sizes="(min-width: 768px) 360px, 70vw"
-                        alt="Mujer Your Canvas"
-                        fill
-                     />
-                  </span>
-                  <div className="flex flex-col px-8">
-                     <p>
-                        By joining in, {"you're"} not just sharing your personal
-                        reflections but also becoming part of a collective art
-                        masterpiece.
-                     </p>
-                     <p>
-                        This activity is crafted to uncover the cultural impact
-                        of music on your life.
-                     </p>
-                     <p>
-                        Your participation is essential, as it enriches the
-                        creation of art and literature, all rooted in real-life
-                        stories.
-                     </p>
-                     <p>
-                        Thank you for contributing to this significant artwork.
-                     </p>
-                     {/* <p>¿What does your vision of love look like?</p>
-                     <p>
-                        Thanks to your participation I can make art and books,
-                        based on real stories. ​ ​
-                     </p> */}
-                  </div>
+         </section>
+         <div className="community-layout">
+            <section className="content-panel reading-flow" aria-labelledby="activity-heading">
+               <div className="catalog-image community-art">
+                  <ArtworkImage src="/MujerYourCanvas1.png" alt="" fill sizes="(min-width: 1000px) 420px, 85vw" className="object-contain" />
                </div>
-            </div>
-            <form
-               onSubmit={sendEmail}
-               ref={scrollRef}
-               tabIndex={-1}
-               className="flex flex-col w-full max-w-xl px-5 sm:px-10 rounded-3xl drop-shadow-sm bg-[#f6f0fc] py-7 text-[#35204f]"
-            >
-               <p className="font-semibold">
-                  Please share your musical stories here. You are invited to
-                  contribute multiple narratives, each associated with different
-                  songs.
-               </p>
-               <p className="my-2 text-sm">
-                  The provision of your name and country is voluntary. You may
-                  also opt to share your experiences anonymously.
-               </p>
-               <p className="mb-6 text-sm">
-                  By submitting your story, you are granting permission for your
-                  contributions to be utilized by Daya in her artistic
-                  endeavors, which may include public display on social media,
-                  incorporation into her artwork, and use in future projects
-                  such as books and audiovisual podcasts.
-               </p>
-               {!currentUser?.email && <div className="flex flex-col gap-2">
-                  <label htmlFor="story-name">Name (optional)</label>
-                  <input
-                     id="story-name"
-                     type="text"
-                     autoComplete="name"
-                     className="min-h-11 rounded border bg-white px-3"
-                     value={name}
-                     onChange={(e) => setName(e.target.value)}
-                  />
-                  <label className="mt-2" htmlFor="story-email">Email</label>
-                  <input
-                     id="story-email"
-                     type="email"
-                     required
-                     autoComplete="email"
-                     className="min-h-11 rounded border bg-white px-3"
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
-                  />
-               </div>}
-               <label className="flex my-4 font-medium">
-                  <input
-                     type="checkbox"
-                     checked={anonymously}
-                     onChange={(e) => setAnonymously(e.target.checked)}
-                  />
-                  <span className="pl-2 text-sm">
-                     <p className="inline mr-1">Send anonymously</p>
-                  </span>
-               </label>
-               <label
-                  className="flex my-4 font-medium"
-               >
-                  <input type="checkbox" required />
-                  <span className="pl-2 text-sm">
-                     <p className="inline mr-1">
-                        I accept the terms and conditions
-                     </p>
-                     <Link
-                        href="/legal/terms-of-service"
-                        target="_blank"
-                        className="underline"
-                     >
-                        See Terms of Use
-                     </Link>
-                  </span>
-               </label>
-               {/* <p className="mb-6">
-                  By sharing your history, you are giving Daya the permission to
-                  use what you wrote and sent to her email to be published on
-                  her artwork, social networks, upcoming projects such as books,
-                  video podcasts etc.
-               </p> */}
-               <p className="mb-6">
-                  To participate, you must agree to the terms and conditions.
-                  This includes a release allowing the use of your story across
-                  various platforms and media, and your agreement will serve as
-                  your signature.
-               </p>
-               <label htmlFor="story-message" className="mb-2 font-medium">Your story</label>
-               <textarea
-                  id="story-message"
-                  required
-                  maxLength={10000}
-                  className="h-28 rounded border bg-white p-3"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-               />
-               <button className="portfolio-button portfolio-button-primary mt-4" type="submit" disabled={loading}>
-                  {loading ? "Sending…" : "Send story"}
-               </button>
-               {status === "sent" && <p className="mt-3" role="status">Thank you. Your story was submitted.</p>}
-               {status === "error" && <p className="mt-3 text-[#9b203e]" role="alert">Couldn’t send your story. Please try again.</p>}
-            </form>
-            {/* <p className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
-               {`"The insights gathered from these artistic activities will serve to craft art aimed at enhancing life's appreciation, while also enabling me to continue developing practices rooted in the authentic experiences we collectively share in this space."`}
-            </p> */}
-            {/* <div className="bg-linear-to-r/srgb from-[#754af1] to-[#51eace] rounded-3xl drop-shadow-sm  flex flex-col items-center w-full py-6 mb-4">
-               <div className="flex flex-col items-center gap-3 sm:flex-row">
-                  <span className="flex relative mx-auto w-full max-w-[20rem] min-h-[15rem] sm:w-[15rem] h-[23rem]">
-                     <ArtworkImage
-                        src="/ESCUCHA_LA_MUSICA_DE_TU_LIENZO.png" sizes="(min-width: 640px) 240px, min(320px, 90vw)"
-                        fill
-                        alt=""
-                        className="object-cover object-top"
-                     />
-                  </span>
-
-                  <div className="flex flex-col max-w-[90vw]  px-2 sm:max-w-xs flex-1">
-                     <div>
-                        <p className="text-2xl font-semibold text-[#edff05]">
-                           ESCUCHA LA MÚSICA DE
-                        </p>
-                        <p className="text-2xl font-semibold text-white">
-                           TU LIENZO
-                        </p>
-                        <p className="leading-4">
-                           Tu cultura musical, un molde invisible que ha
-                           configurado tus emociones
-                        </p>
-                     </div>
-                     <div className="mt-12">
-                        <p
-                           className={`${dancingScript.className} text-4xl font-bold text-[#5225d7] rotate-[-5deg] mb-2 `}
-                        >
-                           WORKSHOP
-                        </p>
-                        <p className="leading-4">
-                           Explora a través del arte y canciones herramientas
-                           mentales que te ayudan a remodelar y mejorar tu
-                           bienestar emocional.
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <p className={` max-w-[95vw] mt-10 mb-4 text-white font-bold`}>
-                  Daya Muneton © Todos Los Derechos Reservados
-               </p>
-            </div> */}
-            {/* <div className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
-               <p className="font-bold">
-                  We believe that the more we talk about what hurts us, the
-                  quicker we can locate the source of our pain.
-               </p>
-               <p>
-                  Expressing what you feel can help you understand how you ended
-                  up in this unsettling place. Gaining insight from {`other's`}{" "}
-                  struggles can serve as a roadmap to your own healing.
-               </p>
-               <p>
-                  Remember, {`it's`} essential to pay attention to your feelings
-                  and not be ashamed to express your troubles. After all, we are
-                  humans learning to navigate life.
-               </p>
-               <p>
-                  Can you envision your story potentially aiding someone{" "}
-                  {`else's`}
-                  journey towards healing?
-               </p>
-               <p>
-                  {`Don't`} hold back - write and share your unique perspective
-                  on love.
-               </p>
-            </div> */}
+               <h2 id="activity-heading">About A Latin Gift</h2>
+               <p>The project explores the role music plays in our lives. Your memories help shape the artwork and the stories that accompany it.</p>
+               <Link href="/shop/memorials" className="form-link">Explore the collection</Link>
+            </section>
+            <section className="content-panel" aria-labelledby="story-heading">
+               <h2 id="story-heading" ref={storyTitle} tabIndex={-1} className="section-title mb-3">Share your story</h2>
+               <p className="text-muted mb-5">You can send your story anonymously. Daya may use your contribution in artwork, social media, books, or podcasts.</p>
+               <form onSubmit={sendStory} className="form-stack">
+                  {!currentUser?.email && <>
+                     <label htmlFor="story-name">Name (optional)<input id="story-name" name="name" type="text" autoComplete="name" maxLength={120} /></label>
+                     <label htmlFor="story-email">Email<input id="story-email" name="email" type="email" autoComplete="email" required /></label>
+                  </>}
+                  <label htmlFor="story-message">Your story<textarea id="story-message" name="story" rows={6} required maxLength={5000} /></label>
+                  <label className="check-field"><input name="anonymously" type="checkbox" />Send anonymously</label>
+                  <label className="check-field"><input type="checkbox" required /><span>I accept the <Link href="/legal/terms-of-service" target="_blank" className="form-link">terms and conditions</Link>.</span></label>
+                  <button className="portfolio-button portfolio-button-primary" type="submit" disabled={loading}>{loading ? "Sending…" : "Submit my story"}</button>
+                  {status === "sent" && <p role="status">Thank you. Your story was submitted.</p>}
+                  {status === "error" && <p className="form-feedback" role="alert">Couldn’t send your story. Please try again.</p>}
+               </form>
+            </section>
          </div>
-         <Footer />
       </div>
    );
 }
-
-export default Community;

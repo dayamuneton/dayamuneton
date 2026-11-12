@@ -1,75 +1,54 @@
-import { useShop } from "@/context/shopContext";
-import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemFromShoppingCart";
-import Image from "next/image";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { useState } from "react";
 import Link from "next/link";
+import { useShop } from "@/context/shopContext";
+import ArtworkImage from "@/components/ui/ArtworkImage";
+import { formatCurrency } from "@/utils/formatCurrency";
 
-function limitText(text: string, limit: number) {
-   if (text.length > limit) {
-      return text.substring(0, limit) + "...";
-   } else {
-      return text;
+export default function CartItems() {
+   const { shoppingCart, refreshCart } = useShop();
+   const [pending, setPending] = useState<string>();
+   const [error, setError] = useState("");
+
+   async function remove(item: { handle: string; name: string; variantId?: string }) {
+      setPending(item.name);
+      setError("");
+      try {
+         const { removeCartItem } = await import("@/integrations/firebase/shoppingCart/removeItemFromShoppingCart");
+         await removeCartItem(shoppingCart, item);
+         refreshCart();
+      } catch {
+         setError("Couldn’t remove " + item.name + ". Please try again.");
+      } finally {
+         setPending(undefined);
+      }
    }
-}
-
-function CartItems({ className }: { className?: string }) {
-   const { shoppingCart } = useShop();
-   // const mailerlite_groups = shoppingCart?.cartItems?.map(
-   // (item) => item.mailerlite_group
-   // );
-   // console.log(mailerlite_groups);
-
-   // console.log(shoppingCart);
 
    return (
-      <div className={`${className} text-gray-100 `}>
-         {shoppingCart?.cartItems?.map((item) => (
-            <div
-               key={item.name}
-               className="w-full flex flex-col p-4 mb-2 bg-linear-to-l/srgb to-[#5cdde5] from-[#4a23a9] drop-shadow-md rounded-lg hover:scale-[1.005] "
-            >
-               <Link
-                  href={`/${item.variants ? "ageofemotions" : "shop"}/${
-                     item.category
-                  }/${item.handle}`}
-                  className="flex flex-col items-center w-full sm:items-start sm:flex-row"
-               >
-                  <span className="relative flex min-w-[7rem] w-[7rem] aspect-square sm:mr-3">
-                     <Image
-                        src={item.featuredImage || item.images[0]}
-                        fill
-                        alt={item.name}
-                        className="object-cover"
-                     />
-                  </span>
-                  <span className="flex flex-col w-full ">
-                     <p className="w-full mt-1 font-medium">{item.name}</p>
-                     <p className="text-sm">
-                        {limitText(item.description, 100)}{" "}
-                     </p>
-                  </span>
-               </Link>
-               <div className="flex mt-auto ml-auto">
-                  <div className="flex items-end font-medium">
-                     <p className="">
-                        {item.price.toLocaleString("en-US", {
-                           style: "currency",
-                           currency: "USD",
-                        })}
-                     </p>
-                     <p className="ml-1">USD</p>
-                  </div>
-                  <button
-                     className="mx-2 text-gray-200 hover:text-red-600"
-                     onClick={() => removeCartItem(shoppingCart, item)}
-                  >
-                     <DeleteIcon />
-                  </button>
-               </div>
-            </div>
-         ))}
-      </div>
+      <section aria-label="Cart items">
+         {error && <p role="alert" className="form-feedback mb-3">{error}</p>}
+         <ul className="cart-items">
+            {shoppingCart?.cartItems.map((item) => {
+               const catalog = item.variants ? "/ageofemotions" : "/shop";
+               const href = /^\/(ageofemotions|shop)\/[^/]/.test(item.handle)
+                  ? item.handle
+                  : catalog + "/" + encodeURIComponent(item.category) + "/" + encodeURIComponent(item.handle);
+               return (
+                  <li key={item.handle + ":" + item.name} className="content-panel cart-row">
+                     <div className="cart-thumb">
+                        <ArtworkImage src={item.featuredImage || item.images?.[0]} alt="" fill sizes="80px" className="object-cover" />
+                     </div>
+                     <div>
+                        <Link href={href} className="font-semibold">{item.name}</Link>
+                        <p className="text-muted">{formatCurrency(item.price)}</p>
+                        <button type="button" className="form-link min-h-11" onClick={() => void remove(item)}
+                           aria-label={"Remove " + item.name} disabled={!!pending}>
+                           {pending === item.name ? "Removing…" : "Remove"}
+                        </button>
+                     </div>
+                  </li>
+               );
+            })}
+         </ul>
+      </section>
    );
 }
-
-export default CartItems;

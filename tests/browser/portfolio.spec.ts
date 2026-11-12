@@ -12,8 +12,8 @@ test("homepage is readable without JavaScript or Firebase Auth", async ({ browse
    await expect(page.getByRole("heading", { name: "Daya Muneton", level: 1 })).toBeVisible();
    await expect(page.getByRole("link", { name: "Community Stories behind the songs" })).toHaveAttribute("href", "/community");
    const portrait = page.locator(".portfolio-portrait img");
-   await expect(portrait).toHaveAttribute("fetchpriority", "high");
-   await expect(portrait).toHaveAttribute("sizes", "112px");
+   await expect(page.locator(".home-hero-art img")).toHaveAttribute("fetchpriority", "high");
+   await expect(portrait).toHaveAttribute("sizes", /104px$/);
    await expect(page.locator(".portfolio-tile img[loading=lazy]")).toHaveCount(2);
    await expect.poll(() => portrait.evaluate((element) => (
       element instanceof HTMLImageElement ? new URL(element.currentSrc).pathname : ""
@@ -68,7 +68,7 @@ test("a slow collection navigation shows feedback and delivers a responsive bann
    await page.goto("/shop");
    await page.getByRole("link", { name: /Forgotten Bodies/ }).click();
    await expect(page.getByText("Loading page…", { exact: true })).toBeVisible();
-   await expect(page.getByRole("heading", { name: "Gallery", exact: true })).toBeVisible();
+   await expect(page.getByRole("heading", { name: "Heads", exact: true })).toBeVisible();
    await expect(page.getByText("Loading page…", { exact: true })).toBeHidden();
    const banner = page.locator(".gallery-banner img");
    await expect.poll(() => banner.evaluate((element) => (
@@ -84,13 +84,13 @@ test("story form keeps the draft after a failure and confirms a successful retry
    await page.route("**/api/send-email", (route) => route.fulfill({ status: 503, json: { error: "Unavailable" } }), { times: 1 });
    await page.goto("/community");
    await page.getByLabel("Email", { exact: true }).fill("demo@example.test");
-   const story = page.getByLabel("Your story");
+   const story = page.getByRole("textbox", { name: "Your story", exact: true });
    await story.fill("A local test story.");
    await page.getByRole("checkbox", { name: /accept the terms/i }).check();
-   await page.getByRole("button", { name: "Send story" }).click();
+   await page.getByRole("button", { name: "Submit my story" }).click();
    await expect(page.getByRole("alert").filter({ hasText: "Couldn’t send your story" })).toBeVisible();
    await expect(story).toHaveValue("A local test story.");
-   await page.getByRole("button", { name: "Send story" }).click();
+   await page.getByRole("button", { name: "Submit my story" }).click();
    await expect(page.getByText("Thank you. Your story was submitted.")).toBeVisible();
    await expect(story).toHaveValue("");
 });

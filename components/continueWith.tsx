@@ -1,46 +1,39 @@
 import { useAuth } from "@/context/authContext";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
-function ContinueWith({ className }: { className?: string }) {
+export default function ContinueWith({ className }: { className?: string }) {
    const { loginWithGoogle } = useAuth();
+   const [pending, setPending] = useState(false);
+   const [failed, setFailed] = useState(false);
+
+   async function signIn() {
+      setPending(true);
+      setFailed(false);
+      try {
+         setFailed(Boolean(await loginWithGoogle()));
+      } catch {
+         setFailed(true);
+      } finally {
+         setPending(false);
+      }
+   }
+
    return (
-      <div
-         className={`${className} w-full relative border-t-2 border-t-gray-400 `}
-      >
-         <button
-            type="button"
-            onClick={loginWithGoogle}
-            className="flex items-center justify-center w-full p-2  rounded hover:scale-[1.005] my-1 bg-white text-black"
-         >
-            <Image
-               src="/icons/google.png"
-               alt="Google icon"
-               fill
-               className="!relative mr-4 flex !h-6 !w-6  !aspect-square"
-            />
-            <p>Continue With Google</p>
+      <div className={className}>
+         <button type="button" onClick={signIn} disabled={pending}
+            className="portfolio-button portfolio-button-secondary w-full gap-2">
+            <Image src="/icons/google.png" alt="" width={20} height={20} />
+            {pending ? "Connecting…" : "Continue with Google"}
          </button>
-         <p className="text-center">
-            By continuing, you agree to our
-            <Link
-               className="mx-1 underline"
-               href="/legal/terms-of-service"
-               target="_blank"
-            >
-               Terms of Service
-            </Link>
-            and
-            <Link
-               className="mx-1 underline"
-               href="/legal/privacy-policy"
-               target="_blank"
-            >
-               Privacy Policy.
-            </Link>
+         {failed && <p role="alert" className="form-feedback mt-3">Google sign-in couldn’t finish. Try again or sign in with email.</p>}
+         <p className="mt-3 text-sm text-muted">
+            By continuing, you agree to our{" "}
+            <Link className="form-link" href="/legal/terms-of-service">Terms of Service</Link>
+            {" and "}
+            <Link className="form-link" href="/legal/privacy-policy">Privacy Policy</Link>.
          </p>
       </div>
    );
 }
-
-export default ContinueWith;

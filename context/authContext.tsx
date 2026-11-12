@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { User } from "firebase/auth";
 
 interface AuthContextValue {
@@ -21,7 +21,7 @@ export function useAuth() {
 async function loadAuth() {
    const [sdk, { auth, googleProvider }] = await Promise.all([
       import("firebase/auth"),
-      import("@/integrations/firebase/firebaseConfig"),
+      import("@/integrations/firebase/auth"),
    ]);
    return { sdk, auth, googleProvider };
 }
@@ -83,11 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
    }, []);
 
-   return (
-      <AuthContext.Provider value={{
-         currentUser, authReady, loginWithGoogle, signUpUserWithEmailAndPassword, signInWithEmail, logout,
-      }}>
-         {children}
-      </AuthContext.Provider>
-   );
+   const value = useMemo(() => ({ currentUser, authReady, loginWithGoogle, signUpUserWithEmailAndPassword, signInWithEmail, logout }), [currentUser, authReady]);
+   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

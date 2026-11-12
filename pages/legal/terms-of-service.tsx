@@ -1,11 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from "next/head";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
 
 function TermsOfService() {
    return (
-      <div className="flex flex-col items-center w-full">
+      <div className="portfolio-content page-content">
          <Head>
             <title>Terms Of Service</title>
             <meta
@@ -14,11 +12,8 @@ function TermsOfService() {
             />
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <Navbar />
-         <div className="max-w-[min(90%,70ch)] my-20">
-            <span className="flex justify-center mb-10">
-               <h1 className="text-2xl font-bold">Terms Of Service</h1>
-            </span>
+         <article className="content-panel legal-document">
+            <h1 className="page-title">Terms Of Service</h1>
             <p className="text-sm">
                This website, together with social media accounts and applicable
                mobile applications are owned and operated by DAYA MUNETON LLC.,
@@ -358,8 +353,7 @@ function TermsOfService() {
             </p>
             <p className="text-sm">In force from November 22, 2021 ​ ​ ​ ​ ​</p>
             ​ ​ ​ ​
-         </div>
-         <Footer />
+         </article>
       </div>
    );
 }

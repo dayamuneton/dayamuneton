@@ -1,9 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/router";
+import PageSkeleton from "./PageSkeleton";
 
-export default function RouteFeedback() {
+function skeletonFor(url: string) {
+   const [section, entry, detail] = url.split(/[?#]/)[0].split("/").filter(Boolean);
+   if (section === "admin") return "admin";
+   if (section === "auth" || section === "checkout") return "form";
+   if ((section === "shop" || section === "ageofemotions") && detail) return "detail";
+   if (section === "shop" || (section === "ageofemotions" && entry)) return "collection";
+   return "page";
+}
+
+export default function RouteFeedback({ children }: { children: ReactNode }) {
    const { events } = useRouter();
-   const [loading, setLoading] = useState(false);
+   const [pendingUrl, setPendingUrl] = useState<string>();
 
    useEffect(() => {
       let timer: ReturnType<typeof setTimeout> | undefined;
@@ -13,14 +23,14 @@ export default function RouteFeedback() {
          if (shallow) return;
          clearTimeout(timer);
          destination = url;
-         timer = setTimeout(() => setLoading(true), 180);
+         timer = setTimeout(() => setPendingUrl(url), 180);
       }
 
       function finish(url: string) {
          if (destination !== url) return;
          clearTimeout(timer);
          destination = undefined;
-         setLoading(false);
+         setPendingUrl(undefined);
       }
 
       const fail = (_error: unknown, url: string) => finish(url);
@@ -35,5 +45,12 @@ export default function RouteFeedback() {
       };
    }, [events]);
 
-   return <div role="status" className={loading ? "route-feedback" : "sr-only"}>{loading ? "Loading page…" : ""}</div>;
+   return (
+      <main id="main-content" tabIndex={-1} className="site-main">
+         <div className="site-page" data-loading={Boolean(pendingUrl)} inert={Boolean(pendingUrl)}>
+            {children}
+         </div>
+         {pendingUrl && <div className="route-skeleton"><PageSkeleton kind={skeletonFor(pendingUrl)} /></div>}
+      </main>
+   );
 }

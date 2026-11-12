@@ -1,22 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from "next/head";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
 
 function PrivacyPolicy() {
    return (
-      <div className="flex flex-col items-center w-full">
+      <div className="portfolio-content page-content">
          <Head>
             <title>Privacy Policy</title>
             <meta name="description" content="Privacy Policy | Daya Muneton" />
 
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <Navbar />
-         <div className="max-w-[min(90%,70ch)] flex flex-col my-20">
-            <span className="flex justify-center">
-               <h1 className="text-2xl font-bold">Privacy Policy</h1>
-            </span>
+         <article className="content-panel legal-document">
+            <h1 className="page-title">Privacy Policy</h1>
             <h2 className="my-4 font-bold">General</h2>
             <p className="text-sm">
                This website, together with the corresponding network accounts
@@ -155,7 +150,7 @@ function PrivacyPolicy() {
                <a
                   target="_blank"
                   href="https://www.mailerlite.com/legal/privacy-policy"
-                  className="ml-1 text-blue-400 underline"
+                  className="ml-1 text-accent underline"
                >
                   MailerLite Privacy Policy
                </a>
@@ -195,7 +190,7 @@ function PrivacyPolicy() {
                <a
                   href="https://www.mailerlite.com/legal/cookie-policy"
                   target="_blank"
-                  className="ml-1 text-blue-400 underline"
+                  className="ml-1 text-accent underline"
                >
                   See MailerLite's Cookie Policy.
                </a>
@@ -319,7 +314,7 @@ function PrivacyPolicy() {
             <a
                href="mailto:info@dayamuneton.com"
                target="_blank"
-               className="text-blue-400 underline"
+               className="text-accent underline"
             >
                info@dayamuneton.com
             </a>
@@ -330,8 +325,7 @@ function PrivacyPolicy() {
             </p>
             <h2 className="my-4 font-bold">DAYA MUNETON LLC</h2>
             <p className="text-sm">Effective as of November 22, 2022</p>
-         </div>
-         <Footer />
+         </article>
       </div>
    );
 }

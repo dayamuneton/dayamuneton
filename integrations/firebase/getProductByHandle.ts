@@ -1,5 +1,5 @@
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { db } from "./firestore";
 
 export async function getProductByHandle(path: string, productHandle: string) {
    try {

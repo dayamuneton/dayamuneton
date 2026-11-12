@@ -1,170 +1,73 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
-import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import ArtworkGallery from "@/components/ui/ArtworkGallery";
+import Link from "next/link";
 import { useState } from "react";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import { FiCheckCircle, FiImage, FiPackage, FiRotateCcw } from "react-icons/fi";
+import ArtworkGallery from "@/components/ui/ArtworkGallery";
 import MakeAnOffer from "@/components/makeAnOffer";
-import ImageIcon from "@mui/icons-material/Image";
-import { useShop } from "@/context/shopContext";
-import { addItemToCart } from "@/integrations/firebase/shoppingCart/addItemToShoppingCart";
-import { useAuth } from "@/context/authContext";
-import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemFromShoppingCart";
+import CartAction from "@/features/catalog/CartAction";
+import { paintingCategories } from "@/features/catalog/categories";
+import { findCatalogItem } from "@/features/catalog/data";
+import { isSoldOut } from "@/features/catalog/availability";
 
-export async function getServerSideProps(context: any) {
-   const { category, artWork } = context.query;
+export const getServerSideProps = (async ({ params }) => {
+   const category = paintingCategories.find(({ slug }) => slug === params?.category);
+   if (!category || typeof params?.artWork !== "string") return { notFound: true };
+   const snapshot = await findCatalogItem("products", category.slug, params.artWork);
+   if (!snapshot) return { notFound: true };
+   const data = snapshot.data();
+   return { props: { routeKey: snapshot.id, category, product: {
+      id: snapshot.id,
+      handle: data.handle || snapshot.id,
+      name: data.name || "Untitled artwork",
+      description: data.description || "",
+      price: Number(data.price) || 0,
+      images: (data.images || []) as string[],
+      featuredImage: data.featuredImage || "",
+      category: category.slug,
+      techniques: (data.techniques || []) as string[],
+      shippingInformation: data.shippingInformation || "",
+      soldOut: isSoldOut(data),
+   } } };
+}) satisfies GetServerSideProps;
 
-   const product = await getProductByHandle(
-      "products",
-      decodeURIComponent(artWork) || ""
-   );
-   if (product === null) {
-      return {
-         redirect: {
-            destination: `/shop/${category}` || "/shop",
-            permanent: true,
-         },
-      };
-   }
-
-   return {
-      props: {
-         product: product.data(),
-      },
-   };
-}
-
-function ArtWork({ product }: { product: any }) {
-   const [openImage, setOpenImage] = useState(
-      product.featuredImage || product.images?.[0]
-   );
-   const { shoppingCart } = useShop();
-   const { currentUser } = useAuth();
-
+export default function Artwork({ product, category }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+   const initialImage = product.featuredImage || product.images[0];
+   const [selected, setSelected] = useState(initialImage);
    return (
-      <div
-         className="flex flex-col items-center min-h-screen"
-         style={{
-            backgroundImage:
-               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-         }}
-      >
-         <Head>
-            <title>{product.name} | Daya Muneton</title>
-            <meta name="description" content={product.description} />
-            <meta
-               name="keywords"
-               content="Arte, Ciencia, Tecnología, Amor, Liberate, Regalo"
-            />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-         <Navbar />
-         <div className="flex flex-col items-center justify-center w-[95vw] max-w-5xl bg-white py-6 md:pt-8 px-8 md:items-start md:flex-row mt-14 overflow-hidden rounded-3xl drop-shadow-md mb-4">
-            <div className="flex flex-col items-center justify-center w-full">
-               <ArtworkGallery images={product.images} selected={openImage} title={product.name || ""} onSelect={setOpenImage} />
-               <div className="flex flex-col w-full gap-2 py-3 mt-2 border-t-2 border-gray-200 md:flex-row">
-                  <p className="min-w-[9rem] text-xl font-bold">
-                     {product.name}
-                  </p>
-               </div>
-
-               <div className="flex flex-col w-full gap-2 py-6 border-t-2 border-gray-200 md:flex-row">
-                  <p className="min-w-[9rem] text-xl font-bold">
-                     About the art work
-                  </p>
-                  <p>{product.description}</p>
-               </div>
-               <div className="flex flex-col w-full gap-2 py-6 mt-2 border-t-2 border-gray-200 md:flex-row">
-                  <p className="w-[17rem] text-xl font-bold">
-                     Shipping Information
-                  </p>
-                  <p>{product.shippingInformation}</p>
-               </div>
+      <div className="portfolio-content page-content">
+         <Head><title>{product.name} | Daya Muneton</title><meta name="description" content={product.description} /></Head>
+         <Link href={"/shop/" + category.slug} className="back-link">← {category.title}</Link>
+         <div className="detail-grid">
+            <div className="detail-heading">
+               <h1 className="page-title">{product.name}</h1>
+               {product.techniques.length > 0 && <ul className="detail-tags" aria-label="Techniques">
+                  {product.techniques.map((technique) => <li key={technique}>{technique}</li>)}
+               </ul>}
             </div>
-            <div className="flex flex-col w-full gap-2 mt-4 mb-auto md:pl-8 md:mt-0">
-               <h1 className="mt-2 text-2xl font-bold capitalize">
-                  {product.name}
-               </h1>
-               <div className="flex">
-                  {product.techniques.map((technique: string) => (
-                     <p
-                        key={technique}
-                        className="px-2 py-1 mr-1 capitalize bg-gray-100 rounded"
-                     >
-                        {technique}
-                     </p>
-                  ))}
-               </div>
-               <p className="text-2xl font-semibold">
-                  {product.price.toLocaleString("en-US", {
-                     style: "currency",
-                     currency: "USD",
-                  })}
-               </p>
-               <button
-                  className="w-full px-4 py-2 mt-4 text-lg text-white bg-[#4a23a9] rounded-md hover:scale-[1.01] cursor-not-allowed"
-                  title="Original Piece Sold Out"
-                  disabled
-
-               >
-                  Acquire this artwork
-               </button>
-               <button
-                  className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
-                  hidden={
-                     !currentUser ||
-                     shoppingCart?.cartItems?.some(
-                        (item) => item.handle === product.handle
-                     )
-                  }
-                  onClick={() => {
-                     if (currentUser?.email) void addItemToCart(shoppingCart, product, currentUser.email);
-                  }}
-                  title="Original Piece Sold Out"
-               >
-                  Add To Cart
-               </button>
-               <button
-                  className="w-full px-4 py-2 text-lg border-2 border-[#4a23a9] text-[#4a23a9] rounded-md hover:scale-[1.01]"
-                  hidden={
-                     !currentUser ||
-                     !shoppingCart?.cartItems?.some(
-                        (item) => item.handle === product.handle
-                     )
-                  }
-                  onClick={() => removeCartItem(shoppingCart, product)}
-                  title="Original Piece Sold Out"
-               >
-                  Remove from Cart
-               </button>
-               <MakeAnOffer initialPrice={product.price} />
-
-               <div className="w-full px-4 py-4 mb-4 border-2 border-gray-200 rounded-md">
-                  <span className="flex items-center mb-2">
-                     <ImageIcon className="mr-1 text-gray-700" />
-                     <p>Limited Edition</p>
-                  </span>
-                  <span className="flex items-center mb-2">
-                     <VerifiedIcon className="mr-1 text-gray-700" />
-                     <p>Original work with a certificate of authenticity</p>
-                  </span>
-                  <span className="flex items-center mb-2">
-                     <LocalShippingIcon className="mr-1 text-gray-700" />
-                     <p>7-10 day professional delivery</p>
-                  </span>
-                  <span className="flex items-center mb-2">
-                     <KeyboardReturnIcon className="mr-1 text-gray-700" />
-                     <p>Free 14 day returns</p>
-                  </span>
-               </div>
+            <div className="detail-gallery">
+               <ArtworkGallery images={product.featuredImage ? [product.featuredImage, ...product.images] : product.images}
+                  selected={selected} title={product.name} onSelect={setSelected} />
+            </div>
+            <div className="content-panel detail-summary">
+               <p className="detail-price">{product.price.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+               {product.soldOut ? <p className="text-muted">This original is sold out.</p> : <div className="detail-actions">
+                  <MakeAnOffer initialPrice={product.price} />
+                  <CartAction product={product} />
+               </div>}
+               <ul className="detail-facts">
+                  <li><FiImage aria-hidden="true" /> Limited edition</li>
+                  <li><FiCheckCircle aria-hidden="true" /> Certificate of authenticity</li>
+                  <li><FiPackage aria-hidden="true" /> 7–10 day professional delivery</li>
+                  <li><FiRotateCcw aria-hidden="true" /> Free 14-day returns</li>
+               </ul>
+            </div>
+            <div className="content-panel detail-copy reading-flow">
+               {product.description && <><h2>About the artwork</h2><p>{product.description}</p></>}
+               {product.shippingInformation && <><h2>Shipping information</h2><p>{product.shippingInformation}</p></>}
+               {!product.description && !product.shippingInformation && <p>Original artwork by Daya Muneton.</p>}
             </div>
          </div>
-         <Footer />
       </div>
    );
 }
-
-export default ArtWork;

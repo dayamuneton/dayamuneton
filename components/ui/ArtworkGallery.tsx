@@ -13,7 +13,7 @@ export default function ArtworkGallery({ images = [], selected, title, onSelect 
       <div className="product-gallery">
          <div className="product-gallery-main">
             <ArtworkImage src={selected} alt={title} fill priority
-               sizes="(min-width: 1372px) 480px, (min-width: 768px) 35vw, (min-width: 565px) 480px, 85vw"
+               sizes="(min-width: 1450px) 690px, (min-width: 760px) 52vw, calc(100vw - 32px)"
                className="object-contain" />
          </div>
          {views.length > 1 && (

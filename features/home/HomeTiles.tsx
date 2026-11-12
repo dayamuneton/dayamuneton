@@ -8,9 +8,11 @@ const sections = [
 
 export default function HomeTiles() {
    return (
-      <section aria-labelledby="explore-heading" className="portfolio-explore">
-         <h2 id="explore-heading">Explore</h2>
-         <ArtworkTileGrid items={sections} />
+      <section aria-labelledby="explore-heading" className="home-explore">
+         <div className="portfolio-content portfolio-explore">
+            <h2 id="explore-heading">Explore</h2>
+            <ArtworkTileGrid items={sections} />
+         </div>
       </section>
    );
 }

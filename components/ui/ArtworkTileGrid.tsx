@@ -22,7 +22,7 @@ export default function ArtworkTileGrid({ items }: { items: ArtworkTile[] }) {
                <TileLink href={href}>
                   <div className="portfolio-tile-image">
                      <ArtworkImage src={image} alt="" fill eager={index === 0}
-                        sizes="(min-width: 1140px) 360px, (min-width: 760px) 30vw, (min-width: 560px) 496px, calc(100vw - 32px)"
+                        sizes="(min-width: 1440px) 405px, (min-width: 1200px) calc(33.33vw - 70px), (min-width: 760px) 30vw, (min-width: 560px) 496px, calc(100vw - 32px)"
                         className="object-cover" />
                   </div>
                   <div className="portfolio-tile-caption">

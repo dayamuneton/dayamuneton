@@ -1,41 +1,27 @@
 import Link from "next/link";
+import { memo } from "react";
 import ContactLinks from "./contactLinks";
 
-function Footer() {
+export default memo(function Footer() {
    return (
-      <footer className="mt-auto flex flex-col items-center w-full gap-2 p-4 pb-8 text-white bg-black border-t-2 border-white">
-         <span className="flex flex-col items-center text-sm md:flex-row text-center max-w-[95vw] overflow-hidden">
-            <p className="whitespace-nowrap w-full max-w-[95vw]">
-               Daya Muneton © All rights reserved.
-            </p>
-            <span className="flex flex-col items-center justify-center w-full gap-1 sm:flex-row sm:ml-1">
-               <Link
-                  className="pr-2 border-r"
-                  href="/legal/privacy-policy"
-                  target="_blank"
-               >
-                  Privacy Policy
-               </Link>
-
-               <Link href="/legal/terms-of-service" target="_blank">
-                  Terms Of Use
-               </Link>
-            </span>
-         </span>
-
-         <span className="flex flex-col sm:flex-row items-center max-w-[95vw]">
-            <p className="whitespace-nowrap">Email:&nbsp;</p>
-            <a
-               href="mailto:info@dayamuneton.com"
-               target="_blank"
-               rel="noreferrer"
-            >
-               info@dayamuneton.com
-            </a>
-         </span>
-         <ContactLinks />
+      <footer className="site-footer">
+         <div className="site-footer-inner">
+            <div>
+               <Link href="/" className="font-bold">Daya Muneton</Link>
+               <p className="mt-1 text-sm text-muted">© Daya Muneton. All rights reserved.</p>
+            </div>
+            <nav aria-label="Footer" className="footer-links text-sm text-muted">
+               <Link href="/about">About Daya</Link>
+               <Link href="/legal/privacy-policy">Privacy Policy</Link>
+               <Link href="/legal/terms-of-service">Terms of Service</Link>
+            </nav>
+            <div>
+               <address className="text-sm">
+                  <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>
+               </address>
+               <ContactLinks />
+            </div>
+         </div>
       </footer>
    );
-}
-
-export default Footer;
+});

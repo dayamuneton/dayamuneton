@@ -1,26 +1,36 @@
-import React, { useRef } from "react";
-import { useClickOutside } from "@/hooks/clickOutside";
+import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 
 interface ModalProps {
    isOpen: boolean;
    onClose: () => void;
-   children: React.ReactNode;
+   children: ReactNode;
    className?: string;
+   label?: string;
+   returnFocusRef?: RefObject<HTMLElement | null>;
 }
 
-function Modal({ isOpen, onClose, children, className }: ModalProps) {
-   const modalRef = useRef<HTMLDivElement | null>(null);
+export default function Modal({ isOpen, onClose, children, className = "", label = "Confirm change", returnFocusRef }: ModalProps) {
+   const ref = useRef<HTMLDialogElement>(null);
 
-   useClickOutside(modalRef, onClose);
+   useEffect(() => {
+      const dialog = ref.current;
+      if (!dialog) return;
+      const returnFocus = returnFocusRef?.current;
+      if (isOpen && !dialog.open) dialog.showModal();
+      if (!isOpen && dialog.open) dialog.close();
+      return () => {
+         if (dialog.open) {
+            dialog.close();
+            returnFocus?.focus();
+         }
+      };
+   }, [isOpen, returnFocusRef]);
 
-   if (!isOpen) return null;
    return (
-      <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black/50 z-[10000]">
-         <div ref={modalRef} className={`${className} relative`}>
-            {children}
-         </div>
-      </div>
+      <dialog ref={ref} className="site-dialog" aria-label={label}
+         onCancel={(event) => { event.preventDefault(); onClose(); }}
+         onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+         <div className={"dialog-panel " + className}>{isOpen && children}</div>
+      </dialog>
    );
 }
-
-export default Modal;
