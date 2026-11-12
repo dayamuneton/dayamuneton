@@ -1,8 +1,9 @@
-import React, { useState, useContext, createContext, ReactNode } from "react";
+import React, { useId, useState, useContext, createContext, ReactNode } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 interface AcordionContextProps {
    isOpen: boolean;
+   contentId: string;
    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -18,9 +19,10 @@ export function Acordion({
    className?: string;
 }) {
    const [isOpen, setIsOpen] = useState(false);
+   const contentId = useId();
 
    return (
-      <AcordionContext.Provider value={{ isOpen, setIsOpen }}>
+      <AcordionContext.Provider value={{ isOpen, setIsOpen, contentId }}>
          <div className={`flex flex-col ${className}`}>{children}</div>
       </AcordionContext.Provider>
    );
@@ -38,10 +40,13 @@ export function AcordionButton({
       throw new Error("AcordionButton must be used within an Acordion");
    }
 
-   const { setIsOpen } = context;
+   const { isOpen, setIsOpen, contentId } = context;
 
    return (
       <button
+         type="button"
+         aria-controls={contentId}
+         aria-expanded={isOpen}
          onClick={() => setIsOpen((isOpen) => !isOpen)}
          className={className}
       >
@@ -62,11 +67,13 @@ export function AcordionContent({
       throw new Error("AcordionContent must be used within an Acordion");
    }
 
-   const { isOpen } = context;
+   const { isOpen, contentId } = context;
 
    return (
       <div
-         className={`overflow-hidden transition-all duration-300 ease-in-out w-full ${
+         id={contentId}
+         inert={!isOpen}
+         className={`overflow-hidden transition-all duration-300 ease-in-out w-full motion-reduce:transition-none ${
             isOpen ? "max-h-[300vh]" : "max-h-[0vh]"
          }`}
       >
@@ -97,7 +104,7 @@ export function AcordionIcon({
       <div
          className={`${className} ${
             isOpen ? open || "rotate-180" : close || "rotate-0"
-         } transition-all duration-300 ease-in-out`}
+         } transition-all duration-300 ease-in-out motion-reduce:transition-none`}
       >
          {icon ? icon : <KeyboardArrowDownIcon sx={{ fontSize: size }} />}
       </div>

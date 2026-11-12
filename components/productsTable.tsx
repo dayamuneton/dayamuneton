@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 function ProductRow({ product, type }: { product: any; type: string }) {
    if (!product) return null;

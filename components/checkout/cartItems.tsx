@@ -1,7 +1,6 @@
 import { useShop } from "@/context/shopContext";
 import { removeCartItem } from "@/integrations/firebase/shoppingCart/removeItemFromShoppingCart";
 import Image from "next/image";
-import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
 
@@ -27,7 +26,7 @@ function CartItems({ className }: { className?: string }) {
          {shoppingCart?.cartItems?.map((item) => (
             <div
                key={item.name}
-               className="w-full flex flex-col p-4 mb-2 bg-gradient-to-l to-[#5cdde5] from-[#4a23a9] drop-shadow-md rounded-lg hover:scale-[1.005] "
+               className="w-full flex flex-col p-4 mb-2 bg-linear-to-l/srgb to-[#5cdde5] from-[#4a23a9] drop-shadow-md rounded-lg hover:scale-[1.005] "
             >
                <Link
                   href={`/${item.variants ? "ageofemotions" : "shop"}/${

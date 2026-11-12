@@ -2,7 +2,6 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Image from "next/image";
-import React from "react";
 
 function About() {
    return (
@@ -30,7 +29,7 @@ function About() {
                   />
                </span>
             </div>
-            <div className="w-full bg-gradient-to-r from-[#76E3F0] to-[#318791] flex items-center justify-center p-12">
+            <div className="w-full bg-linear-to-r/srgb from-[#76E3F0] to-[#318791] flex items-center justify-center p-12">
                <div className="flex flex-col max-w-md gap-4 text-[0.75rem] leading-4 text-gray-800">
                   <p>
                      Daya Muneton is an artist who began her journey in 2013 by

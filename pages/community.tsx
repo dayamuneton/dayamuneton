@@ -4,10 +4,8 @@ import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState, FormEvent } from "react";
-import { Dancing_Script } from "next/font/google";
+import { useRef, useState, FormEvent } from "react";
 import { useAuth } from "@/context/authContext";
-const dancingScript = Dancing_Script({ subsets: ["latin"] });
 
 function Community() {
    const [loading, setLoading] = useState(false);
@@ -98,7 +96,7 @@ function Community() {
             <div className="grid grid-cols-1 md:grid-cols-3  max-w-5xl w-[70vw] gap-3 md:w-[95vw] ">
                <CommunityColumn
                   scroll={scroll}
-                  className="bg-gradient-to-tr from-[#754af1] to-[#51eace] h-full"
+                  className="bg-linear-to-tr/srgb from-[#754af1] to-[#51eace] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
                      Station of Feelings and Flavors: What emotions does your
@@ -125,7 +123,7 @@ function Community() {
                </CommunityColumn>
                <CommunityColumn
                   scroll={scroll}
-                  className="bg-gradient-to-br to-[#a78ef9] from-[#51eace] h-full"
+                  className="bg-linear-to-br/srgb to-[#a78ef9] from-[#51eace] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
                      Station of Dreams and Challenges:
@@ -152,7 +150,7 @@ function Community() {
                </CommunityColumn>
                <CommunityColumn
                   scroll={scroll}
-                  className="bg-gradient-to-tr from-[#a78ef9] to-[#c7f7db] h-full"
+                  className="bg-linear-to-tr/srgb from-[#a78ef9] to-[#c7f7db] h-full"
                >
                   <p className="text-base font-medium text-white pt-8 h-[10rem] flex ">
                      Station of Journeys and Adventures:
@@ -179,7 +177,7 @@ function Community() {
             </div>
          </div>
          <div className="flex flex-col items-center max-w-3xl mb-8 ">
-            <div className="bg-gradient-to-r py-6 from-[#754af1] to-[#51eace] my-12 p-2 rounded-3xl drop-shadow">
+            <div className="bg-linear-to-r/srgb py-6 from-[#754af1] to-[#51eace] my-12 p-2 rounded-3xl drop-shadow-sm">
                <h2 className="mx-auto mb-4 text-2xl font-medium tracking-wider text-center">
                   What is this activity about?
                </h2>
@@ -220,7 +218,7 @@ function Community() {
             <form
                onSubmit={sendEmail}
                ref={scrollRef}
-               className="flex flex-col max-w-xl px-14 rounded-3xl drop-shadow bg-gradient-to-r  from-[#754af1] to-[#51eace] py-10 text-sm"
+               className="flex flex-col max-w-xl px-14 rounded-3xl drop-shadow-sm bg-linear-to-r/srgb  from-[#754af1] to-[#51eace] py-10 text-sm"
             >
                <p className="font-semibold">
                   Please share your musical stories here. You are invited to
@@ -302,7 +300,7 @@ function Community() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                />
-               <button className="py-2 my-2 bg-white drop-shadow" type="submit">
+               <button className="py-2 my-2 bg-white drop-shadow-sm" type="submit">
                   SEND
                </button>
                <p className="mx-auto">Thank You!</p>
@@ -310,7 +308,7 @@ function Community() {
             {/* <p className="sm:max-w-xl max-w-[80vw] mt-4 mb-10 text-sm font-medium">
                {`"The insights gathered from these artistic activities will serve to craft art aimed at enhancing life's appreciation, while also enabling me to continue developing practices rooted in the authentic experiences we collectively share in this space."`}
             </p> */}
-            {/* <div className="bg-gradient-to-r from-[#754af1] to-[#51eace] rounded-3xl drop-shadow  flex flex-col items-center w-full py-6 mb-4">
+            {/* <div className="bg-linear-to-r/srgb from-[#754af1] to-[#51eace] rounded-3xl drop-shadow-sm  flex flex-col items-center w-full py-6 mb-4">
                <div className="flex flex-col items-center gap-3 sm:flex-row">
                   <span className="flex relative mx-auto min-w-[20rem]  sm:min-w-[15rem] h-[23rem]">
                      <Image

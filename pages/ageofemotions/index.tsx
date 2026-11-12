@@ -4,7 +4,6 @@ import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import StarIcon from "@mui/icons-material/Star";
 import Testimonies from "@/components/testimonies";
 
@@ -49,7 +48,7 @@ function Ageofemotions() {
          <div className="flex flex-col gap-3 mt-4 sm:flex-row">
             <Link
                href="/ageofemotions/freebies"
-               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
+               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
@@ -67,7 +66,7 @@ function Ageofemotions() {
             </Link>
             <Link
                href="/ageofemotions/colors"
-               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
+               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
@@ -85,7 +84,7 @@ function Ageofemotions() {
             </Link>
             <Link
                href="/ageofemotions/chemistry"
-               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
+               className="flex flex-col items-center  hover:underline drop-shadow-lg group aspect-square w-[80vw] sm:w-[27vw] max-w-[20rem]  bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden p-2"
             >
                <span className="aspect-square relative flex h-[30vw] sm:h-[12vw] max-h-[23rem] my-[10%] ">
                   <Image
@@ -112,7 +111,7 @@ function Ageofemotions() {
                <StarIcon />
             </p>
          </span>
-         {/* <div className="bg-gradient-to-r from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden py-2 px-14 text-center text-[#ECFF04] font-semibold max-w-[95vw] hover:scale-[1.01] cursor-pointer">
+         {/* <div className="bg-linear-to-r/srgb from-[#76e3ee] to-[#4b50c8] rounded-3xl overflow-hidden py-2 px-14 text-center text-[#ECFF04] font-semibold max-w-[95vw] hover:scale-[1.01] cursor-pointer">
             <p className="text-[#231f94] text-2xl font-bold">
                Digital guides for science lovers and visual learners
             </p>

@@ -1,11 +1,10 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import CartItems from "@/components/checkout/cartItems";
 import Navbar from "@/components/navbar/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { ShoppingCart } from "@/components/navbar/shoppingCart";
 import { useShop } from "@/context/shopContext";
 import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
 import { useAuth } from "@/context/authContext";
@@ -15,23 +14,24 @@ import { useRouter } from "next/router";
 
 function Checkout() {
    const { shoppingCart } = useShop();
-   const { currentUser } = useAuth();
+   const { currentUser, authReady } = useAuth();
    const router = useRouter();
 
    useEffect(() => {
-      if (!currentUser) {
+      if (authReady && !currentUser) {
          router.push("/auth/login");
       }
-   }, [currentUser, router]);
+   }, [authReady, currentUser, router]);
 
    const redirectToCheckout = async (e: any) => {
       e.preventDefault();
+      if (!currentUser?.email) return;
       const response = await createPdfsCheckout({
          cartItems: shoppingCart?.cartItems || [],
-         cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/checkout`,
+         cancel_url: "/checkout",
          email: currentUser.email,
-         name: currentUser.displayName,
-         success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}`,
+         name: currentUser.displayName || "",
+         success_url: "/",
          cartId: shoppingCart?.id,
       });
 
@@ -39,6 +39,8 @@ function Checkout() {
          router.push(response.url);
       }
    };
+
+   if (!authReady || !currentUser) return null;
 
    return (
       <div
@@ -56,7 +58,7 @@ function Checkout() {
          <Navbar />
 
          <div className="flex-1 max-w-md sm:max-w-xl">
-            <div className=" p-8 bg-gradient-to-r from-[#4a23a9] to-[#5cdde5] rounded-xl  drop-shadow-xl my-12 ">
+            <div className=" p-8 bg-linear-to-r/srgb from-[#4a23a9] to-[#5cdde5] rounded-xl  drop-shadow-xl my-12 ">
                <p className="mb-2 text-xl font-medium text-white">My Cart</p>
 
                <CartItems className="flex flex-col w-full " />
@@ -83,10 +85,10 @@ function Checkout() {
                         shoppingCart?.cartItems?.length == 0 ? "" : "!hidden"
                      } text-[#1b005f]`}
                   />
-                  <div className="w-full drop-shadow">
+                  <div className="w-full drop-shadow-sm">
                      <button
                         onClick={redirectToCheckout}
-                        className=" w-full max-w-xl px-8 py-3 mt-2  mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
+                        className=" w-full max-w-xl px-8 py-3 mt-2  mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow-sm hover:scale-[1.03]"
                         hidden={shoppingCart?.cartItems?.length == 0}
                      >
                         Checkout
@@ -94,13 +96,13 @@ function Checkout() {
                      <span className="flex">
                         <Link
                            href="/shop"
-                           className="w-full  px-8 py-3 mt-2 mb-8 mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
+                           className="w-full  px-8 py-3 mt-2 mb-8 mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow-sm hover:scale-[1.03]"
                         >
                            Paintings
                         </Link>
                         <Link
                            href="/ageofemotions"
-                           className="w-full  px-8 py-3 mt-2 mb-8 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
+                           className="w-full  px-8 py-3 mt-2 mb-8 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow-sm hover:scale-[1.03]"
                         >
                            Guides
                         </Link>

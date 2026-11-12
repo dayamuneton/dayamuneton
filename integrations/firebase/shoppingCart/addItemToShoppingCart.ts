@@ -1,10 +1,10 @@
 import { db } from "@/integrations/firebase/firebaseConfig";
 import {
-   arrayUnion,
-   doc,
-   increment,
-   serverTimestamp,
-   updateDoc,
+arrayUnion,
+doc,
+increment,
+serverTimestamp,
+updateDoc,
 } from "firebase/firestore";
 import { createShoppingCart } from "./createShoppingCart";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
@@ -19,11 +19,12 @@ export const addItemToCart = async (
    variant?: GuiaProductVariant
 ) => {
    try {
-      let cart: any = shoppingCart || (await createShoppingCart(email));
+      const cart: any = shoppingCart || (await createShoppingCart(email));
       const data = removeUndefinedEntriesFromObject(item);
       if (variant) {
          data.name = `${item.name} (${variant.title})`;
          data.mailerlite_group = variant.mailerlite_group;
+         data.variantId = variant.id;
       }
 
       const itemExists = cart.cartItems.some(

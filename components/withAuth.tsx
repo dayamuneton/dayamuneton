@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { NextPage } from "next";
 import { useAuth } from "@/context/authContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
@@ -11,28 +10,28 @@ interface WithAuthComponentProps {
 }
 
 const WithAuth = ({ Component, props }: WithAuthComponentProps) => {
-   const { currentUser, logout } = useAuth();
+   const { currentUser, authReady } = useAuth();
    const router = useRouter();
-   const [isAdmin, setIsAdmin] = useState(false);
+   const [adminUid, setAdminUid] = useState<string>();
 
    useEffect(() => {
-      if (!currentUser) {
+      if (!authReady) return;
+      if (!currentUser?.email) {
          router.push("/auth/login");
          return;
       }
-      const checkAdminStatus = async () => {
-         const adminDoc = doc(db, "admins", currentUser.email);
-         const adminSnapshot = await getDoc(adminDoc);
-         if (!adminSnapshot.exists()) {
-            router.replace("/");
-         } else {
-            setIsAdmin(true);
-         }
-      };
-      checkAdminStatus();
-   }, [currentUser, router, logout]);
+      let active = true;
+      getDoc(doc(db, "admins", currentUser.email))
+         .then((snapshot) => {
+            if (!active) return;
+            if (snapshot.exists()) setAdminUid(currentUser.uid);
+            else void router.replace("/");
+         })
+         .catch(() => { if (active) void router.replace("/"); });
+      return () => { active = false; };
+   }, [authReady, currentUser, router]);
 
-   return isAdmin ? <Component {...props} /> : <p>Loading...</p>;
+   return currentUser && currentUser.uid === adminUid ? <Component {...props} /> : <p>Loading...</p>;
 };
 
 export default WithAuth;

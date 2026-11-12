@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 import { useClickOutside } from "@/hooks/clickOutside";
 
 interface ModalProps {

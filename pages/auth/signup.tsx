@@ -3,7 +3,7 @@ import { useAuth } from "@/context/authContext";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function extractFirebaseError(error: string) {
@@ -26,11 +26,10 @@ function SignUp() {
 
    useEffect(() => {
       if (currentUser) {
-         let src = router.query.src;
-         if (typeof src !== "string") {
-            src = undefined;
-         }
-         router.replace(src || "/");
+         const { src } = router.query;
+         const safePath = typeof src === "string" && src.startsWith("/") &&
+            !src.startsWith("//") && !src.includes("\\");
+         router.replace(safePath ? src : "/");
       }
    }, [router, currentUser]);
 
@@ -42,17 +41,14 @@ function SignUp() {
          return;
       }
 
-      let signInError = await signUpUserWithEmailAndPassword(
+      const signInError = await signUpUserWithEmailAndPassword(
          email,
          password,
          inputName
       );
 
       if (signInError) {
-         signInError = extractFirebaseError(signInError);
-
-         setError(signInError);
-         console.log(signInError);
+         setError(extractFirebaseError(signInError) || signInError);
          return;
       } else {
          setError("");
@@ -107,7 +103,7 @@ function SignUp() {
                   onSubmit={signUpUser}
                   className="flex flex-col items-center w-full"
                >
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type="text"
                         name="name"
@@ -117,7 +113,7 @@ function SignUp() {
                      />
                      <label htmlFor="name">Full Name:</label>
                   </div>
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type="text"
                         name="email"
@@ -127,7 +123,7 @@ function SignUp() {
                      />
                      <label htmlFor="email">Email:</label>
                   </div>
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type={`${showPassword ? "text" : "password"}`}
                         name="password"
@@ -142,7 +138,7 @@ function SignUp() {
 
                      <label htmlFor="password">Password:</label>
                   </div>
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type={`${showConfirmPassword ? "text" : "password"}`}
                         name="confirm password"
@@ -161,7 +157,7 @@ function SignUp() {
                   <div className="flex flex-col items-center w-full mx-auto ">
                      <button
                         type="submit"
-                        className="w-full p-2 mt-2 text-white bg-gradient-to-l to-[#5cdde5] from-[#4a23a9]  rounded hover:scale-[1.005]"
+                        className="w-full p-2 mt-2 text-white bg-linear-to-l/srgb to-[#5cdde5] from-[#4a23a9]  rounded hover:scale-[1.005]"
                      >
                         Continue
                      </button>

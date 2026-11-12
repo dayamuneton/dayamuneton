@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import React, { useState, useEffect } from "react";
 import { useShop } from "@/context/shopContext";
 
 export function ShoppingCart({
@@ -13,29 +12,15 @@ export function ShoppingCart({
 }) {
    const { currentUser } = useAuth();
    const { shoppingCart } = useShop();
-   const [cartQty, setCartQty] = useState<null | string>(null);
-
-   const handleCartQty = (variantsLength?: number) => {
-      if (!variantsLength || variantsLength === 0) return null;
-
-      if (variantsLength > 9) return "9+";
-
-      return variantsLength.toString();
-   };
-
-   useEffect(() => {
-      if (!currentUser || !shoppingCart) return;
-
-      let variantsLength = shoppingCart.cartItems?.length;
-
-      setCartQty(handleCartQty(variantsLength));
-   }, [shoppingCart, currentUser]);
+   const itemCount = shoppingCart?.cartItems.length ?? 0;
+   const cartQty = itemCount > 9 ? "9+" : itemCount || null;
 
    return (
       <div className={`${!currentUser ? "hidden" : ""}  ${className}`}>
          <div className="flex !aspect-square relative">
             <Link
                href="/checkout"
+               aria-label="Shopping cart"
                className="flex items-center justify-center !min-h-full  cursor-pointer !aspect-square  "
             >
                <ShoppingCartIcon

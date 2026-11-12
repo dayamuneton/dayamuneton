@@ -1,11 +1,12 @@
 import { firstLetterUpperCaseEachWord } from "@/utils/firstLetterUpperCase";
+import { isLocalSite } from "@/config/site-environment";
 
 export const subscribeCustomerToGroups = async (
    email: string,
    fullName: string,
    groups: string | string[]
 ) => {
-   if (!email || !fullName) return;
+   if (isLocalSite || !email || !fullName) return;
 
    const name = fullName.toLowerCase();
 
@@ -21,10 +22,9 @@ export const subscribeCustomerToGroups = async (
       lastName = splitName[splitName.length - 1];
    }
 
-   let filteredGroups = typeof groups === "string" ? [groups] : groups;
-   filteredGroups = filteredGroups.filter(
-      (group) => group !== undefined || group !== ""
-   );
+   const filteredGroups = [...new Set((typeof groups === "string" ? [groups] : groups)
+      .filter((group) => typeof group === "string" && group.trim()))];
+   if (!filteredGroups.length) return;
 
    const payload = {
       email: email,
@@ -37,20 +37,17 @@ export const subscribeCustomerToGroups = async (
 
    const data = JSON.stringify(payload);
 
-   // const response =
-   await fetch(process.env.NEXT_PUBLIC_MAILERLITE_SUBSCRIBERS_API_URL || "", {
+   const apiKey = process.env.MAILERLITE_API_KEY;
+   if (!apiKey) throw new Error("MAILERLITE_API_KEY is required.");
+   const response = await fetch(process.env.MAILERLITE_SUBSCRIBERS_API_URL || "https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
       headers: {
-         Authorization: `Bearer ${
-            process.env.NEXT_PUBLIC_MAILERLITE_API_KEY || ""
-         }`,
+         Authorization: `Bearer ${apiKey}`,
          "Content-Type": "application/json",
          Accept: "application/json",
       },
       body: data,
    });
 
-   // const mailerliteResponse = await response.json();
-
-   // console.log("log", mailerliteResponse);
+   if (!response.ok) throw new Error(`MailerLite returned ${response.status}.`);
 };

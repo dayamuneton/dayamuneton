@@ -1,11 +1,10 @@
 import AcquireGuide from "@/components/acquireGuide";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
-import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
 import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { addItemToCart } from "@/integrations/firebase/shoppingCart/addItemToShoppingCart";
 import { useShop } from "@/context/shopContext";
 import { useAuth } from "@/context/authContext";
@@ -66,7 +65,7 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
             <link rel="icon" href="/favicon.ico" />
          </Head>
          <Navbar />
-         <div className="flex flex-col items-center bg-white justify-center w-[95vw] max-w-4xl  h-full py-8  mt-14 rounded-xl drop-shadow mb-8 px-4">
+         <div className="flex flex-col items-center bg-white justify-center w-[95vw] max-w-4xl  h-full py-8  mt-14 rounded-xl drop-shadow-sm mb-8 px-4">
             <div className="flex flex-col md:flex-row">
                <div>
                   <div className="flex flex-col-reverse items-center gap-1 md:items-start md:flex-row ">
@@ -149,14 +148,15 @@ function PdfProduct({ product }: { product: GuiaProduct }) {
                               (item) => item.handle === router.asPath
                            )
                         }
-                        onClick={() =>
-                           addItemToCart(
+                        onClick={() => {
+                           if (!currentUser?.email) return;
+                           void addItemToCart(
                               shoppingCart,
                               product,
                               currentUser.email,
                               selectedVariant || product.variants?.[0]
-                           )
-                        }
+                           );
+                        }}
                         title="Original Piece Sold Out"
                      >
                         Add To Cart

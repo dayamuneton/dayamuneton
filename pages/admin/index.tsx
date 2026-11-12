@@ -3,7 +3,6 @@ import Navbar from "@/components/navbar/navbar";
 import WithAuth from "@/components/withAuth";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 
 function Admin() {
    return (

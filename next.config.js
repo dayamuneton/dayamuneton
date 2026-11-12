@@ -1,8 +1,19 @@
+const local = process.env.NEXT_PUBLIC_SITE_ENV !== "production";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    reactStrictMode: true,
+   distDir: process.env.LOCAL_NEXT_BUILD === "1" ? ".next-local" : ".next",
    images: {
-      remotePatterns: [
+      dangerouslyAllowLocalIP: local,
+      remotePatterns: local ? [
+         {
+            protocol: "http",
+            hostname: "127.0.0.1",
+            port: "9199",
+            pathname: "/v0/b/demo-dayamuneton.appspot.com/o/**",
+         },
+      ] : [
          {
             protocol: "https",
             hostname: "**.googleusercontent.com",
@@ -12,10 +23,6 @@ const nextConfig = {
             hostname: "**.googleapis.com",
          },
       ],
-   },
-   i18n: {
-      locales: ["en"],
-      defaultLocale: "en",
    },
 };
 

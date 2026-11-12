@@ -1,11 +1,7 @@
 import { useAuth } from "@/context/authContext";
-import { auth, db } from "@/integrations/firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import PersonIcon from "@mui/icons-material/Person";
-import { updateProfile } from "firebase/auth";
 import { useClickOutside } from "@/hooks/clickOutside";
 
 function NavbarProfile({

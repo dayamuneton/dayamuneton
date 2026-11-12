@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Image from "next/image";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";

@@ -2,11 +2,11 @@ import { GuiaProduct } from "@/models/guiaProductModel";
 import { ShoppingCart } from "@/models/shoppingCartModel";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import {
-   arrayRemove,
-   doc,
-   increment,
-   serverTimestamp,
-   updateDoc,
+arrayRemove,
+doc,
+increment,
+serverTimestamp,
+updateDoc,
 } from "firebase/firestore";
 
 export const removeCartItem = async (

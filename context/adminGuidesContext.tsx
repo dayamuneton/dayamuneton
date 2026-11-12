@@ -3,12 +3,12 @@ import { GuiaProductVariant } from "@/models/guiaProductModel";
 import { dataURLtoBlob } from "@/utils/dataURLtoBlob";
 import { randomRange } from "@/utils/random";
 import {
-   deleteObject,
-   getDownloadURL,
-   ref,
-   uploadBytes,
+deleteObject,
+getDownloadURL,
+ref,
+uploadBytes,
 } from "firebase/storage";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface AdminProductContextProps {
    setFeaturedImage: React.Dispatch<React.SetStateAction<string>>;
@@ -65,7 +65,7 @@ export function AdminProductProvider({
 
       await uploadBytes(photoRef, blob);
 
-      let photoURL = await getDownloadURL(photoRef);
+      const photoURL = await getDownloadURL(photoRef);
       return photoURL;
    };
 

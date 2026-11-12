@@ -1,13 +1,11 @@
 import Navbar from "@/components/navbar/navbar";
 import WithAuth from "@/components/withAuth";
 import Head from "next/head";
-import React, { useState, useEffect } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "@/context/authContext";
 import ProductsTable from "@/components/productsTable";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
-import { NextPage } from "next";
 import Footer from "@/components/footer";
 import Link from "next/link";
 

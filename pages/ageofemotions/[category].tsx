@@ -1,13 +1,11 @@
-import Modal from "@/components/ui/modal";
 import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState } from "react";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Link from "next/link";
 import Footer from "@/components/footer";
+import type { GetServerSideProps } from "next";
 
 const validCategories = [
    {
@@ -30,10 +28,10 @@ const validCategories = [
    },
 ];
 
-export async function getServerSideProps(context: any) {
-   const { category } = context.query;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+   const category = params?.category;
 
-   const data: any = validCategories.find((item) => item.category === category);
+   const data = validCategories.find((item) => item.category === category);
 
    if (!data) {
       return {
@@ -58,13 +56,12 @@ export async function getServerSideProps(context: any) {
       });
    });
 
-   data.galleryContent = galleryContent;
    return {
       props: {
-         data: data,
+         data: { ...data, galleryContent },
       },
    };
-}
+};
 
 function PDFCategory({ data }: { data: any }) {
    // const [item, setItem] = useState<any>(null);
@@ -119,7 +116,7 @@ function PDFCategory({ data }: { data: any }) {
                         encodeURIComponent(item.handle) || item.id
                      }`}
                      key={item.id}
-                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-gradient-to-r from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg text-black"
+                     className="flex flex-col  sm:w-[30vw] w-[40vw] max-w-[15rem] items-center hover:scale-[1.01] cursor-pointer overflow-hidden bg-linear-to-r/srgb from-[#ddf2f1] to-[#d2faf8] drop-shadow-md rounded-lg text-black"
                   >
                      <span className="relative flex w-full aspect-square">
                         <Image

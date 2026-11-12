@@ -1,161 +1,93 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import {
-   createUserWithEmailAndPassword,
-   signInWithEmailAndPassword,
-   signInWithPopup,
-   signOut,
-   updateProfile,
-   sendSignInLinkToEmail,
-   isSignInWithEmailLink,
-   signInWithEmailLink,
-} from "firebase/auth";
-import {
-   auth,
-   db,
-   googleProvider,
-} from "@/integrations/firebase/firebaseConfig";
-import { doc, onSnapshot } from "firebase/firestore";
-// import { Profile, profileConverter } from "@/models/profileModel";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { User } from "firebase/auth";
 
-interface AuthContextProps {
-   setCurrentUser: React.Dispatch<React.SetStateAction<any>>;
-   currentUser: any;
+interface AuthContextValue {
+   currentUser: User | null;
+   authReady: boolean;
    loginWithGoogle: () => Promise<unknown>;
-   signUpUserWithEmailAndPassword: (
-      email: string,
-      password: string,
-      name: string
-   ) => Promise<any>;
-   signInWithEmail: (email: string, password: string) => Promise<any>;
+   signUpUserWithEmailAndPassword: (email: string, password: string, name: string) => Promise<string | undefined>;
+   signInWithEmail: (email: string, password: string) => Promise<string | undefined>;
    logout: () => Promise<void>;
-   user: any;
-   setUser: React.Dispatch<React.SetStateAction<any>>;
-   registerUserWithEmailLink: (
-      email: string,
-      url: string
-   ) => Promise<void | unknown>;
 }
 
-const AuthContext = createContext<AuthContextProps | null>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function useAuth() {
-   return useContext(AuthContext as React.Context<AuthContextProps>);
+   const value = useContext(AuthContext);
+   if (!value) throw new Error("useAuth requires AuthProvider");
+   return value;
 }
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-   const [currentUser, setCurrentUser] = useState<any>();
-   const [user, setUser] = useState();
-   const [loaded, setLoaded] = useState(false);
+async function loadAuth() {
+   const [sdk, { auth, googleProvider }] = await Promise.all([
+      import("firebase/auth"),
+      import("@/integrations/firebase/firebaseConfig"),
+   ]);
+   return { sdk, auth, googleProvider };
+}
 
-   async function loginWithGoogle() {
-      try {
-         await signInWithPopup(auth, googleProvider);
-      } catch (error) {
-         console.error(error);
-         return error;
-      }
+async function loginWithGoogle() {
+   try {
+      const { sdk, auth, googleProvider } = await loadAuth();
+      await sdk.signInWithPopup(auth, googleProvider, sdk.browserPopupRedirectResolver);
+   } catch (error) {
+      return error;
    }
+}
 
-   async function signUpUserWithEmailAndPassword(
-      email: string,
-      password: string,
-      name: string
-   ) {
-      try {
-         await createUserWithEmailAndPassword(auth, email, password);
-
-         if (!auth.currentUser) return;
-
-         await updateProfile(auth.currentUser, {
-            displayName: name,
-         });
-      } catch (error: any) {
-         console.log(error);
-
-         return error.message;
-      }
+async function signUpUserWithEmailAndPassword(email: string, password: string, name: string) {
+   try {
+      const { sdk, auth } = await loadAuth();
+      const { user } = await sdk.createUserWithEmailAndPassword(auth, email, password);
+      await sdk.updateProfile(user, { displayName: name });
+   } catch (error) {
+      return error instanceof Error ? error.message : "Could not create your account.";
    }
+}
 
-   async function signInWithEmail(email: string, password: string) {
-      try {
-         await signInWithEmailAndPassword(auth, email, password);
-      } catch (error: any) {
-         console.log(error);
-
-         return error.message;
-      }
+async function signInWithEmail(email: string, password: string) {
+   try {
+      const { sdk, auth } = await loadAuth();
+      await sdk.signInWithEmailAndPassword(auth, email, password);
+   } catch (error) {
+      return error instanceof Error ? error.message : "Could not sign you in.";
    }
+}
 
-   async function logout() {
-      await signOut(auth);
-   }
+async function logout() {
+   const { sdk, auth } = await loadAuth();
+   await sdk.signOut(auth);
+}
 
-   async function registerUserWithEmailLink(email: string, url: string) {
-      // If the user is re-entering their email address but already has a code
-      if (isSignInWithEmailLink(auth, url) && !!email) {
-         // Sign the user in
-         try {
-            await signInWithEmailLink(auth, email, url);
-         } catch (error) {
-            console.error(error);
-            return error;
-         }
-         return;
-      }
-
-      try {
-         await sendSignInLinkToEmail(auth, email, {
-            url,
-            handleCodeInApp: true,
-         });
-         window.localStorage.setItem("emailForSignIn", email);
-      } catch (error) {
-         console.error(error);
-         return error;
-      }
-   }
+export function AuthProvider({ children }: { children: ReactNode }) {
+   const [currentUser, setCurrentUser] = useState<User | null>(null);
+   const [authReady, setAuthReady] = useState(false);
 
    useEffect(() => {
-      const unSubscribe = auth.onAuthStateChanged((user) => {
-         setCurrentUser(user);
-         setLoaded(true);
-      });
-      return unSubscribe;
+      let active = true;
+      let unsubscribe: (() => void) | undefined;
+      loadAuth()
+         .then(({ auth }) => {
+            if (!active) return;
+            unsubscribe = auth.onAuthStateChanged((user) => {
+               setCurrentUser(user);
+               setAuthReady(true);
+            });
+         })
+         .catch(() => {
+            if (active) setAuthReady(true);
+         });
+      return () => {
+         active = false;
+         unsubscribe?.();
+      };
    }, []);
 
-   // useEffect(() => {
-   //    if (!currentUser) {
-   //       setProfile(null);
-   //       return;
-   //    }
-
-   //    const userRef = doc(db, "users", currentUser.email).withConverter(
-   //       profileConverter
-   //    );
-   //    const unSubscribe = onSnapshot(
-   //       userRef,
-   //       (snapshot) => setProfile(snapshot.data() || null),
-   //       (e) => console.error(e)
-   //    );
-
-   //    return unSubscribe;
-   // }, [currentUser]);
-
-   const value = {
-      setCurrentUser,
-      currentUser,
-      loginWithGoogle,
-      signUpUserWithEmailAndPassword,
-      signInWithEmail,
-      logout,
-      user,
-      setUser,
-      registerUserWithEmailLink,
-   };
-
    return (
-      <AuthContext.Provider value={value}>
-         {loaded && children}
+      <AuthContext.Provider value={{
+         currentUser, authReady, loginWithGoogle, signUpUserWithEmailAndPassword, signInWithEmail, logout,
+      }}>
+         {children}
       </AuthContext.Provider>
    );
 }

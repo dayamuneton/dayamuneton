@@ -1,17 +1,16 @@
 export const dataURLtoBlob = (dataurl: string): Blob | null => {
-   let arr = dataurl.split(","),
+   const arr = dataurl.split(","),
       mime = arr[0].match(/:(.*?);/);
 
    if (!mime) {
       return null;
    }
 
-   let bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-   while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
+   const binary = atob(arr[1]);
+   const bytes = new Uint8Array(binary.length);
+   for (let index = 0; index < binary.length; index++) {
+      bytes[index] = binary.charCodeAt(index);
    }
 
-   return new Blob([u8arr], { type: mime[1] });
+   return new Blob([bytes], { type: mime[1] });
 };

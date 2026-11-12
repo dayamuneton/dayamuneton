@@ -3,7 +3,7 @@ import { useAuth } from "@/context/authContext";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Login() {
@@ -68,7 +68,7 @@ function Login() {
                   onSubmit={loginUser}
                   className="flex flex-col items-center w-full"
                >
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type="text"
                         name="email"
@@ -78,7 +78,7 @@ function Login() {
                      />
                      <label htmlFor="email">Email:</label>
                   </div>
-                  <div className="authInputBox bg-gradient-to-r to-[#5cdde5] from-[#4a23a9]">
+                  <div className="authInputBox bg-linear-to-r/srgb to-[#5cdde5] from-[#4a23a9]">
                      <input
                         type={`${showPassword ? "text" : "password"}`}
                         name="password"
@@ -97,7 +97,7 @@ function Login() {
                   <div className="flex flex-col items-center w-full mx-auto ">
                      <button
                         type="submit"
-                        className="w-full p-2 mt-2 text-white bg-gradient-to-l to-[#5cdde5] from-[#4a23a9] rounded hover:scale-[1.005]"
+                        className="w-full p-2 mt-2 text-white bg-linear-to-l/srgb to-[#5cdde5] from-[#4a23a9] rounded hover:scale-[1.005]"
                      >
                         Continue
                      </button>

@@ -1,24 +1,20 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/integrations/firebase/firebaseConfig";
-import { OrderType } from "../checkoutSessionCompleted/event";
-import { reportInitializeCheckoutEvent } from "@/integrations/convertions/events";
+import type { OrderType } from "../checkoutSessionCompleted/event";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
-import { GuiaProductVariant } from "@/models/guiaProductModel";
-import { subscribeCustomerToGroups } from "@/integrations/mailerlite/subscribeCustomerToGroups";
 
 const handleGifts = async (items: any[], email: string, name: string) => {
    const gifts = items.filter((item) => item.price === 0);
-   const mailerlite_groups = gifts
-      .map((item) => {
-         if (
-            item.mailerlite_group !== undefined ||
-            item.mailerlite_group !== ""
-         ) {
-            return item.mailerlite_group as string;
-         }
-      })
-      .filter((group) => group !== undefined) as string[];
-   await subscribeCustomerToGroups(email, name, mailerlite_groups);
+   if (!gifts.length) return;
+   const response = await fetch("/api/guides/claim", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+         email, name, items: gifts.map(({ handle, variantId, mailerlite_group }) =>
+            ({ handle, variantId, group: mailerlite_group })),
+      }),
+   });
+   if (!response.ok) throw new Error("Could not claim the guide.");
 };
 
 export const createPdfsCheckout = async ({
@@ -45,19 +41,14 @@ export const createPdfsCheckout = async ({
 
       await handleGifts(cartItemsFormatted, email, name);
 
-      if (cartId) {
-         const cartRef = doc(db, "shoppingCarts", cartId);
-         await updateDoc(cartRef, {
-            cartItems: [],
-            subTotal: 0,
-         });
-      }
-
       cartItemsFormatted = cartItemsFormatted.filter((item) => {
          return item.price !== 0;
       });
 
       if (cartItemsFormatted.length === 0) {
+         if (cartId) {
+            await updateDoc(doc(db, "shoppingCarts", cartId), { cartItems: [], subTotal: 0 });
+         }
          return {
             url: success_url,
          };
@@ -83,7 +74,7 @@ export const createPdfsCheckout = async ({
       };
 
       const response = await fetch(
-         `${process.env.NEXT_PUBLIC_MY_DOMAIN}/api/stripe/create-checkout-session`,
+         "/api/stripe/create-checkout-session",
          {
             method: "POST",
             headers: {
@@ -94,8 +85,11 @@ export const createPdfsCheckout = async ({
          }
       );
 
-      await reportInitializeCheckoutEvent(`/${cancel_url}`, email);
+      if (!response.ok) throw new Error("Could not start checkout.");
       const data = await response.json();
+      if (cartId && data.url) {
+         await updateDoc(doc(db, "shoppingCarts", cartId), { cartItems: [], subTotal: 0 });
+      }
       return data;
    } catch (error) {
       console.error(error);

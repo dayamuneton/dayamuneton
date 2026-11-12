@@ -1,5 +1,5 @@
 import { GuiaProductVariant } from "@/models/guiaProductModel";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import VariantImage from "./variantImage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAdminProduct } from "@/context/adminGuidesContext";

@@ -68,7 +68,7 @@ function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
                         type="text"
                         value={offer}
                         onChange={(e) => handleNumberInputChange(e, setOffer)}
-                        className="flex w-full px-1 py-1 bg-transparent outline-none "
+                        className="flex w-full px-1 py-1 bg-transparent outline-hidden "
                      />
                      <p className="px-2 py-1 text-sm text-white bg-[#4a23a9] rounded-full">
                         {
@@ -93,7 +93,7 @@ function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-none"
+                        className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
                      />
                   </label>
                   <label className="flex flex-col w-full mt-2">
@@ -104,7 +104,7 @@ function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
                         value={email}
                         // placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
-                        className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-none"
+                        className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
                      />
                   </label>
                </div>
@@ -118,7 +118,7 @@ function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
                         onChange={(e) =>
                            handleNumberInputChange(e, setPhoneNumber)
                         }
-                        className="flex w-full px-2 py-1 text-gray-800 bg-transparent outline-none"
+                        className="flex w-full px-2 py-1 text-gray-800 bg-transparent outline-hidden"
                      />
                   </span>
                </label>
@@ -128,7 +128,7 @@ function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
                      value={message}
                      onChange={(e) => setMessage(e.target.value)}
                      rows={4}
-                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-none"
+                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
                   />
                </label>
 

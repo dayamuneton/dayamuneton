@@ -1,4 +1,4 @@
-export const apiConvertions = async (reqPayload: any) => {
+export const apiConvertions = async (_reqPayload: unknown) => {
    // if (process.env.NODE_ENV === "development") return {};
    return {};
 

@@ -2,7 +2,6 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 import { Dancing_Script } from "next/font/google";
 
 const dancingScript = Dancing_Script({
@@ -26,9 +25,9 @@ function Thankyou() {
          <Navbar />
          <div className="flex flex-col items-center pt-12 w-[95vw] max-w-md mb-8">
             <h1 className="text-2xl font-bold text-center text-black">
-               <p>Welcome to Your Journey </p>
-               <p>with Art & Emotions</p>
-               <p>THANK YOU!</p>
+               <span className="block">Welcome to Your Journey </span>
+               <span className="block">with Art & Emotions</span>
+               <span className="block">THANK YOU!</span>
             </h1>
             <div className="flex flex-col gap-4 my-4 text-base leading-4">
                <p>

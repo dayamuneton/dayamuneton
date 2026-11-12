@@ -1,7 +1,7 @@
 import { useAdminProduct } from "@/context/adminGuidesContext";
 import { GuiaProductVariant } from "@/models/guiaProductModel";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "../ui/modal";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";

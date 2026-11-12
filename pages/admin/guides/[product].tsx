@@ -3,7 +3,7 @@ import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import Head from "next/head";
-import React, { useState } from "react";
+import { useState } from "react";
 import { replaceSpacesWithDashes } from "@/utils/replaceSpacesWithDashes";
 import Link from "next/link";
 import { CgSpinner } from "react-icons/cg";
@@ -17,8 +17,8 @@ import DeleteProduct from "@/components/admin/deleteProduct";
 import UploadImages from "@/components/admin/uploadImages";
 import { handleNumberInputChange } from "@/utils/validateNumberInput";
 import {
-   AdminProductProvider,
-   useAdminProduct,
+AdminProductProvider,
+useAdminProduct,
 } from "@/context/adminGuidesContext";
 import { GuiaProduct } from "@/models/guiaProductModel";
 import Variants from "@/components/admin/variants";
@@ -51,7 +51,7 @@ export async function getServerSideProps(context: any) {
 }
 
 function Product({ product }: { product: GuiaProduct }) {
-   const { images, setImages, featuredImage, setFeaturedImage, variants } =
+   const { images, featuredImage, setFeaturedImage, variants } =
       useAdminProduct();
    const router = useRouter();
    const [loading, setLoading] = useState(false);
@@ -107,7 +107,7 @@ function Product({ product }: { product: GuiaProduct }) {
          return;
       }
 
-      let productID =
+      const productID =
          product?.id || (await addDoc(collection(db, "pdfproducts"), {})).id;
 
       const formatedVariants =

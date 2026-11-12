@@ -1,17 +1,15 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import {
-   Acordion,
-   AcordionButton,
-   AcordionContent,
-   AcordionIcon,
+Acordion,
+AcordionButton,
+AcordionContent,
+AcordionIcon,
 } from "@/components/ui/acordion";
 import { sendWaMessageURL } from "@/utils/sendWaMessageURL";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
 
 function Custom() {
    return (
@@ -42,7 +40,7 @@ function Custom() {
                   }
                </p>
             </span>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
+            <Acordion className="my-2 bg-linear-to-r/srgb to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full text-center">Digital Art Format</p>
                   <AcordionIcon className="text-white" />
@@ -71,13 +69,13 @@ function Custom() {
                      href={sendWaMessageURL(
                         "Daya, I want a custom digital art"
                      )}
-                     className="text-center text-white bg-gradient-to-l to-[#4a23a9] from-[#5cdde5] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
+                     className="text-center text-white bg-linear-to-l/srgb to-[#4a23a9] from-[#5cdde5] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
                   >
                      Daya, I want a custom digital art
                   </Link>
                </AcordionContent>
             </Acordion>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
+            <Acordion className="my-2 bg-linear-to-r/srgb to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full text-center">Acrylic On Canvas</p>
                   <AcordionIcon className="text-white" />
@@ -116,7 +114,7 @@ function Custom() {
                   </Link>
                </AcordionContent>
             </Acordion>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
+            <Acordion className="my-2 bg-linear-to-r/srgb to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
                <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
                   <p className="w-full leading-5 text-center">Art Prints</p>
                   <AcordionIcon className="text-white" />

@@ -1,12 +1,10 @@
-import Modal from "@/components/ui/modal";
 import Navbar from "@/components/navbar/navbar";
 import { db } from "@/integrations/firebase/firebaseConfig";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState } from "react";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Link from "next/link";
+import type { GetServerSideProps } from "next";
 
 const validCategories = [
    {
@@ -33,9 +31,10 @@ const validCategories = [
    },
 ];
 
-export async function getServerSideProps(context: any) {
-   const { category } = context.query;
-   const data: any = validCategories.find((item) => item.category === category);
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+   const category = params?.category;
+   const data = validCategories.find((item) => item.category === category);
+   if (!data) return { notFound: true };
    const galleryContent: any[] = [];
    const galleryQuery = query(
       collection(db, "products"),
@@ -50,13 +49,12 @@ export async function getServerSideProps(context: any) {
       });
    });
 
-   data.galleryContent = galleryContent;
    return {
       props: {
-         data: data,
+         data: { ...data, galleryContent },
       },
    };
-}
+};
 
 function Shop({ data }: { data: any }) {
    // const [item, setItem] = useState<any>(null);
@@ -85,7 +83,7 @@ function Shop({ data }: { data: any }) {
                {" "}
                {data.category === "memorials" ? "A LATIN GIFT" : "Gallery"}
             </h1>
-            <p className="max-w-sm sm:max-w-[90vw] mb-8 text-sm font-medium text-center">
+            <div className="max-w-sm sm:max-w-[90vw] mb-8 text-sm font-medium text-center">
                {data.category !== "memorials"
                   ? "With your purchase or custom art commissions, you are helping me financially strengthen my current project: ART FOR EMOTIONAL EDUCATION."
                   : "A Latin Gift is a mosaic where each piece represents the life experiences of the Latin community through a journey across our musical history. With your purchase or custom art commissions, you are helping me financially strengthen this initiative, directly supporting the continuation and expansion of this unique cultural project"}
@@ -100,7 +98,7 @@ function Shop({ data }: { data: any }) {
                   </a>{" "}
                   for further details.
                </p>
-            </p>
+            </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                {data.galleryContent?.map((item: any) => (
                   <Link
@@ -115,6 +113,7 @@ function Shop({ data }: { data: any }) {
                            src={item.featuredImage || item.images[0]}
                            alt={item.name}
                            fill
+                           sizes="(min-width: 800px) 240px, (min-width: 640px) 30vw, (min-width: 600px) 240px, 40vw"
                            className="object-cover"
                         />
                      </span>

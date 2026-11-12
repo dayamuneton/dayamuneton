@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { dollarsToCents } from "@/integrations/stripe/line-items";
 import {
-   Acordion,
-   AcordionButton,
-   AcordionContent,
-   AcordionIcon,
+Acordion,
+AcordionButton,
+AcordionContent,
+AcordionIcon,
 } from "./ui/acordion";
 
 function TipOption({
@@ -17,7 +18,7 @@ function TipOption({
    return (
       <button
          onClick={() => setAmount(amount)}
-         className="hover:scale-[1.01] px-4 py-2 text-white border-2 w-[30%] sm:w-full text-center border-white rounded-full focus:outline-none"
+         className="hover:scale-[1.01] px-4 py-2 text-white border-2 w-[30%] sm:w-full text-center border-white rounded-full focus:outline-hidden"
       >
          ${amount}
       </button>
@@ -28,33 +29,41 @@ const tipOptions = [3, 5, 10, 20, 50];
 const SupportMyWork: React.FC = () => {
    const router = useRouter();
    const [amount, setAmount] = useState(5);
+   const [pending, setPending] = useState(false);
+   const [error, setError] = useState("");
 
    const redirectToCheckout = async () => {
-      if (amount && amount < 0.5) return;
-      const response = await fetch(`/api/stripe/create-checkout-session`, {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-         },
-         body: JSON.stringify({
-            lineItems: [
-               {
+      if (pending) return;
+      if (dollarsToCents(amount) === null) {
+         setError("Enter an amount of at least $0.50 in dollars and cents.");
+         return;
+      }
+      setPending(true);
+      setError("");
+      try {
+         const response = await fetch("/api/stripe/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+               lineItems: [{
                   price: amount,
                   images: ["https://www.dayamuneton.com/DayaMunetonB&WArt.jpg"],
                   name: "Support My Work",
-               },
-            ],
-         }),
-      });
-      const data = await response.json();
-      if (data.url) {
-         router.push(data.url);
+               }],
+            }),
+         });
+         const data = await response.json();
+         if (!response.ok || typeof data.url !== "string") throw new Error("Checkout unavailable");
+         await router.push(data.url);
+      } catch {
+         setError("Checkout is unavailable. Please try again.");
+      } finally {
+         setPending(false);
       }
    };
 
    return (
-      <Acordion className="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-[#4a23a9] to-[#5cdde5] drop-shadow-md w-[90vw] max-w-xl">
+      <Acordion className="flex flex-col items-center justify-center rounded-xl bg-linear-to-r/srgb from-[#4a23a9] to-[#5cdde5] drop-shadow-md w-[90vw] max-w-xl">
          <AcordionButton className="relative w-full scale-[1.01] px-4 py-2 text-white  rounded-lg flex">
             <p className="w-full text-center">Click here to support my work</p>
             <AcordionIcon className="absolute right-4" />
@@ -72,16 +81,22 @@ const SupportMyWork: React.FC = () => {
                   value={amount}
                   onChange={(e) => setAmount(Number(e.target.value))}
                   type="number"
+                  aria-label="Tip amount in US dollars"
+                  min={0.5}
+                  step={0.01}
                   placeholder="Or enter another amount"
-                  className="w-full pl-2 bg-transparent outline-none"
+                  className="w-full pl-2 bg-transparent outline-hidden"
                />
             </div>
             <button
+               type="button"
+               disabled={pending}
                onClick={redirectToCheckout}
                className="bg-[#5cdde5] mx-auto mt-4 w-full py-2 text-white rounded-full drop-shadow-md hover:scale-[1.01] "
             >
-               Send
+               {pending ? "Opening checkout…" : "Send"}
             </button>
+            {error && <p role="alert" className="mt-2">{error}</p>}
          </AcordionContent>
       </Acordion>
    );

@@ -1,8 +1,6 @@
-import React from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Link from "next/link";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import YouTubeIcon from "@mui/icons-material/YouTube";
 import { FaTiktok } from "react-icons/fa";
 
 function ContactLinks({

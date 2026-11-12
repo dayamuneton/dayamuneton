@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from "next/head";
-import React from "react";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 
@@ -152,7 +151,7 @@ function PrivacyPolicy() {
                provider third party that may collect and process your data using
                industry standard technologies to help us monitor and improve our
                newsletter. The privacy policy of MailerLite is available at
-               {/* eslint-disable-next-line react/jsx-no-target-blank */}
+               { }
                <a
                   target="_blank"
                   href="https://www.mailerlite.com/legal/privacy-policy"
@@ -192,7 +191,7 @@ function PrivacyPolicy() {
                specific content, you must communicate directly with the
                responsible provider at the following link: For more information
                on how Mailerlite processes your Personal information,
-               {/* eslint-disable-next-line react/jsx-no-target-blank */}
+               { }
                <a
                   href="https://www.mailerlite.com/legal/cookie-policy"
                   target="_blank"
@@ -316,7 +315,7 @@ function PrivacyPolicy() {
                with us.
             </p>
             <h2 className="my-4 font-bold">Contact Us</h2>
-            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            { }
             <a
                href="mailto:info@dayamuneton.com"
                target="_blank"

@@ -3,8 +3,7 @@ import Navbar from "@/components/navbar/navbar";
 import { getProductByHandle } from "@/integrations/firebase/getProductByHandle";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
@@ -44,27 +43,6 @@ function ArtWork({ product }: { product: any }) {
    );
    const { shoppingCart } = useShop();
    const { currentUser } = useAuth();
-   const router = useRouter();
-   const redirectToCheckout = async () => {
-      if (product.price && product.price < 0.5) return;
-      const response = await fetch(`/api/stripe/create-checkout-session`, {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-         },
-         body: JSON.stringify({
-            lineItems: [product],
-            cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/shop/${
-               product.category
-            }/${encodeURIComponent(product.handle)}`,
-         }),
-      });
-      const data = await response.json();
-      if (data.url) {
-         router.push(data.url);
-      }
-   };
 
    return (
       <div
@@ -161,7 +139,6 @@ function ArtWork({ product }: { product: any }) {
                   title="Original Piece Sold Out"
                   disabled
 
-                  // onClick={redirectToCheckout}
                >
                   Acquire this artwork
                </button>
@@ -173,9 +150,9 @@ function ArtWork({ product }: { product: any }) {
                         (item) => item.handle === product.handle
                      )
                   }
-                  onClick={() =>
-                     addItemToCart(shoppingCart, product, currentUser.email)
-                  }
+                  onClick={() => {
+                     if (currentUser?.email) void addItemToCart(shoppingCart, product, currentUser.email);
+                  }}
                   title="Original Piece Sold Out"
                >
                   Add To Cart

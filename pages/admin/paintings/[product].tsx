@@ -2,12 +2,12 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar/navbar";
 import { db, storage } from "@/integrations/firebase/firebaseConfig";
 import {
-   addDoc,
-   collection,
-   deleteDoc,
-   doc,
-   getDoc,
-   updateDoc,
+addDoc,
+collection,
+deleteDoc,
+doc,
+getDoc,
+updateDoc,
 } from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
@@ -71,9 +71,6 @@ function Product(props: any) {
          name: string;
       }[]
    >([]);
-   const [dimentionSelected, setDimentionSelected] = useState(
-      product?.dimention || ""
-   );
    const [images, setImages] = useState<string[]>(product?.images || []);
    const [featuredImage, setFeaturedImage] = useState(
       product?.featuredImage || ""
@@ -88,16 +85,6 @@ function Product(props: any) {
       "Mixed Media",
       "Digital Art",
    ];
-   const dimentionsOptions = [
-      ' 24" x 48" ',
-      ' 30" x 40" ',
-      ' 30" x 48" ',
-      ' 36" x 36" ',
-      ' 36" x 48" ',
-      ' 48" x 48" ',
-      ' 48" x 60"',
-   ];
-   const [limitedEdition, setLimitedEdition] = useState(false);
    const [shippingInformation, setShippingInformation] = useState(
       product?.shippingInformation || ""
    );
@@ -134,8 +121,8 @@ function Product(props: any) {
          return;
       }
 
-      let dbImages = product?.images || [],
-         featuredImageDB = featuredImage;
+      const dbImages = product?.images || [];
+      let featuredImageDB = featuredImage;
 
       for (const image of formatedFiles) {
          const photoRef = ref(
@@ -150,7 +137,7 @@ function Product(props: any) {
 
          await uploadBytes(photoRef, blob);
 
-         let photoURL = await getDownloadURL(photoRef);
+         const photoURL = await getDownloadURL(photoRef);
          dbImages.push(photoURL);
          if (featuredImage === image.dataURL) {
             featuredImageDB = photoURL;
@@ -196,7 +183,7 @@ function Product(props: any) {
          const reader = new FileReader();
          reader.onload = () => {
             if (reader.readyState === 2) {
-               let index = formatedFiles.findIndex(
+               const index = formatedFiles.findIndex(
                   (file) => file.dataURL === reader.result
                );
                if (index !== -1) return;

@@ -4,7 +4,7 @@ import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Acordion, AcordionButton, AcordionContent } from "./ui/acordion";
 
 function AcquireGuide({
@@ -25,16 +25,17 @@ function AcquireGuide({
       if (variant) {
          data.name = `${product.name} (${variant.title})`;
          data.mailerlite_group = variant.mailerlite_group;
+         data.variantId = variant.id;
       }
 
       const response = await createPdfsCheckout({
          cartItems: [data],
-         cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/ageofemotions/${
+         cancel_url: `/ageofemotions/${
             product.category
          }/${encodeURIComponent(product.handle || "")}`,
-         email,
-         name,
-         success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/thankyou/`,
+         email: currentUser?.email || email,
+         name: currentUser?.displayName || name,
+         success_url: "/thankyou",
       });
 
       if (response.url) {
@@ -74,7 +75,7 @@ function AcquireGuide({
                      required
                      value={name}
                      onChange={(e) => setName(e.target.value)}
-                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-none"
+                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
                   />
                </label>
                <label className="flex flex-col w-full mt-2">
@@ -85,7 +86,7 @@ function AcquireGuide({
                      value={email}
                      // placeholder="Email"
                      onChange={(e) => setEmail(e.target.value)}
-                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-none"
+                     className="flex w-full px-2 py-1 text-gray-800 bg-gray-100 outline-hidden"
                   />
                </label>
 

@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/authContext";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 function ContinueWith({ className }: { className?: string }) {
    const { loginWithGoogle } = useAuth();

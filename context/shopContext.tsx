@@ -1,10 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { db } from "@/integrations/firebase/firebaseConfig";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useAuth } from "./authContext";
 import {
-   ShoppingCart,
-   shoppingCartConverter,
+ShoppingCart,
+shoppingCartConverter,
 } from "../models/shoppingCartModel";
 
 interface ShopContextProps {
@@ -15,43 +13,38 @@ interface ShopContextProps {
 const ShopContext = createContext<ShopContextProps | null>(null);
 
 export function useShop() {
-   return useContext(ShopContext as React.Context<ShopContextProps>);
+   const value = useContext(ShopContext);
+   if (!value) throw new Error("useShop requires ShopProvider");
+   return value;
 }
 
 export function ShopProvider({ children }: { children: React.ReactNode }) {
-   const { currentUser } = useAuth();
+   const email = useAuth().currentUser?.email;
    const [shoppingCart, setShoppingCart] = useState<ShoppingCart | null>(null);
 
    useEffect(() => {
-      if (!currentUser) {
-         setShoppingCart(null);
-         return;
-      }
-
-      const shoppingCartRef = collection(db, "shoppingCarts").withConverter(
-         shoppingCartConverter
-      );
-
-      const shoppingCartQuery = query(
-         shoppingCartRef,
-         where("customerEmail", "==", currentUser?.email),
-         where("isActive", "==", true)
-      );
-
-      const unSubscribeShoppingCart = onSnapshot(
-         shoppingCartQuery,
-         (snapshot) => {
-            const shoppingCartData = snapshot.docs[0]?.data() || null;
-            setShoppingCart(shoppingCartData);
-         }
-      );
+      if (!email) return;
+      let active = true;
+      let unsubscribe: (() => void) | undefined;
+      Promise.all([import("firebase/firestore"), import("@/integrations/firebase/firebaseConfig")])
+         .then(([{ collection, limit, onSnapshot, query, where }, { db }]) => {
+            if (!active) return;
+            const carts = collection(db, "shoppingCarts").withConverter(shoppingCartConverter);
+            const activeCart = query(carts, where("customerEmail", "==", email),
+               where("isActive", "==", true), limit(1));
+            unsubscribe = onSnapshot(activeCart,
+               (snapshot) => setShoppingCart(snapshot.docs[0]?.data() ?? null),
+               () => setShoppingCart(null));
+         })
+         .catch(() => { if (active) setShoppingCart(null); });
       return () => {
-         unSubscribeShoppingCart();
+         active = false;
+         unsubscribe?.();
       };
-   }, [currentUser]);
+   }, [email]);
 
    const value = {
-      shoppingCart,
+      shoppingCart: email && shoppingCart?.customerEmail === email ? shoppingCart : null,
       setShoppingCart,
    };
 

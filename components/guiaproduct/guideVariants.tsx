@@ -1,6 +1,6 @@
 import { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 function GuideVariants({
    product,
@@ -19,7 +19,7 @@ function GuideVariants({
 
    useEffect(() => {
       const variant = router.query.variant as string;
-      setSelectedVariant(product.variants?.find((v) => v.title === variant)!);
+      setSelectedVariant(product.variants?.find((v) => v.title === variant));
    }, [product.variants, router, setSelectedVariant]);
 
    const handleSetSelectedVariant = (variant: GuiaProductVariant) => {
