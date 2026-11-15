@@ -54,7 +54,7 @@ const ArtworkImage = memo(function ArtworkImage({
    return (
       <picture>
          <source type="image/webp" srcSet={sources.webp} sizes={sizes} />
-         <img src={`${asset.path}-${asset.widths[0]}.${asset.fallback}`}
+         <img src={`${asset.path}-${asset.fallbackWidths[0]}.${asset.fallback}`}
             srcSet={sources.fallback} sizes={sizes} width={asset.width} height={asset.height}
             alt={alt} loading={loading} decoding="async" fetchPriority={priority ? "high" : undefined}
             className={imageClass} onError={() => setFailedSrc(src)} />

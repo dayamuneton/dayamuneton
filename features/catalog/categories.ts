@@ -6,7 +6,7 @@ export const paintingCategories = [
 ];
 
 export const guideCategories = [
-   { slug: "freebies", title: "Freebies", image: "/Freebies.png", summary: "Free art guides to help you explore and express your emotions." },
-   { slug: "colors", title: "Art Your Emotions", image: "/ArtEmotions.png", summary: "Downloadable guides for exploring emotions through art and mindful reflection." },
-   { slug: "chemistry", title: "Chemistry of Emotions", image: "/ChemistryEmotions.png", summary: "Explore the science of how emotions work in the body." },
+   { slug: "freebies", title: "Freebies", landingTitle: "Freebies", image: "/Freebies.png", summary: "Free art guides to help you explore and express your emotions." },
+   { slug: "colors", title: "Art Your Emotions", landingTitle: "PDFs & Guides", image: "/ArtEmotions.png", summary: "Downloadable guides for exploring emotions through art and mindful reflection." },
+   { slug: "chemistry", title: "Chemistry of Emotions", landingTitle: "Workshops", image: "/ChemistryEmotions.png", summary: "Explore the science of how emotions work in the body." },
 ];

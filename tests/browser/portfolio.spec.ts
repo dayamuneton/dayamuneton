@@ -10,11 +10,15 @@ test("homepage is readable without JavaScript or Firebase Auth", async ({ browse
    const page = await browser.newPage({ javaScriptEnabled: false, baseURL });
    await page.goto("/");
    await expect(page.getByRole("heading", { name: "Daya Muneton", level: 1 })).toBeVisible();
-   await expect(page.getByRole("link", { name: "Community Stories behind the songs" })).toHaveAttribute("href", "/community");
+   const tiles = page.getByRole("navigation", { name: "Explore the portfolio" });
+   await expect(tiles.getByRole("link")).toHaveText(["Community", "Shop", "Emotional Education"]);
+   await expect(tiles.getByRole("link", { name: "Community" })).toHaveAttribute("href", "/community");
+   await expect(page.getByText("Welcome to my art gallery!", { exact: true })).toBeVisible();
+   await expect(page.locator(".site-shell")).toHaveCSS("background-image", /^radial-gradient/);
    const portrait = page.locator(".portfolio-portrait img");
-   await expect(page.locator(".home-hero-art img")).toHaveAttribute("fetchpriority", "high");
-   await expect(portrait).toHaveAttribute("sizes", /104px$/);
-   await expect(page.locator(".portfolio-tile img[loading=lazy]")).toHaveCount(2);
+   await expect(portrait).toHaveAttribute("fetchpriority", "high");
+   await expect(portrait).toHaveAttribute("sizes", "112px");
+   await expect(tiles.locator("img[loading=lazy]")).toHaveCount(3);
    await expect.poll(() => portrait.evaluate((element) => (
       element instanceof HTMLImageElement ? new URL(element.currentSrc).pathname : ""
    ))).toMatch(/^\/artwork\/.+\.(webp|jpg)$/);
@@ -34,13 +38,13 @@ test("support dialog stays in place and uses local checkout", async ({ page, isM
    });
    if (isMobile) await page.emulateMedia({ reducedMotion: "reduce" });
    await page.goto("/");
-   const support = page.getByRole("button", { name: "Support my work" });
-   const explore = page.getByRole("heading", { name: "Explore", exact: true });
+   const support = page.getByRole("button", { name: "Click here to support my work" });
+   const explore = page.getByRole("navigation", { name: "Explore the portfolio" });
    const before = await explore.boundingBox();
    await support.press("Enter");
    const dialog = page.getByRole("dialog", { name: "Support my work" });
    await expect(dialog).toBeVisible();
-   const after = await page.locator("#explore-heading").boundingBox();
+   const after = await explore.boundingBox();
    expect(after?.x).toBeCloseTo(before?.x ?? 0, 0);
    expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);
    await dialog.getByRole("button", { name: "Close support" }).press("Escape");
@@ -83,6 +87,8 @@ test("a slow collection navigation shows feedback and delivers a responsive bann
 test("story form keeps the draft after a failure and confirms a successful retry", async ({ page }) => {
    await page.route("**/api/send-email", (route) => route.fulfill({ status: 503, json: { error: "Unavailable" } }), { times: 1 });
    await page.goto("/community");
+   await page.getByRole("button", { name: "Write my story" }).first().click();
+   await expect(page.getByRole("heading", { name: "Share your story", exact: true })).toBeFocused();
    await page.getByLabel("Email", { exact: true }).fill("demo@example.test");
    const story = page.getByRole("textbox", { name: "Your story", exact: true });
    await story.fill("A local test story.");
@@ -102,6 +108,18 @@ test("public landing pages fit a 320 pixel viewport", async ({ page }) => {
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `Horizontal overflow on ${route}`).toBeLessThanOrEqual(1);
    }
+});
+
+test("commission formats keep their expandable layout and work with the keyboard", async ({ page }) => {
+   await page.goto("/shop/custom");
+   const digital = page.locator("summary").filter({ hasText: "Digital Art Format" });
+   const request = page.getByRole("link", { name: "Request digital art" });
+   await expect(request).toBeHidden();
+   await digital.press("Enter");
+   await expect(request).toBeVisible();
+   await expect(page.getByText("$175 USD", { exact: true })).toBeVisible();
+   await digital.press("Enter");
+   await expect(request).toBeHidden();
 });
 
 test("mobile navigation opens with the keyboard and returns focus on Escape", async ({ page, isMobile }) => {

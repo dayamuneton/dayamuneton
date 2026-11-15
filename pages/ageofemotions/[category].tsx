@@ -2,6 +2,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import PageIntro from "@/components/layout/PageIntro";
+import DayaProfile from "@/components/layout/DayaProfile";
 import CatalogGrid from "@/features/catalog/CatalogGrid";
 import { guideCategories } from "@/features/catalog/categories";
 import { listCollection } from "@/features/catalog/data";
@@ -14,9 +15,10 @@ export const getServerSideProps = (async ({ params }) => {
 
 export default function GuideCollection({ category, items }: InferGetServerSidePropsType<typeof getServerSideProps>) {
    return (
-      <div className="portfolio-content page-content">
+      <div className="portfolio-content page-content collection-page guide-collection">
          <Head><title>{category.title} | Daya Muneton</title><meta name="description" content={category.summary} /></Head>
          <Link href="/ageofemotions" className="back-link">← Emotional education</Link>
+         <div className="collection-artist"><DayaProfile /><p>Artist</p></div>
          <PageIntro title={category.title} description={category.summary} />
          <nav className="collection-nav" aria-label="Guide categories">
             {guideCategories.map(({ slug, title }) => (

@@ -1,28 +1,23 @@
-import PageIntro from "@/components/layout/PageIntro";
 import Head from "next/head";
 import ArtworkImage from "@/components/ui/ArtworkImage";
 
 function About() {
    return (
-      <div className="portfolio-content page-content">
+      <div>
          <Head>
             <title>About | Daya Muneton</title>
             <meta name="description" content="Meet Daya Muneton, an artist working at the intersection of Latin music, culture, and emotional education." />
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <PageIntro title="About Daya Muneton" description="Artist and entrepreneur" />
          <div className="about-layout">
-            <div className="about-image">
-               <ArtworkImage
-                  src="/DayaAbout1.png" sizes="(min-width: 1280px) 470px, (min-width: 760px) 40vw, 95vw"
-                  alt="Daya Muneton"
-                  fill
-                  priority
-                  className="object-cover"
-               />
+            <div className="about-portrait">
+               <header><h1>Daya Muneton</h1><p>Artist &amp; Entrepreneur</p></header>
+               <div className="about-image">
+                  <ArtworkImage src="/DayaAbout1.png" sizes="(min-width: 760px) 32vw, 72vw"
+                     alt="Daya Muneton" fill priority className="object-contain" />
+               </div>
             </div>
-            <article className="content-panel reading-flow">
-               <h2>Art, music, and emotional education</h2>
+            <article className="about-story reading-flow" aria-label="Art, music, and emotional education">
                <p>
                   Daya Muneton is an artist who began her journey in 2013 by
                   creating a vast collection of paintings honoring Latin

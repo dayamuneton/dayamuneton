@@ -15,12 +15,12 @@ async function signIn(page: Page, email: string) {
 test("all public route families share the responsive shell and accessible headings", async ({ page }) => {
    await page.setViewportSize({ width: 320, height: 700 });
    const routes = [
-      ["/", "Daya Muneton"], ["/shop", "Art Shop"], ["/shop/custom", "Custom art commissions"],
+      ["/", "Daya Muneton"], ["/shop", "Art Shop"], ["/shop/custom", "Custom Art Commissions"],
       ["/shop/heads", "Heads"], ["/shop/bodies", "Bodies"], ["/shop/abstracts", "Abstracts"],
       ["/shop/memorials", "A Latin Gift"], ["/ageofemotions", "Age of Emotions"],
       ["/ageofemotions/freebies", "Freebies"], ["/ageofemotions/colors", "Art Your Emotions"],
-      ["/ageofemotions/chemistry", "Chemistry of Emotions"], ["/community", "Stories behind the songs"],
-      ["/about", "About Daya Muneton"], ["/legal/privacy-policy", "Privacy Policy"],
+      ["/ageofemotions/chemistry", "Chemistry of Emotions"], ["/community", "Be the voice of your song, share your story in “A Latin Gift”"],
+      ["/about", "Daya Muneton"], ["/legal/privacy-policy", "Privacy Policy"],
       ["/legal/terms-of-service", "Terms Of Service"], ["/auth/login", "Sign in"],
       ["/auth/signup", "Create an account"], ["/thankyou", "Welcome to your journey with art and emotions"],
       ["/support/thanks", "Thank you for your support"], ["/500", "Something went wrong"],
@@ -32,7 +32,7 @@ test("all public route families share the responsive shell and accessible headin
          await expect(page.getByRole("main")).toHaveCount(1);
          await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
          await expect(page.getByRole("navigation", { name: "Main navigation" })).toHaveCount(1);
-         await expect(page.getByRole("contentinfo")).toHaveCount(1);
+         await expect(page.getByRole("contentinfo")).toHaveCount(route === "/" || route === "/shop" ? 0 : 1);
          expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth))
             .toBeLessThanOrEqual(1);
       });

@@ -18,10 +18,14 @@ export function reportWebVitals({ name, value, label }: NextWebVitalsMetric) {
 export default function App({ Component, pageProps }: AppProps) {
    const { pathname } = useRouter();
    const accountRoute = pathname === "/checkout" || /^\/(auth|admin)(\/|$)/.test(pathname);
+   const landing = pathname === "/" || pathname === "/shop" || pathname === "/ageofemotions";
+   const surface = pathname === "/about" || pathname.startsWith("/legal/")
+      ? "paper"
+      : pathname === "/shop/[category]" ? "collection" : "gradient";
    return (
       <AuthProvider>
          <ShopProvider>
-            <div className="site-shell">
+            <div className="site-shell" data-surface={surface} data-landing={landing}>
                <a className="skip-link" href="#main-content">Skip to content</a>
                <Navbar />
                <RouteFeedback>
@@ -29,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
                      ? <StatusPage title="Portfolio preview" description="This preview uses sample listings and simulated checkout. Account and admin features are available in the local test build." />
                      : <Component key={pageProps.routeKey} {...pageProps} />}
                </RouteFeedback>
-               <Footer />
+               {pathname !== "/" && pathname !== "/shop" && <Footer />}
             </div>
          </ShopProvider>
       </AuthProvider>

@@ -40,10 +40,11 @@ export default function Guide({ product, category }: InferGetServerSidePropsType
       <div className="portfolio-content page-content">
          <Head><title>{product.name} | Daya Muneton</title><meta name="description" content={product.description} /></Head>
          <Link href={"/ageofemotions/" + category.slug} className="back-link">← {category.title}</Link>
-         <div className="detail-grid">
+         <div className="detail-grid original-product guide-detail">
             <div className="detail-heading"><h1 className="page-title">{product.name}</h1></div>
             <div className="detail-gallery">
                <ArtworkGallery images={images} selected={selected} title={product.name}
+                  sizes="(min-width: 760px) 550px, (min-width: 640px) 610px, calc(100vw - 64px)"
                   onSelect={(image) => setSelection({ variantId: variant?.id, image })} />
             </div>
             <div className="content-panel detail-summary">

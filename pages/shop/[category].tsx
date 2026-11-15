@@ -21,14 +21,14 @@ export default function PaintingCollection({ category, items }: InferGetServerSi
    return (
       <>
          <Head><title>{category.title} | Daya Muneton</title><meta name="description" content={description} /></Head>
-         <div className="portfolio-content page-content">
+         <div className="portfolio-content page-content collection-page">
+            <div className="gallery-banner collection-banner">
+               <ArtworkImage src={category.image} alt="" sizes="(min-width: 1280px) 1216px, 95vw" priority />
+            </div>
             <Link href="/shop" className="back-link">← Art shop</Link>
             <PageIntro title={category.title} description={description}>
                {memorial && <a className="portfolio-button portfolio-button-secondary" href="https://unregalolatino.com/">Explore A Latin Gift</a>}
             </PageIntro>
-            <div className="gallery-banner collection-banner">
-               <ArtworkImage src={category.image} alt="" sizes="(min-width: 1280px) 1216px, 95vw" priority />
-            </div>
             {!memorial && <nav aria-label="Art collections" className="collection-nav">
                {paintingCategories.filter(({ slug }) => slug !== "memorials").map(({ slug, title }) => (
                   <Link key={slug} href={"/shop/" + slug} aria-current={category.slug === slug ? "page" : undefined}>{title}</Link>

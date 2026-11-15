@@ -38,7 +38,7 @@ export default function Artwork({ product, category }: InferGetServerSidePropsTy
       <div className="portfolio-content page-content">
          <Head><title>{product.name} | Daya Muneton</title><meta name="description" content={product.description} /></Head>
          <Link href={"/shop/" + category.slug} className="back-link">← {category.title}</Link>
-         <div className="detail-grid">
+         <div className="detail-grid original-product">
             <div className="detail-heading">
                <h1 className="page-title">{product.name}</h1>
                {product.techniques.length > 0 && <ul className="detail-tags" aria-label="Techniques">
@@ -47,6 +47,7 @@ export default function Artwork({ product, category }: InferGetServerSidePropsTy
             </div>
             <div className="detail-gallery">
                <ArtworkGallery images={product.featuredImage ? [product.featuredImage, ...product.images] : product.images}
+                  sizes="(min-width: 1150px) 505px, (min-width: 760px) 48vw, calc(100vw - 64px)"
                   selected={selected} title={product.name} onSelect={setSelected} />
             </div>
             <div className="content-panel detail-summary">

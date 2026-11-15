@@ -4,16 +4,16 @@ interface ArtworkGalleryProps {
    images?: string[];
    selected?: string;
    title: string;
+   sizes: string;
    onSelect: (image: string) => void;
 }
 
-export default function ArtworkGallery({ images = [], selected, title, onSelect }: ArtworkGalleryProps) {
+export default function ArtworkGallery({ images = [], selected, title, sizes, onSelect }: ArtworkGalleryProps) {
    const views = [...new Set(images.filter(Boolean))];
    return (
       <div className="product-gallery">
          <div className="product-gallery-main">
-            <ArtworkImage src={selected} alt={title} fill priority
-               sizes="(min-width: 1450px) 690px, (min-width: 760px) 52vw, calc(100vw - 32px)"
+            <ArtworkImage src={selected} alt={title} fill priority sizes={sizes}
                className="object-contain" />
          </div>
          {views.length > 1 && (

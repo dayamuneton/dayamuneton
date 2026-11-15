@@ -1,24 +1,25 @@
 @import "tailwindcss" source(none);
 @import "./portfolio.css";
+@import "./original-design.css";
 @source "../components";
 @source "../features";
 @source "../pages";
 
 /* Shared portfolio palette. */
 @theme {
-   --color-night: #04172d;
-   --color-panel: #0b2744;
-   --color-panel-raised: #133855;
-   --color-field: #061e36;
-   --color-ink: #f5faff;
-   --color-muted: #bbd1e7;
-   --color-line: #264c6c;
-   --color-line-strong: #6083a3;
-   --color-accent: #51e8fa;
-   --color-on-accent: #062034;
-   --color-blue-action: #17569a;
-   --color-danger: #ffb7c9;
-   --color-danger-surface: #3e2035;
+   --color-night: #e8f3f4;
+   --color-panel: #f8fcfc;
+   --color-panel-raised: #e0f0f2;
+   --color-field: #ffffff;
+   --color-ink: #171630;
+   --color-muted: #343452;
+   --color-line: #c0d3d7;
+   --color-line-strong: #677c91;
+   --color-accent: #422099;
+   --color-on-accent: #ffffff;
+   --color-blue-action: #422099;
+   --color-danger: #820f36;
+   --color-danger-surface: #fff0f4;
    --color-gray-100: #f3f4f6;
    --color-gray-200: #e5e7eb;
    --color-gray-300: #d1d5db;

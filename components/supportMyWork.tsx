@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/router";
+import { FiChevronDown } from "react-icons/fi";
 import { supportThanksPath } from "@/features/home/support";
 import { dollarsToCents } from "@/integrations/stripe/line-items";
 
@@ -84,9 +85,10 @@ export default function SupportMyWork() {
    return (
       <>
          <button ref={trigger} type="button" aria-haspopup="dialog"
-            className="portfolio-button portfolio-button-secondary"
+            className="support-launch"
             onClick={() => dialog.current?.showModal()}>
-            Support my work
+            Click here to support my work
+            <FiChevronDown aria-hidden="true" />
          </button>
          <dialog ref={dialog} aria-labelledby={titleId} className="support-dialog"
             onClose={handleClose} onClick={(event) => {
