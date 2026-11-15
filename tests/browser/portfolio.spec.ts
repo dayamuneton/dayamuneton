@@ -24,7 +24,7 @@ test("homepage is readable without JavaScript or Firebase Auth", async ({ browse
    await page.close();
 });
 
-test("support dialog stays in place and uses local checkout", async ({ page, isMobile }) => {
+test("support opens as a desktop dropdown or mobile modal without shifting the page", async ({ page, isMobile }) => {
    const externalRequests: string[] = [];
    await page.route("**/*", async (route) => {
       const { hostname } = new URL(route.request().url());
@@ -43,6 +43,17 @@ test("support dialog stays in place and uses local checkout", async ({ page, isM
    await support.press("Enter");
    const dialog = page.getByRole("dialog", { name: "Support my work" });
    await expect(dialog).toBeVisible();
+   await expect(support).toHaveAttribute("aria-expanded", "true");
+   expect(await dialog.evaluate((panel) => panel.matches(":modal"))).toBe(isMobile);
+   if (!isMobile) {
+      const triggerBox = (await support.boundingBox())!;
+      const dropdownBox = (await dialog.boundingBox())!;
+      expect(dropdownBox.y).toBeGreaterThanOrEqual(triggerBox.y + triggerBox.height);
+      expect(dropdownBox.x).toBeCloseTo(triggerBox.x, 0);
+      await page.getByRole("heading", { name: "Welcome to my art gallery!" }).click();
+      await expect(dialog).toBeHidden();
+      await support.press("Enter");
+   }
    const after = await explore.boundingBox();
    expect(after?.x).toBeCloseTo(before?.x ?? 0, 0);
    expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);

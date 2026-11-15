@@ -68,7 +68,7 @@ export default function Community() {
    return (
       <div className="portfolio-content community-page">
          <Head><title>Community | Daya Muneton</title><meta name="description" content="Share the story behind a song that matters to you and contribute to A Latin Gift." /></Head>
-         <header className="community-intro content-panel">
+         <header className="community-intro">
             <p><mark>Today&apos;s topic:</mark></p>
             <h1>Be the voice of your song, share your story in &ldquo;A Latin Gift&rdquo;</h1>
             <p>Have you ever felt like a song was the story you never told? Our collective artwork, &ldquo;A Latin Gift&rdquo;, cannot be completed without your story. In your hands, you hold fragments of stories, pieces of memories that together form the cultural tapestry of our music. We invite you to share your story with your favorite song.</p>

@@ -283,7 +283,30 @@ html { color-scheme: light; background: var(--color-canvas); scrollbar-gutter: s
 .support-input:focus-within { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .site-main .support-input input:focus-visible { outline: none; box-shadow: none; }
 
-@media (max-width: 540px) {
+.support-control { position: relative; width: min(100%, 35.625rem); }
+
+@media (min-width: 680px) {
+   .support-dialog {
+      position: absolute;
+      inset: auto 0 auto 0;
+      inset-block-start: calc(100% + var(--space-2));
+      z-index: 20;
+      width: 100%;
+      margin: 0;
+      border: 1px solid var(--color-line);
+      box-shadow: 0 12px 36px #25174a42;
+   }
+   @media (prefers-reduced-motion: no-preference) {
+      .support-dialog[open] { animation: support-reveal var(--motion-normal) var(--ease-out); }
+      .support-launch svg { transition: transform var(--motion-fast) var(--ease-out); }
+      @keyframes support-reveal {
+         from { opacity: 0; transform: translateY(-.375rem); }
+         to { opacity: 1; transform: translateY(0); }
+      }
+   }
+}
+
+@media (max-width: 679px) {
    .support-dialog {
       width: 100%;
       max-width: none;

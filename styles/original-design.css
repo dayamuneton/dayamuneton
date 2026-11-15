@@ -6,7 +6,8 @@
    --daya-gradient: radial-gradient(circle at center, var(--daya-violet), var(--daya-aqua));
    --daya-station-one: linear-gradient(#ffffff26, #ffffff26), linear-gradient(35deg, #754af1, #51eace);
    --soft-shadow: 0 5px 12px #25174a30;
-   --gradient-copy: #25134ba6;
+   --gradient-copy: #25134b8f;
+   --gradient-text-shadow: 0 1px 3px #24144d, 0 0 8px #24144d88;
    --gradient-shade: linear-gradient(#25134b91, #25134b91);
 }
 .site-shell[data-surface="gradient"] { background: var(--daya-gradient); }
@@ -30,6 +31,8 @@
 }
 
 .landing-page {
+   position: relative;
+   isolation: isolate;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -38,21 +41,46 @@
    color: white;
    text-align: center;
 }
+.landing-page::before {
+   content: "";
+   position: absolute;
+   z-index: -1;
+   inset: 0 0 auto;
+   height: min(44rem, 100%);
+   background: radial-gradient(ellipse 50% 49% at 50% 49%, #25134b8c 15%, #25134b45 60%, transparent 100%);
+   pointer-events: none;
+}
 .landing-intro, .home-socials { display: grid; justify-items: center; gap: var(--space-3); }
 .daya-profile { display: grid; justify-items: center; gap: var(--space-2); font-size: var(--text-small); font-weight: 650; }
 .daya-profile:hover { text-decoration: underline; text-underline-offset: .2em; }
-.profile-handle, .landing-copy, .home-socials, .landing-intro > .social-links {
-   background: var(--gradient-copy);
-   border-radius: var(--radius-control);
-   color: white;
+:is(.education-story, .commission-intro, .community-intro, .community-prompts-heading, .portfolio-tile-label),
+.site-shell[data-surface="gradient"] :is(.page-content, .admin-content) > .page-intro {
+   position: relative;
+   isolation: isolate;
 }
+:is(.education-story, .commission-intro, .community-intro, .community-prompts-heading, .portfolio-tile-label)::before,
+.site-shell[data-surface="gradient"] :is(.page-content, .admin-content) > .page-intro::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   z-index: -1;
+   background: radial-gradient(ellipse 50% 50% at center, var(--text-backdrop, var(--gradient-copy)) 20%, transparent 100%);
+   pointer-events: none;
+}
+.landing-page :is(.profile-handle, .landing-copy, .home-socials h2),
+.commission-intro, .community-prompts-heading,
+.site-shell[data-surface="gradient"] :is(.page-content, .admin-content) > .page-intro {
+   color: white;
+   text-shadow: var(--gradient-text-shadow);
+}
+.landing-page .social-links svg { filter: drop-shadow(0 1px 3px #24144d); }
 .profile-handle { padding: var(--space-1) var(--space-3); }
 .landing-copy { padding: var(--space-3) clamp(var(--space-4), 4vw, var(--space-6)); }
 .home-welcome, .education-intro { max-width: 38rem; }
 .landing-intro h1 { font-size: clamp(1.5rem, 1.25rem + 1.4vw, 2.25rem); }
 .landing-intro h1 + p { margin-top: var(--space-2); }
 .education-intro p + p { margin-top: var(--space-3); }
-.home-socials { gap: 0; padding: var(--space-2) var(--space-2) var(--space-1); }
+.home-socials { gap: 0; }
 .home-socials h2 { font-size: var(--text-small); font-weight: 650; letter-spacing: .045em; text-transform: uppercase; }
 .landing-page > nav { width: min(100%, 62rem); }
 .support-launch, .landing-custom-link {
@@ -66,11 +94,13 @@
    box-shadow: var(--soft-shadow);
 }
 .support-launch {
+   width: 100%;
    font-weight: 600;
    background: var(--gradient-shade), linear-gradient(90deg, var(--daya-violet), var(--daya-aqua));
    color: white;
 }
-.support-launch svg { position: absolute; inset-inline-end: 1rem; top: 50%; transform: translateY(-50%); }
+.support-launch svg { position: absolute; inset-inline-end: 1rem; top: 50%; translate: 0 -50%; }
+.support-launch[aria-expanded="true"] svg { transform: rotate(180deg); }
 .landing-custom-link {
    border-radius: 100vmax;
    background: var(--gradient-shade), linear-gradient(90deg, var(--daya-aqua), var(--daya-blue));
@@ -103,7 +133,7 @@
    max-width: 19ch;
    padding: var(--space-2) var(--space-3);
    border-radius: var(--radius-control);
-   background: #ffffffc7;
+   --text-backdrop: #ffffffb3;
    font-size: var(--text-card);
    font-weight: 700;
    line-height: 1.3;
@@ -111,8 +141,10 @@
    text-wrap: balance;
    text-align: center;
    text-transform: uppercase;
+   text-shadow: 0 0 .25em #fff9;
 }
 .portfolio-tile-label small { font-weight: 550; text-transform: none; }
+.portfolio-tile-label::before { inset: -15% -12%; }
 .portfolio-tiles a:hover .portfolio-tile-label { text-decoration: underline; text-underline-offset: .18em; }
 .portfolio-tile-caption { padding: var(--space-3) 0 0; }
 .portfolio-tile:hover .portfolio-tile-caption h2 { text-decoration: underline; text-underline-offset: .18em; }
@@ -148,7 +180,8 @@
    max-width: 52rem;
    margin-inline: auto;
    text-align: center;
-   background: #f8fcfcc7;
+   padding: var(--panel-padding);
+   --text-backdrop: #f8fcfc70;
 }
 .community-intro mark {
    display: block;
@@ -171,8 +204,6 @@
    width: fit-content;
    margin: var(--section-gap) auto var(--space-5);
    padding: var(--space-2) var(--space-4);
-   border-radius: var(--radius-control);
-   background: var(--gradient-copy);
    color: white;
    font-size: var(--text-section);
    font-weight: 650;
@@ -231,6 +262,7 @@
 .collection-page .portfolio-tile { border-radius: var(--radius-control); overflow: hidden; background: var(--color-panel); height: 100%; }
 .collection-page .catalog-image { border-radius: 0; }
 .collection-artist { display: grid; justify-items: center; margin-bottom: var(--space-5); }
+.collection-artist .profile-handle { color: white; text-shadow: var(--gradient-text-shadow); }
 @media (min-width: 640px) {
    .collection-page .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
@@ -285,8 +317,6 @@
 .commission-details .detail-actions { grid-column: 1 / -1; }
 .site-shell[data-surface="gradient"] :is(.page-content, .admin-content) > .page-intro {
    padding: var(--space-3) var(--space-4);
-   border-radius: var(--radius-control);
-   background: var(--gradient-copy);
    color: white;
 }
 .site-shell[data-surface="gradient"] :is(.page-content, .admin-content) > .page-intro p { color: inherit; }
