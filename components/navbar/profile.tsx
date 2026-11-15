@@ -25,7 +25,8 @@ export default function NavbarProfile({ size }: { size?: string }) {
 
    return (
       <div ref={profileRef} className="relative" onKeyDown={(event) => {
-         if (event.key === "Escape") {
+         if (event.key === "Escape" && open) {
+            event.preventDefault();
             setOpen(false);
             trigger.current?.focus();
          }

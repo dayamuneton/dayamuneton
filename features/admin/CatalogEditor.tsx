@@ -27,6 +27,7 @@ export default function CatalogEditor({ product, kind }: { product: AdminDocumen
    const [deleting, setDeleting] = useState(false);
    const [confirm, setConfirm] = useState(false);
    const [error, setError] = useState("");
+   const [imageError, setImageError] = useState("");
    const [deleteError, setDeleteError] = useState("");
    const [saved, setSaved] = useState(false);
    const [images, setImages] = useState<EditorImage[]>(() => {
@@ -43,13 +44,12 @@ export default function CatalogEditor({ product, kind }: { product: AdminDocumen
    }, []);
 
    function addImages(files: File[]) {
-      setError("");
       const added = files.filter((file) => imageTypes.has(file.type) && file.size <= maxImageSize).map((file) => {
          const url = URL.createObjectURL(file);
          previewUrls.current.add(url);
          return { url, file };
       });
-      if (added.length < files.length) setError("Choose JPEG, PNG, WebP, GIF, or AVIF images up to 10 MB each.");
+      setImageError(added.length < files.length ? "Some files were skipped. Choose a supported format and check the file size." : "");
       setImages((current) => [...current, ...added]);
       if (!featured && added[0]) setFeatured(added[0].url);
    }
@@ -169,10 +169,12 @@ export default function CatalogEditor({ product, kind }: { product: AdminDocumen
             </fieldset>
             <fieldset disabled={pending} className="content-panel form-stack">
                <legend className="section-title px-1">Artwork images</legend>
-               <label>Add images<input type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,image/avif" onChange={(event) => {
+               <label>Add images<input type="file" multiple aria-describedby="image-upload-hint" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" onChange={(event) => {
                   addImages(Array.from(event.currentTarget.files ?? []));
                   event.currentTarget.value = "";
                }} /></label>
+               <p id="image-upload-hint" className="field-hint">JPEG, PNG, WebP, GIF, or AVIF. Up to 10 MB per image.</p>
+               {imageError && <p className="form-feedback" role="alert">{imageError}</p>}
                {images.length > 0 && <ul className="editor-images">
                   {images.map(({ url }, index) => (
                      <li key={url}>
@@ -208,7 +210,7 @@ export default function CatalogEditor({ product, kind }: { product: AdminDocumen
                }}>Add option</button>
             </fieldset>}
             {error && <p className="form-feedback" role="alert">{error}</p>}
-            {saved && <p role="status">Changes saved.</p>}
+            {saved && <p role="status" className="success-feedback">Changes saved.</p>}
             <div className="editor-actions">
                <button className="portfolio-button portfolio-button-primary" type="submit" disabled={pending}>{pending ? "Saving…" : "Save " + label}</button>
                {product && <button ref={deleteTrigger} type="button" className="portfolio-button portfolio-button-secondary text-danger" disabled={pending}
@@ -222,7 +224,7 @@ export default function CatalogEditor({ product, kind }: { product: AdminDocumen
                {deleteError && <p className="form-feedback" role="alert">{deleteError}</p>}
                <div className="editor-actions">
                   <button type="button" disabled={deleting} className="portfolio-button portfolio-button-secondary" onClick={() => setConfirm(false)}>Cancel</button>
-                  <button type="button" disabled={deleting} className="portfolio-button portfolio-button-primary"
+                  <button type="button" disabled={deleting} className="portfolio-button portfolio-button-danger"
                      onClick={removeProduct}>{deleting ? "Deleting…" : "Delete"}</button>
                </div>
             </div>

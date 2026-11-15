@@ -20,8 +20,8 @@ export default function ArtworkTileGrid({ items, variant }: {
    variant: "home" | "shop" | "education";
 }) {
    const sizes = variant === "education"
-      ? "(min-width: 1200px) 145px, (min-width: 640px) 12vw, 35vw"
-      : "(min-width: 1200px) 320px, (min-width: 640px) 27vw, (min-width: 400px) 320px, 80vw";
+      ? "(min-width: 1050px) 148px, (min-width: 640px) 14vw, (min-width: 434px) 184px, 42vw"
+      : "(min-width: 1050px) 320px, (min-width: 640px) 30vw, (min-width: 434px) 400px, calc(100vw - 32px)";
    return (
       <ul className="portfolio-tiles" data-variant={variant}>
          {items.map(({ href, image, title, status, captionPosition }) => (

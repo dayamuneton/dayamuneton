@@ -68,7 +68,7 @@ export default function Checkout() {
             </div> :
             <div className="checkout-grid">
                <CartItems />
-               <section className="content-panel detail-actions" aria-labelledby="order-summary">
+               <section className="content-panel detail-actions order-summary" aria-labelledby="order-summary">
                   <h2 id="order-summary">Order summary</h2>
                   <p className="checkout-total"><span>Total</span><strong>{formatCurrency(shoppingCart?.subTotal ?? 0)} USD</strong></p>
                   <button type="button" disabled={pending} onClick={startCheckout} className="portfolio-button portfolio-button-primary">

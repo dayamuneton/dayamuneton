@@ -36,7 +36,7 @@ export default function Commissions() {
       <div className="portfolio-content page-content commission-page">
          <Head><title>Custom Art Commissions | Daya Muneton</title><meta name="description" content="Commission digital art, an acrylic canvas, or a print from Daya Muneton." /></Head>
          <Link href="/shop" className="back-link">← Art shop</Link>
-         <header className="commission-intro">
+         <header className="commission-intro landing-copy">
             <h1>Custom Art Commissions</h1>
             <p>Hello, and thanks for your interest in my art!</p>
             <p>I&apos;m excited to discuss your commission request. If WhatsApp isn&apos;t accessible, you can email me at <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>.</p>

@@ -18,7 +18,7 @@ export default function GuideCollection({ category, items }: InferGetServerSideP
       <div className="portfolio-content page-content collection-page guide-collection">
          <Head><title>{category.title} | Daya Muneton</title><meta name="description" content={category.summary} /></Head>
          <Link href="/ageofemotions" className="back-link">← Emotional education</Link>
-         <div className="collection-artist"><DayaProfile /><p>Artist</p></div>
+         <div className="collection-artist"><DayaProfile /></div>
          <PageIntro title={category.title} description={category.summary} />
          <nav className="collection-nav" aria-label="Guide categories">
             {guideCategories.map(({ slug, title }) => (

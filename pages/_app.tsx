@@ -6,8 +6,16 @@ import Navbar from "@/components/navbar/navbar";
 import { isPreviewSite } from "@/config/site-environment";
 import StatusPage from "@/components/layout/StatusPage";
 import { useRouter } from "next/router";
+import localFont from "next/font/local";
 import "@/styles/globals.css";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
+
+const inter = localFont({
+   src: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+   weight: "100 900",
+   display: "swap",
+   variable: "--font-portfolio",
+});
 
 export function reportWebVitals({ name, value, label }: NextWebVitalsMetric) {
    if (process.env.NEXT_PUBLIC_REPORT_VITALS === "1") {
@@ -25,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
    return (
       <AuthProvider>
          <ShopProvider>
-            <div className="site-shell" data-surface={surface} data-landing={landing}>
+            <div className={`site-shell ${inter.variable}`} data-surface={surface} data-landing={landing}>
                <a className="skip-link" href="#main-content">Skip to content</a>
                <Navbar />
                <RouteFeedback>

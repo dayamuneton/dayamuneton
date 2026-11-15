@@ -23,8 +23,7 @@ export default function ProductsTable({ products, type }: { products: ProductSum
                      <ArtworkImage src={product.featuredImage || product.images?.[0]} fill sizes="48px" className="object-cover" alt="" />
                   </span>
                   <span><strong>{product.name || "Untitled"}</strong><span className="block text-sm text-muted">{product.category || "Uncategorized"}</span></span>
-                  {typeof product.price === "number" && <span>{currency.format(product.price)}</span>}
-                  <span aria-hidden="true" className="text-accent">→</span>
+                  <span className="admin-price">{typeof product.price === "number" ? currency.format(product.price) : "—"}</span>
                </Link>
             </li>
          ))}

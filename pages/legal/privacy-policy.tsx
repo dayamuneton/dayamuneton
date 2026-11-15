@@ -12,8 +12,8 @@ function PrivacyPolicy() {
          </Head>
          <article className="content-panel legal-document">
             <h1 className="page-title">Privacy Policy</h1>
-            <h2 className="my-4 font-bold">General</h2>
-            <p className="text-sm">
+            <h2>General</h2>
+            <p>
                This website, together with the corresponding network accounts
                social networks and mobile applications, is owned and operated by
                DAYA MUNETON LLC., a US company ("DAYA MUNETON LLC" or "we").
@@ -36,8 +36,8 @@ function PrivacyPolicy() {
                website and in emails, messages text or other electronic messages
                between you and the site Web.
             </p>
-            <h2 className="my-4 font-bold">​Children under 18 years of age</h2>
-            <p className="text-sm">
+            <h2>​Children under 18 years of age</h2>
+            <p>
                Our website is not intended for children under the age of 18. No
                one under the age of 18 can provide information on the site Web.
                We do not knowingly collect personal information from children
@@ -54,8 +54,8 @@ function PrivacyPolicy() {
                about a child under the age of 18 years old, contact us at
                info@dayamuneton.com
             </p>
-            <h2 className="my-4 font-bold">Information we collect about you</h2>
-            <p className="text-sm">
+            <h2>Information we collect about you</h2>
+            <p>
                We receive, collect and store any information that enter our
                website or otherwise provide us manner. In addition, we collect
                the address of the Protocol of Internet (IP) used to connect your
@@ -82,10 +82,10 @@ function PrivacyPolicy() {
                providing information when they request a product or service from
                through the website.
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                Why do we collect such personal information?​
             </h2>
-            <p className="text-sm">
+            <p>
                As a visitor to this website, you can participate in most of the
                activities without providing any personal information. Only when
                you try to download resources and/or register for services need
@@ -126,21 +126,21 @@ function PrivacyPolicy() {
                you ads that are tailored to your characteristics, interests and
                Personal activities.
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                How do we collect your information?
             </h2>
-            <p className="text-sm">
+            <p>
                When you make a transaction on our website, as part of of the
                process, we collect the personal information that we provide,
                such as your name, physical address, and mailing address email.
                Your personal information will be used solely for the specific
                reasons stated above.
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                How do we store, use, share and disclose information? personal
                information of visitors to this website?
             </h2>
-            <p className="text-sm">
+            <p>
                "We use MailerLite to manage our subscriber list email marketing
                and to send emails emails to our subscribers. MailerLite is a
                provider third party that may collect and process your data using
@@ -155,10 +155,10 @@ function PrivacyPolicy() {
                   MailerLite Privacy Policy
                </a>
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                How do we communicate with visitors to this site?​
             </h2>
-            <p className="text-sm">
+            <p>
                We may contact you to notify you about your account, to fix
                problems with your account, to resolve a dispute, to collect fees
                or money owed, to request their opinions through surveys or
@@ -168,10 +168,10 @@ function PrivacyPolicy() {
                For these purposes, we may contact you by email, phone, text
                messages and postal mail.
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                ​ Use of cookies by third parties ​
             </h2>
-            <p className="text-sm">
+            <p>
                Some application providers are third parties that may use cookies
                alone or together with other applications or other technologies
                tracking to collect information about you when you use our
@@ -195,8 +195,8 @@ function PrivacyPolicy() {
                   See MailerLite's Cookie Policy.
                </a>
             </p>
-            <h2 className="my-4 font-bold">​ email policies</h2>​
-            <p className="text-sm">
+            <h2>​ email policies</h2>​
+            <p>
                We promise to maintain the confidentiality of your address of
                e-mail. We do not sell, rent or lease our subscription lists to
                third parties, and we will not disclose your email address to
@@ -216,11 +216,11 @@ function PrivacyPolicy() {
                can opt out receive these communications by clicking on the link
                to unsubscribe in email.
             </p>
-            <h2 className="my-4 font-bold">
+            <h2>
                How do we protect your information and secure data transmissions?
                information?
             </h2>
-            <p className="text-sm">
+            <p>
                We use commercially reasonable methods to ensure the security of
                the information you provide to us and the information that we
                collect automatically. This includes the use of standard security
@@ -242,8 +242,8 @@ function PrivacyPolicy() {
                identify unauthorized attempts to upload or change information,
                or otherwise cause damage.
             </p>
-            <h2 className="my-4 font-bold">Policy Changes​ </h2>
-            <p className="text-sm">
+            <h2>Policy Changes​ </h2>
+            <p>
                It is our policy to post any changes we make to our privacy
                policy on this page. if we make changes material in the way we
                treat personal information of our users, we will notify you by
@@ -255,8 +255,8 @@ function PrivacyPolicy() {
                periodically visit our website and this privacy policy privacy to
                verify any changes.
             </p>
-            <h2 className="my-4 font-bold">GDPR visitor rights</h2>
-            <p className="text-sm">
+            <h2>GDPR visitor rights</h2>
+            <p>
                If you are located within the European Union, you are entitled to
                certain information and you have certain rights under the General
                Data Protection Regulation. Those rights include: We will retain
@@ -309,7 +309,7 @@ function PrivacyPolicy() {
                unnecessary processing as a condition of entering into a contract
                with us.
             </p>
-            <h2 className="my-4 font-bold">Contact Us</h2>
+            <h2>Contact Us</h2>
             { }
             <a
                href="mailto:info@dayamuneton.com"
@@ -319,12 +319,12 @@ function PrivacyPolicy() {
                info@dayamuneton.com
             </a>
             <br />
-            <p className="text-sm">
+            <p>
                The company welcomes your questions or comments regarding the
                Privacy Policy:
             </p>
-            <h2 className="my-4 font-bold">DAYA MUNETON LLC</h2>
-            <p className="text-sm">Effective as of November 22, 2022</p>
+            <h2>DAYA MUNETON LLC</h2>
+            <p>Effective as of November 22, 2022</p>
          </article>
       </div>
    );

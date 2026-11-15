@@ -15,22 +15,12 @@ export function ShoppingCart({
    const itemCount = shoppingCart?.cartItems.length ?? 0;
    const cartQty = itemCount > 9 ? "9+" : itemCount || null;
 
+   if (!currentUser) return null;
    return (
-      <div className={`${!currentUser ? "hidden" : ""} ${className ?? ""}`}>
-         <div className="flex !aspect-square relative">
-            <Link
-               href="/checkout"
-               aria-label="Shopping cart"
-               className="site-nav-icon"
-            >
-               <MdShoppingCart size={size} aria-hidden="true" />
-            </Link>
-            {currentUser && cartQty && (
-               <p className="absolute -bottom-2 -left-3 flex items-center justify-center p-1 text-[.6rem] text-white bg-red-600 rounded-full !aspect-square !w-5  !h-5">
-                  {cartQty}
-               </p>
-            )}
-         </div>
-      </div>
+      <Link href="/checkout" aria-label="Shopping cart"
+         className={`site-nav-icon ${className ?? ""}`}>
+         <MdShoppingCart size={size} aria-hidden="true" />
+         {cartQty && <span aria-hidden="true" className="cart-count">{cartQty}</span>}
+      </Link>
    );
 }

@@ -18,9 +18,11 @@ export default function Shop() {
             <title>Art Shop | Daya Muneton</title>
             <meta name="description" content="Browse Daya Muneton’s original artwork, collections, and custom commissions." />
          </Head>
-         <h1 className="sr-only">Art Shop</h1>
-         <DayaProfile />
-         <ContactLinks />
+         <header className="landing-intro">
+            <DayaProfile />
+            <h1 className="landing-copy">Art Shop</h1>
+            <ContactLinks />
+         </header>
          <nav aria-label="Collections">
             <ArtworkTileGrid items={collections} variant="shop" />
          </nav>

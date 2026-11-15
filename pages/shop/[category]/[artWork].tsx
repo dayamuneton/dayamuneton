@@ -35,7 +35,7 @@ export default function Artwork({ product, category }: InferGetServerSidePropsTy
    const initialImage = product.featuredImage || product.images[0];
    const [selected, setSelected] = useState(initialImage);
    return (
-      <div className="portfolio-content page-content">
+      <div className="portfolio-content page-content product-page">
          <Head><title>{product.name} | Daya Muneton</title><meta name="description" content={product.description} /></Head>
          <Link href={"/shop/" + category.slug} className="back-link">← {category.title}</Link>
          <div className="detail-grid original-product">

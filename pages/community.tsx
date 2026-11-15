@@ -68,7 +68,7 @@ export default function Community() {
    return (
       <div className="portfolio-content community-page">
          <Head><title>Community | Daya Muneton</title><meta name="description" content="Share the story behind a song that matters to you and contribute to A Latin Gift." /></Head>
-         <header className="community-intro">
+         <header className="community-intro content-panel">
             <p><mark>Today&apos;s topic:</mark></p>
             <h1>Be the voice of your song, share your story in &ldquo;A Latin Gift&rdquo;</h1>
             <p>Have you ever felt like a song was the story you never told? Our collective artwork, &ldquo;A Latin Gift&rdquo;, cannot be completed without your story. In your hands, you hold fragments of stories, pieces of memories that together form the cultural tapestry of our music. We invite you to share your story with your favorite song.</p>
@@ -99,9 +99,11 @@ export default function Community() {
                   </div>
                </div>
             </section>
-            <section className="content-panel" aria-labelledby="story-heading">
-               <h2 id="story-heading" ref={storyTitle} tabIndex={-1} className="section-title mb-3">Share your story</h2>
-               <p className="text-muted mb-5">You can share multiple stories, each about a different song. You can send your story anonymously. By accepting the terms, you grant Daya permission to use your contribution in artwork, social media, books, or podcasts.</p>
+            <section className="content-panel story-panel" aria-labelledby="story-heading">
+               <header className="reading-flow">
+                  <h2 id="story-heading" ref={storyTitle} tabIndex={-1} className="section-title">Share your story</h2>
+                  <p>You can share multiple stories, each about a different song. You can send your story anonymously. By accepting the terms, you grant Daya permission to use your contribution in artwork, social media, books, or podcasts.</p>
+               </header>
                <form onSubmit={sendStory} className="form-stack">
                   {!currentUser?.email && <>
                      <label htmlFor="story-name">Name (optional)<input id="story-name" name="name" type="text" autoComplete="name" maxLength={120} /></label>
@@ -111,8 +113,8 @@ export default function Community() {
                   <label className="check-field"><input name="anonymously" type="checkbox" />Send anonymously</label>
                   <label className="check-field"><input type="checkbox" required /><span>I accept the <Link href="/legal/terms-of-service" target="_blank" className="form-link">terms and conditions</Link>.</span></label>
                   <button className="portfolio-button portfolio-button-primary" type="submit" disabled={loading}>{loading ? "Sending…" : "Submit my story"}</button>
-                  {status === "sent" && <p role="status">Thank you. Your story was submitted.</p>}
                   {status === "error" && <p className="form-feedback" role="alert">Couldn’t send your story. Please try again.</p>}
+                  {status === "sent" && <p role="status" className="success-feedback">Thank you. Your story was submitted.</p>}
                </form>
             </section>
          </div>

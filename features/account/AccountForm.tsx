@@ -14,26 +14,30 @@ function returnPath(input: string | string[] | undefined) {
       : "/";
 }
 
-function PasswordField({ label, name, autoComplete, minLength }: {
+function PasswordField({ label, name, autoComplete, minLength, error }: {
    label: string;
    name: string;
    autoComplete: string;
    minLength?: number;
+   error?: string;
 }) {
    const [visible, setVisible] = useState(false);
    const id = useId();
+   const message = error || (name === "password" && minLength ? `Use at least ${minLength} characters.` : undefined);
    return (
       <div className="grid gap-1.5">
          <label htmlFor={id}>{label}</label>
          <div className="password-field">
             <input id={id} name={name} type={visible ? "text" : "password"}
-               required autoComplete={autoComplete} minLength={minLength} />
+               required autoComplete={autoComplete} minLength={minLength} aria-invalid={error ? true : undefined}
+               aria-describedby={message ? `${id}-hint` : undefined} />
             <button type="button" aria-controls={id}
                aria-label={`${visible ? "Hide" : "Show"} ${label.toLowerCase()}`}
                onClick={() => setVisible((value) => !value)}>
                {visible ? "Hide" : "Show"}
             </button>
          </div>
+         {message && <p id={`${id}-hint`} className={error ? "field-hint text-danger" : "field-hint"} role={error ? "alert" : undefined}>{message}</p>}
       </div>
    );
 }
@@ -42,6 +46,7 @@ export default function AccountForm({ mode }: { mode: "login" | "signup" }) {
    const router = useRouter();
    const { currentUser, signInWithEmail, signUpUserWithEmailAndPassword } = useAuth();
    const [error, setError] = useState("");
+   const [confirmationError, setConfirmationError] = useState(false);
    const [pending, setPending] = useState(false);
    const signup = mode === "signup";
    const title = signup ? "Create an account" : "Sign in";
@@ -58,7 +63,9 @@ export default function AccountForm({ mode }: { mode: "login" | "signup" }) {
       const email = String(fields.get("email") ?? "").trim();
       const password = String(fields.get("password") ?? "");
       if (signup && password !== fields.get("confirmation")) {
-         setError("Passwords must match.");
+         setError("");
+         setConfirmationError(true);
+         (event.currentTarget.elements.namedItem("confirmation") as HTMLInputElement | null)?.focus();
          return;
       }
       setPending(true);
@@ -84,11 +91,12 @@ export default function AccountForm({ mode }: { mode: "login" | "signup" }) {
          <Head><title>{title} | Daya Muneton</title></Head>
          <section className="content-panel auth-panel">
             <PageIntro title={title} description={signup ? "Create an account to save artwork and guides in your cart." : "Sign in to access your account and cart."} />
-            <form className="form-stack" onSubmit={submit}>
+            <form className="form-stack" onSubmit={submit} onChange={() => { if (confirmationError) setConfirmationError(false); }}>
                {signup && <label>Name<input name="name" autoComplete="name" required /></label>}
                <label>Email<input type="email" name="email" autoComplete="email" required /></label>
                <PasswordField label="Password" name="password" autoComplete={signup ? "new-password" : "current-password"} minLength={signup ? 6 : undefined} />
-               {signup && <PasswordField label="Confirm password" name="confirmation" autoComplete="new-password" minLength={6} />}
+               {signup && <PasswordField label="Confirm password" name="confirmation" autoComplete="new-password" minLength={6}
+                  error={confirmationError ? "Passwords must match." : undefined} />}
                {error && <p className="form-feedback" role="alert">{error}</p>}
                <button className="portfolio-button portfolio-button-primary" disabled={pending} type="submit">
                   {pending ? "Please wait…" : title}

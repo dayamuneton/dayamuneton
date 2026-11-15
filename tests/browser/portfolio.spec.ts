@@ -9,11 +9,10 @@ import { app, auth, db, storage } from "../../integrations/firebase/firebaseConf
 test("homepage is readable without JavaScript or Firebase Auth", async ({ browser, baseURL }) => {
    const page = await browser.newPage({ javaScriptEnabled: false, baseURL });
    await page.goto("/");
-   await expect(page.getByRole("heading", { name: "Daya Muneton", level: 1 })).toBeVisible();
+   await expect(page.getByRole("heading", { name: "Welcome to my art gallery!", level: 1 })).toBeVisible();
    const tiles = page.getByRole("navigation", { name: "Explore the portfolio" });
    await expect(tiles.getByRole("link")).toHaveText(["Community", "Shop", "Emotional Education"]);
    await expect(tiles.getByRole("link", { name: "Community" })).toHaveAttribute("href", "/community");
-   await expect(page.getByText("Welcome to my art gallery!", { exact: true })).toBeVisible();
    await expect(page.locator(".site-shell")).toHaveCSS("background-image", /^radial-gradient/);
    const portrait = page.locator(".portfolio-portrait img");
    await expect(portrait).toHaveAttribute("fetchpriority", "high");
@@ -74,6 +73,7 @@ test("a slow collection navigation shows feedback and delivers a responsive bann
    await expect(page.getByText("Loading page…", { exact: true })).toBeVisible();
    await expect(page.getByRole("heading", { name: "Heads", exact: true })).toBeVisible();
    await expect(page.getByText("Loading page…", { exact: true })).toBeHidden();
+   await expect(page.getByRole("main")).toBeFocused();
    const banner = page.locator(".gallery-banner img");
    await expect.poll(() => banner.evaluate((element) => (
       element instanceof HTMLImageElement && element.complete ? element.naturalWidth : 0
@@ -82,6 +82,20 @@ test("a slow collection navigation shows feedback and delivers a responsive bann
    expect(new URL(source).pathname).toMatch(/^\/artwork\/bannerheads-/);
    const response = await page.request.get(source);
    expect((await response.body()).byteLength).toBeLessThan(450_000);
+});
+
+test("password mismatch points to the confirmation without clearing either field", async ({ page }) => {
+   await page.goto("/auth/signup");
+   await page.getByLabel("Name", { exact: true }).fill("Test Visitor");
+   await page.getByLabel("Email", { exact: true }).fill("signup@example.test");
+   await page.getByLabel("Password", { exact: true }).fill("demo-password");
+   const confirm = page.getByLabel("Confirm password", { exact: true });
+   await confirm.fill("different-password");
+   await page.getByRole("button", { name: "Create an account" }).click();
+   await expect(confirm).toBeFocused();
+   await expect(confirm).toHaveAccessibleDescription("Passwords must match.");
+   await expect(confirm).toHaveValue("different-password");
+   await expect(page.getByLabel("Password", { exact: true })).toHaveValue("demo-password");
 });
 
 test("story form keeps the draft after a failure and confirms a successful retry", async ({ page }) => {

@@ -57,7 +57,7 @@ export default function MakeAnOffer({ initialPrice }: { initialPrice: number }) 
             <button type="submit" disabled={pending} className="portfolio-button portfolio-button-primary">
                {pending ? "Sending offer…" : "Submit my offer"}
             </button>
-            {status === "sent" && <p role="status">Thank you. Your offer was sent.</p>}
+            {status === "sent" && <p role="status" className="success-feedback">Thank you. Your offer was sent.</p>}
             {status === "error" && <p className="form-feedback" role="alert">Couldn’t send your offer. Please try again.</p>}
          </form>
       </Disclosure>

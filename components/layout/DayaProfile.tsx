@@ -7,7 +7,7 @@ export default function DayaProfile() {
          <span className="portfolio-portrait">
             <ArtworkImage src="/DayaMunetonB&WArt.jpg" alt="" fill sizes="112px" priority />
          </span>
-         <span>@DayaMuneton</span>
+         <span className="profile-handle">@DayaMuneton</span>
       </Link>
    );
 }

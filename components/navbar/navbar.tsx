@@ -12,7 +12,7 @@ const links = [
 ];
 
 export default function Navbar() {
-   const { pathname } = useRouter();
+   const { pathname, events } = useRouter();
    const [showNavbar, setShowNavbar] = useState(false);
    const navRef = useRef<HTMLElement>(null);
    const menuButton = useRef<HTMLButtonElement>(null);
@@ -21,11 +21,20 @@ export default function Navbar() {
    useEffect(() => {
       if (showNavbar) navRef.current?.querySelector<HTMLAnchorElement>(".site-nav-links a")?.focus();
    }, [showNavbar]);
+   useEffect(() => {
+      const closeMenu = () => setShowNavbar(false);
+      events.on("routeChangeComplete", closeMenu);
+      return () => events.off("routeChangeComplete", closeMenu);
+   }, [events]);
 
    return (
       <nav ref={navRef} aria-label="Main navigation" className="site-nav"
+         onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setShowNavbar(false);
+         }}
          onKeyDown={(event) => {
-            if (event.key === "Escape" && showNavbar) {
+            if (!event.defaultPrevented && event.key === "Escape" && showNavbar) {
+               event.preventDefault();
                setShowNavbar(false);
                menuButton.current?.focus();
             }
@@ -39,7 +48,12 @@ export default function Navbar() {
                   <li key={href}>
                      <Link href={href} aria-current={pathname === href ? "page" : undefined}
                         data-section-active={pathname.startsWith(href)}
-                        onClick={() => setShowNavbar(false)}>
+                        onClick={() => {
+                           if (showNavbar && pathname === href) {
+                              setShowNavbar(false);
+                              menuButton.current?.focus();
+                           }
+                        }}>
                         {label}
                      </Link>
                   </li>

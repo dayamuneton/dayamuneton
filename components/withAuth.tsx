@@ -38,13 +38,13 @@ export default function WithAuth({ children }: { children: ReactNode }) {
 
    if (uid && access?.uid === uid && access.status === "allowed") return children;
    if (currentUser && (!email || (access?.uid === uid && access?.status === "denied"))) {
-      return <div className="portfolio-content"><PageIntro title="Admin access required"
+      return <div className="portfolio-content page-content"><PageIntro title="Admin access required"
          description="Sign in with an account that has permission to manage the portfolio.">
          <Link href="/" className="portfolio-button portfolio-button-secondary">Back to portfolio</Link>
       </PageIntro></div>;
    }
    if (uid && access?.uid === uid && access.status === "failed") {
-      return <div className="portfolio-content"><PageIntro title="Couldn’t check admin access">
+      return <div className="portfolio-content page-content"><PageIntro title="Couldn’t check admin access">
          <button type="button" className="portfolio-button portfolio-button-primary" onClick={() => {
             setAccess(undefined);
             setAttempt((value) => value + 1);

@@ -37,7 +37,7 @@ export default function Guide({ product, category }: InferGetServerSidePropsType
    const images = [initialImage, product.featuredImage, ...product.images].filter(Boolean);
 
    return (
-      <div className="portfolio-content page-content">
+      <div className="portfolio-content page-content product-page guide-product-page">
          <Head><title>{product.name} | Daya Muneton</title><meta name="description" content={product.description} /></Head>
          <Link href={"/ageofemotions/" + category.slug} className="back-link">← {category.title}</Link>
          <div className="detail-grid original-product guide-detail">

@@ -25,7 +25,7 @@ const testimonies = [
 export default function Testimonies() {
    return (
       <section className="testimonials" aria-labelledby="testimonials-heading">
-         <h2 className="section-title" id="testimonials-heading">What readers say</h2>
+         <h2 className="section-title landing-copy" id="testimonials-heading">What readers say</h2>
          <div className="testimonials-grid">
             {testimonies.map(({ name, message }, index) => (
                <figure className="content-panel reading-flow" key={name}>

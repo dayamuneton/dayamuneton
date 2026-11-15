@@ -18,17 +18,18 @@ export default function EmotionalEducation() {
             <title>Age of Emotions | Daya Muneton</title>
             <meta name="description" content="Explore emotional education through downloadable art guides, creative exercises, and workshops." />
          </Head>
-         <h1 className="sr-only">Age of Emotions</h1>
-         <DayaProfile />
-         <div className="education-intro">
-            <p>Artist</p>
-            <p>Inspired by a deeply personal experience, I created these PDF guides as a means to overcome the difficult period when my son grappled with a lack of interest in life.</p>
-            <p>Now, I am committed to sharing the invaluable lessons we have learned, offering them to you for guidance and support.</p>
-         </div>
+         <header className="landing-intro">
+            <DayaProfile />
+            <div className="landing-copy education-intro">
+               <h1>Age of Emotions</h1>
+               <p>Inspired by a deeply personal experience, I created these PDF guides as a means to overcome the difficult period when my son grappled with a lack of interest in life.</p>
+               <p>Now, I am committed to sharing the invaluable lessons we have learned, offering them to you for guidance and support.</p>
+            </div>
+         </header>
          <nav aria-label="Guides and workshops">
             <ArtworkTileGrid items={categories} variant="education" />
          </nav>
-         <section className="education-story reading-flow" aria-labelledby="mission-heading">
+         <section className="landing-copy education-story reading-flow" aria-labelledby="mission-heading">
             <h2 id="mission-heading">PDF Guides · Digital download</h2>
             <p>817 Sales <span aria-hidden="true">★★★★★</span></p>
             <p>With your purchase, you are not only acquiring a valuable product, but you are also actively contributing to the realization of my vision for implementing emotional education in schools through my program, Age of Emotions. Your support is incredibly valuable and deeply appreciated. Together, we can make a difference in empowering individuals with essential emotional skills.</p>

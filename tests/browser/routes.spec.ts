@@ -15,7 +15,7 @@ async function signIn(page: Page, email: string) {
 test("all public route families share the responsive shell and accessible headings", async ({ page }) => {
    await page.setViewportSize({ width: 320, height: 700 });
    const routes = [
-      ["/", "Daya Muneton"], ["/shop", "Art Shop"], ["/shop/custom", "Custom Art Commissions"],
+      ["/", "Welcome to my art gallery!"], ["/shop", "Art Shop"], ["/shop/custom", "Custom Art Commissions"],
       ["/shop/heads", "Heads"], ["/shop/bodies", "Bodies"], ["/shop/abstracts", "Abstracts"],
       ["/shop/memorials", "A Latin Gift"], ["/ageofemotions", "Age of Emotions"],
       ["/ageofemotions/freebies", "Freebies"], ["/ageofemotions/colors", "Art Your Emotions"],
@@ -30,7 +30,9 @@ test("all public route families share the responsive shell and accessible headin
       await test.step(route, async () => {
          await page.goto(route);
          await expect(page.getByRole("main")).toHaveCount(1);
-         await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+         const title = page.getByRole("heading", { level: 1 });
+         await expect(title).toHaveText(heading);
+         await expect(title).toBeInViewport();
          await expect(page.getByRole("navigation", { name: "Main navigation" })).toHaveCount(1);
          await expect(page.getByRole("contentinfo")).toHaveCount(route === "/" || route === "/shop" ? 0 : 1);
          expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth))
