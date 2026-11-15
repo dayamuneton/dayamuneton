@@ -1,6 +1,6 @@
 # Daya Muneton
 
-The portfolio, art shop, community, and emotional education guides share the Next.js Pages Router. Public pages, account screens, and admin share the navy layout, navigation, and loading feedback.
+The portfolio, art shop, community, and emotional education guides use the Next.js Pages Router. Public pages, account screens, and admin share base styles, navigation, and loading feedback.
 
 ## Run locally
 
@@ -42,18 +42,28 @@ Run `npm run artwork:generate` after changing a bundled artwork source. Commit t
 
 - `pages/` contains routes and API entry points.
 - `features/home/` contains the homepage gallery and support flow.
-- `features/catalog/` contains collection data access and shared product UI.
+- `features/catalog/` contains catalog types, data access, and shared product UI.
 - `features/admin/` contains catalog management and editors.
 - `features/account/` contains the sign-in and registration form.
 - `components/` contains shared UI, with checkout and navigation components grouped by purpose.
 - `integrations/` contains Firebase, Stripe, and email platform adapters. `handlers/` contains order workflows.
 - `tests/` contains unit tests, browser tests, and rules for the demo emulators.
 
+### Common edits
+
+| To change | Start here |
+| --- | --- |
+| Brand colors, button colors, text sizes, spacing, or motion timings | [Theme](styles/theme.css). The `--color-brand-*` tokens control artwork accents and gradients. `--color-accent`, `--color-accent-hover`, `--color-on-accent`, and `--color-focus` control interactive states. |
+| The mobile-to-desktop switch | [Theme](styles/theme.css). `--breakpoint-navigation` sets both the navigation layout and the support dropdown breakpoint. |
+| Public page layouts or shared components | [Public pages](styles/original-design.css), [shared styles](styles/portfolio.css), and [support styles](styles/support.css). |
+| Email, social profiles, portrait, or default site URL | [Site config](config/site.ts). |
+| Shop or education categories | [Catalog categories](features/catalog/categories.ts). |
+
 ## Vercel Preview
 
 Vercel builds Preview deployments with the sample artwork and guides from the local seed. Preview checkout and email are simulated, and sign-in and admin are available in the local emulator build. A Preview needs no Firebase or payment credentials.
 
-To reproduce the Preview build locally, set `VERCEL_ENV=preview` and run `npm run build`, then `npx next start`.
+To reproduce the Preview build locally, set `VERCEL_ENV=preview` and run `npm run build -- --webpack`, then `npx next start`.
 
 ## Production handoff
 

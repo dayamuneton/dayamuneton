@@ -1,6 +1,6 @@
 import Head from "next/head";
 import ContactLinks from "@/components/contactLinks";
-import SupportMyWork from "@/components/supportMyWork";
+import SupportMyWork from "@/features/home/SupportMyWork";
 import DayaProfile from "@/components/layout/DayaProfile";
 import HomeTiles from "@/features/home/HomeTiles";
 

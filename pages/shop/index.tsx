@@ -26,7 +26,7 @@ export default function Shop() {
          <nav aria-label="Collections">
             <ArtworkTileGrid items={collections} variant="shop" />
          </nav>
-         <Link href="/shop/custom" className="landing-custom-link">Custom Art</Link>
+         <Link href="/shop/custom" className="landing-action landing-custom-link">Custom Art</Link>
       </div>
    );
 }

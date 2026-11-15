@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { memo } from "react";
+import { site } from "@/config/site";
 import ContactLinks from "./contactLinks";
 
 export default memo(function Footer() {
@@ -17,7 +18,7 @@ export default memo(function Footer() {
             </nav>
             <div>
                <address className="text-sm">
-                  <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>
+                  <a href={`mailto:${site.email}`}>{site.email}</a>
                </address>
                <ContactLinks />
             </div>

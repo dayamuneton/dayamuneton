@@ -1,10 +1,8 @@
 import { isPreviewSite } from "@/config/site-environment";
 import { demoCatalog } from "./demo-data";
-import type { CatalogItem } from "./CatalogGrid";
+import type { Catalog, CatalogItem } from "./types";
 import { isSoldOut } from "./availability";
 import type { DocumentData } from "firebase/firestore/lite";
-
-export type Catalog = "products" | "pdfproducts";
 
 function summarize(id: string, item: DocumentData, catalog: Catalog): CatalogItem {
    return {

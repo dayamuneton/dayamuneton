@@ -1,0 +1,90 @@
+/* Color tokens shared by custom CSS and Tailwind utilities. */
+@theme {
+   --color-canvas: #e8f3f4;
+   --color-panel: #f8fcfc;
+   --color-panel-raised: #e0f0f2;
+   --color-field: #ffffff;
+   --color-ink: #171630;
+   --color-muted: #343452;
+   --color-line: #c0d3d7;
+   --color-line-strong: #677c91;
+   --color-brand-purple: #4a23a9;
+   --color-brand-aqua: #5cdde5;
+   --color-brand-blue: #034daf;
+   --color-accent: #422099;
+   --color-accent-hover: #321675;
+   --color-focus: #281064;
+   --color-navigation-line: #c4b5e9;
+   --color-collection: #ddf2f1;
+   --color-on-accent: #ffffff;
+   --color-topic: #f4ff00;
+   --color-on-topic: #241842;
+   --color-community-ink: #10091f;
+   --color-about-ink: #081019;
+   --color-danger: #820f36;
+   --color-danger-hover: #640927;
+   --color-danger-line: #96556b;
+   --color-danger-surface: #fff0f4;
+   --color-success: #155641;
+   --color-success-surface: #e7f6ee;
+   --color-success-line: #6ba694;
+   --color-footer: #000000;
+   --color-on-footer: #ffffff;
+   --color-footer-muted: #ededf4;
+}
+
+/* Navigation is also read by the support form to choose a dropdown or modal. */
+@theme static {
+   --breakpoint-navigation: 42.5rem;
+}
+
+@theme {
+   --breakpoint-content-columns: 47.5rem;
+}
+
+:root {
+   --space-1: .25rem;
+   --space-2: .5rem;
+   --space-3: .75rem;
+   --space-4: 1rem;
+   --space-5: 1.25rem;
+   --space-6: 1.5rem;
+   --space-8: 2rem;
+   --space-10: 2.5rem;
+   --space-12: 3rem;
+   --space-16: 4rem;
+   --size-control: 2.75rem;
+   --radius-control: .625rem;
+   --radius-panel: 1rem;
+   --text-small: .875rem;
+   --text-lead: clamp(1rem, .95rem + .25vw, 1.125rem);
+   --text-title: clamp(1.875rem, 1.45rem + 1.9vw, 3rem);
+   --text-section: clamp(1.25rem, 1.1rem + .65vw, 1.625rem);
+   --text-card: clamp(1rem, .95rem + .3vw, 1.1875rem);
+   --leading-copy: 1.6;
+   --portfolio-gutter: clamp(1rem, 3.5vw, 3rem);
+   --portfolio-width: 78rem;
+   --landing-action-width: 35.625rem;
+   --panel-padding: clamp(var(--space-4), 3vw, var(--space-8));
+   --section-gap: clamp(var(--space-8), 5vw, var(--space-16));
+   --gradient-portfolio: radial-gradient(circle at center, var(--color-brand-purple), var(--color-brand-aqua));
+   --gradient-education-card: linear-gradient(90deg, #76e3ee, #4b50c8);
+   --gradient-community-feelings: linear-gradient(#ffffff26, #ffffff26), linear-gradient(35deg, #754af1, #51eace);
+   --gradient-community-dreams: linear-gradient(145deg, #51eace, #a78ef9);
+   --gradient-community-journeys: linear-gradient(35deg, #a78ef9, #c7f7db);
+   --gradient-about: linear-gradient(90deg, #76e3f0, #318791);
+   --gradient-landing-shade: radial-gradient(ellipse 50% 49% at 50% 49%, #25134b8c 15%, #25134b45 60%, transparent 100%);
+   --gradient-action-shade: linear-gradient(#25134b91, #25134b91);
+   --overlay-gradient-copy: #25134b8f;
+   --overlay-artwork-label: #ffffffb3;
+   --overlay-community-intro: #f8fcfc70;
+   --overlay-support-modal: #020b1bdb;
+   --overlay-confirmation-modal: #020914b8;
+   --shadow-gradient-text: 0 1px 3px #24144d, 0 0 8px #24144d88;
+   --shadow-gradient-icon: 0 1px 3px #24144d;
+   --shadow-artwork-label: 0 0 .25em #fff9;
+   --shadow-card: 0 5px 12px #25174a30;
+   --motion-fast: 140ms;
+   --motion-normal: 200ms;
+   --ease-out: cubic-bezier(.2, .7, .2, 1);
+}

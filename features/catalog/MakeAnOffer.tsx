@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "@/context/authContext";
-import Disclosure from "./ui/Disclosure";
+import Disclosure from "@/components/ui/Disclosure";
 
 export default function MakeAnOffer({ initialPrice }: { initialPrice: number }) {
    const { currentUser } = useAuth();

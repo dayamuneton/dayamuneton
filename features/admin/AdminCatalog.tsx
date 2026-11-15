@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { QueryDocumentSnapshot } from "firebase/firestore/lite";
-import ProductsTable from "@/components/productsTable";
+import AdminCatalogList from "./AdminCatalogList";
 import PageSkeleton from "@/components/ui/PageSkeleton";
 import { catalogCollections, catalogLabels, type CatalogKind } from "./catalogConfig";
 
@@ -55,7 +55,7 @@ export default function AdminCatalog({ kind }: { kind: CatalogKind }) {
                Add {catalogLabels[kind]}
             </Link>
          </div>
-         {docs.length > 0 && <ProductsTable type={kind} products={docs.map((item) => ({ ...item.data(), id: item.id }))} />}
+         {docs.length > 0 && <AdminCatalogList type={kind} products={docs.map((item) => ({ ...item.data(), id: item.id }))} />}
          {!docs.length && loading && <PageSkeleton kind="admin" label={`Loading ${kind}…`} />}
          {!loading && !failed && !docs.length && <p className="content-panel">No {kind} yet.</p>}
          {failed && <p className="form-feedback" role="alert">

@@ -1,74 +1,11 @@
 @import "tailwindcss" source(none);
+@import "./theme.css";
 @import "./portfolio.css";
 @import "./original-design.css";
+@import "./support.css";
 @source "../components";
 @source "../features";
 @source "../pages";
-
-/* Shared portfolio palette. */
-@theme {
-   --color-canvas: #e8f3f4;
-   --color-panel: #f8fcfc;
-   --color-panel-raised: #e0f0f2;
-   --color-field: #ffffff;
-   --color-ink: #171630;
-   --color-muted: #343452;
-   --color-line: #c0d3d7;
-   --color-line-strong: #677c91;
-   --color-accent: #422099;
-   --color-on-accent: #ffffff;
-   --color-danger: #820f36;
-   --color-danger-surface: #fff0f4;
-   --color-success: #155641;
-   --color-success-surface: #e7f6ee;
-   --color-gray-100: #f3f4f6;
-   --color-gray-200: #e5e7eb;
-   --color-gray-300: #d1d5db;
-   --color-gray-400: #9ca3af;
-   --color-gray-500: #6b7280;
-   --color-gray-700: #374151;
-   --color-gray-800: #1f2937;
-   --color-slate-100: #f1f5f9;
-   --color-red-500: #ef4444;
-   --color-red-600: #dc2626;
-   --color-blue-400: #60a5fa;
-   --color-blue-500: #3b82f6;
-   --color-blue-700: #1d4ed8;
-   --color-green-500: #22c55e;
-   --color-green-600: #16a34a;
-   --color-green-700: #15803d;
-   --color-green-800: #166534;
-   --color-yellow-300: #fde047;
-}
-
-:root {
-   --space-1: .25rem;
-   --space-2: .5rem;
-   --space-3: .75rem;
-   --space-4: 1rem;
-   --space-5: 1.25rem;
-   --space-6: 1.5rem;
-   --space-8: 2rem;
-   --space-10: 2.5rem;
-   --space-12: 3rem;
-   --space-16: 4rem;
-   --size-control: 2.75rem;
-   --radius-control: .625rem;
-   --radius-panel: 1rem;
-   --text-small: .875rem;
-   --text-lead: clamp(1rem, .95rem + .25vw, 1.125rem);
-   --text-title: clamp(1.875rem, 1.45rem + 1.9vw, 3rem);
-   --text-section: clamp(1.25rem, 1.1rem + .65vw, 1.625rem);
-   --text-card: clamp(1rem, .95rem + .3vw, 1.1875rem);
-   --leading-copy: 1.6;
-   --portfolio-gutter: clamp(1rem, 3.5vw, 3rem);
-   --portfolio-width: 78rem;
-   --panel-padding: clamp(var(--space-4), 3vw, var(--space-8));
-   --section-gap: clamp(var(--space-8), 5vw, var(--space-16));
-   --motion-fast: 140ms;
-   --motion-normal: 200ms;
-   --ease-out: cubic-bezier(.2, .7, .2, 1);
-}
 
 @layer base {
    *, ::before, ::after, ::backdrop, ::file-selector-button {

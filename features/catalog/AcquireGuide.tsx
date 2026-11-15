@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "@/context/authContext";
 import type { GuiaProduct, GuiaProductVariant } from "@/models/guiaProductModel";
-import Disclosure from "./ui/Disclosure";
+import Disclosure from "@/components/ui/Disclosure";
 
 export default function AcquireGuide({ product, variant }: { product: GuiaProduct; variant?: GuiaProductVariant }) {
    const router = useRouter();

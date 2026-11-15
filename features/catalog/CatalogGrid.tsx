@@ -1,13 +1,6 @@
 import Link from "next/link";
 import ArtworkImage from "@/components/ui/ArtworkImage";
-
-export interface CatalogItem {
-   id: string;
-   handle: string;
-   name: string;
-   image: string | null;
-   soldOut: boolean;
-}
+import type { CatalogItem } from "./types";
 
 export default function CatalogGrid({ items, basePath }: { items: CatalogItem[]; basePath: string }) {
    return (

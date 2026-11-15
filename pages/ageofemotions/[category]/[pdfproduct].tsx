@@ -5,7 +5,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import ArtworkGallery from "@/components/ui/ArtworkGallery";
-import AcquireGuide from "@/components/acquireGuide";
+import AcquireGuide from "@/features/catalog/AcquireGuide";
+import { formatCurrency } from "@/utils/formatCurrency";
 import CartAction from "@/features/catalog/CartAction";
 import { GuiaProduct } from "@/models/guiaProductModel";
 import { guideCategories } from "@/features/catalog/categories";
@@ -49,7 +50,7 @@ export default function Guide({ product, category }: InferGetServerSidePropsType
             </div>
             <div className="content-panel detail-summary">
                <p className="detail-price">{product.price > 0
-                  ? product.price.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "Free guide"}</p>
+                  ? formatCurrency(product.price) : "Free guide"}</p>
                {product.variants.length > 0 && <div className="detail-variants" role="group" aria-label="Guide options">
                   {product.variants.map((option) => (
                      <button key={option.id} type="button" aria-pressed={variant?.id === option.id}

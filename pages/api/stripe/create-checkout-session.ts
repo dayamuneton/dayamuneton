@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { site } from "@/config/site";
 import { isTestSite } from "@/config/site-environment";
 import { supportThanksPath } from "@/features/home/support";
 import { getStripe } from "@/integrations/stripe/stripeConfig";
@@ -22,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    }
 
    try {
-      const origin = new URL(process.env.NEXT_PUBLIC_MY_DOMAIN || "https://www.dayamuneton.com").origin;
+      const origin = new URL(process.env.NEXT_PUBLIC_MY_DOMAIN || site.origin).origin;
       const session = await getStripe().checkout.sessions.create({
          payment_method_types: ["card"],
          line_items,

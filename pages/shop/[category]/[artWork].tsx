@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { FiCheckCircle, FiImage, FiPackage, FiRotateCcw } from "react-icons/fi";
 import ArtworkGallery from "@/components/ui/ArtworkGallery";
-import MakeAnOffer from "@/components/makeAnOffer";
+import MakeAnOffer from "@/features/catalog/MakeAnOffer";
+import { formatCurrency } from "@/utils/formatCurrency";
 import CartAction from "@/features/catalog/CartAction";
 import { paintingCategories } from "@/features/catalog/categories";
 import { findCatalogItem } from "@/features/catalog/data";
@@ -51,7 +52,7 @@ export default function Artwork({ product, category }: InferGetServerSidePropsTy
                   selected={selected} title={product.name} onSelect={setSelected} />
             </div>
             <div className="content-panel detail-summary">
-               <p className="detail-price">{product.price.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+               <p className="detail-price">{formatCurrency(product.price)}</p>
                {product.soldOut ? <p className="text-muted">This original is sold out.</p> : <div className="detail-actions">
                   <MakeAnOffer initialPrice={product.price} />
                   <CartAction product={product} />

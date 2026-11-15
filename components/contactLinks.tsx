@@ -1,9 +1,10 @@
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
+import { site } from "@/config/site";
 
 const socials = [
-   { name: "Instagram", url: "https://www.instagram.com/dayamuneton/", Icon: FaInstagram },
-   { name: "Facebook", url: "https://www.facebook.com/dayamuneton", Icon: FaFacebook },
-   { name: "TikTok", url: "https://www.tiktok.com/@dayamuneton", Icon: FaTiktok },
+   { name: "Instagram", url: site.social.instagram, Icon: FaInstagram },
+   { name: "Facebook", url: site.social.facebook, Icon: FaFacebook },
+   { name: "TikTok", url: site.social.tiktok, Icon: FaTiktok },
 ];
 
 export default function ContactLinks() {

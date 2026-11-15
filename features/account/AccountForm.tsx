@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useId, useState, type FormEvent } from "react";
-import ContinueWith from "@/components/continueWith";
+import ContinueWith from "./ContinueWith";
 import PageIntro from "@/components/layout/PageIntro";
 import { useAuth } from "@/context/authContext";
 

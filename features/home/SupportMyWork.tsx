@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/router";
 import { FiChevronDown } from "react-icons/fi";
-import { supportThanksPath } from "@/features/home/support";
+import { site } from "@/config/site";
 import { useClickOutside } from "@/hooks/clickOutside";
 import { dollarsToCents } from "@/integrations/stripe/line-items";
+import { supportThanksPath } from "./support";
 
 const tipOptions = [3, 5, 10, 20, 50];
-const desktopSupport = "(min-width: 680px)";
 
 export default function SupportMyWork() {
    const router = useRouter();
    const support = useRef<HTMLDivElement>(null);
    const dialog = useRef<HTMLDialogElement>(null);
+   const desktop = useRef<MediaQueryList>(null);
    const trigger = useRef<HTMLButtonElement>(null);
    const activeRequest = useRef<AbortController | null>(null);
    const returnFocus = useRef(true);
@@ -37,14 +38,16 @@ export default function SupportMyWork() {
    }, []);
 
    useEffect(() => {
-      const media = window.matchMedia(desktopSupport);
+      const breakpoint = getComputedStyle(document.documentElement).getPropertyValue("--breakpoint-navigation").trim();
+      const media = window.matchMedia(`(min-width: ${breakpoint})`);
+      desktop.current = media;
       const dismiss = () => closeSupport();
       media.addEventListener("change", dismiss);
       return () => media.removeEventListener("change", dismiss);
    }, [closeSupport]);
 
    useClickOutside(support, () => {
-      if (window.matchMedia(desktopSupport).matches) closeSupport(false);
+      if (desktop.current?.matches) closeSupport(false);
    });
 
    function updateAmount(value: string) {
@@ -60,7 +63,7 @@ export default function SupportMyWork() {
          return;
       }
       returnFocus.current = true;
-      if (window.matchMedia(desktopSupport).matches) panel.show();
+      if (desktop.current?.matches) panel.show();
       else panel.showModal();
       setOpen(true);
    }
@@ -93,7 +96,7 @@ export default function SupportMyWork() {
                metadata: { order_type: "tip" },
                lineItems: [{
                   price,
-                  images: ["https://www.dayamuneton.com/DayaMunetonB&WArt.jpg"],
+                  images: [site.origin + site.portrait],
                   name: "Support My Work",
                }],
             }),
@@ -122,16 +125,16 @@ export default function SupportMyWork() {
       <div ref={support} className="support-control"
          onBlur={(event) => {
             if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget) &&
-               window.matchMedia(desktopSupport).matches) closeSupport(false);
+               desktop.current?.matches) closeSupport(false);
          }}
          onKeyDown={(event) => {
-            if (event.key === "Escape" && open && window.matchMedia(desktopSupport).matches) {
+            if (event.key === "Escape" && open && desktop.current?.matches) {
                event.preventDefault();
                closeSupport();
             }
          }}>
          <button ref={trigger} type="button" aria-haspopup="dialog" aria-expanded={open} aria-controls={dialogId}
-            className="support-launch"
+            className="landing-action support-launch"
             onClick={toggleSupport}>
             Click here to support my work
             <FiChevronDown aria-hidden="true" />
@@ -142,7 +145,7 @@ export default function SupportMyWork() {
                closeSupport();
             }}
             onClose={handleClose} onClick={(event) => {
-               if (event.target === event.currentTarget && !window.matchMedia(desktopSupport).matches) closeSupport();
+               if (event.target === event.currentTarget && !desktop.current?.matches) closeSupport();
             }}>
             <div className="support-dialog-body">
                <header className="mb-5 flex items-start justify-between gap-3">

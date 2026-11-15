@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { site } from "@/config/site";
 import Link from "next/link";
 import { FiChevronDown } from "react-icons/fi";
 import ArtworkImage from "@/components/ui/ArtworkImage";
@@ -39,7 +40,7 @@ export default function Commissions() {
          <header className="commission-intro landing-copy">
             <h1>Custom Art Commissions</h1>
             <p>Hello, and thanks for your interest in my art!</p>
-            <p>I&apos;m excited to discuss your commission request. If WhatsApp isn&apos;t accessible, you can email me at <a href="mailto:info@dayamuneton.com">info@dayamuneton.com</a>.</p>
+            <p>I&apos;m excited to discuss your commission request. If WhatsApp isn&apos;t accessible, you can email me at <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
          </header>
          <div className="commission-formats">
             {formats.map(({ title, image, details, price, actions }) => (
