@@ -1,4 +1,5 @@
 /* The public portfolio's palette, artwork proportions, and page compositions. */
+html:has(.home-page) { scrollbar-gutter: auto; }
 .site-shell[data-surface="gradient"] { background: var(--gradient-portfolio); }
 .site-shell[data-surface="paper"] { background: var(--color-field); }
 .site-shell[data-surface="collection"] { background: var(--color-collection); }

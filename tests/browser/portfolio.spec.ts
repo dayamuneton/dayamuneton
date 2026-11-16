@@ -7,13 +7,15 @@ import { deleteObject, getBytes, getDownloadURL, ref, uploadBytes } from "fireba
 import { app, auth, db, storage } from "../../integrations/firebase/firebaseConfig";
 
 test("homepage is readable without JavaScript or Firebase Auth", async ({ browser, baseURL }) => {
-   const page = await browser.newPage({ javaScriptEnabled: false, baseURL });
+   const page = await browser.newPage({ javaScriptEnabled: false, baseURL, viewport: { width: 1440, height: 1080 } });
    await page.goto("/");
    await expect(page.getByRole("heading", { name: "Welcome to my art gallery!", level: 1 })).toBeVisible();
    const tiles = page.getByRole("navigation", { name: "Explore the portfolio" });
    await expect(tiles.getByRole("link")).toHaveText(["Community", "Shop", "Emotional Education"]);
    await expect(tiles.getByRole("link", { name: "Community" })).toHaveAttribute("href", "/community");
+   await expect(page.locator("html")).toHaveCSS("scrollbar-gutter", "auto");
    await expect(page.locator(".site-shell")).toHaveCSS("background-image", /^radial-gradient/);
+   expect(await page.locator(".site-shell").evaluate((shell) => Math.round(window.innerWidth - shell.getBoundingClientRect().right))).toBe(0);
    const portrait = page.locator(".portfolio-portrait img");
    await expect(portrait).toHaveAttribute("fetchpriority", "high");
    await expect(portrait).toHaveAttribute("sizes", "112px");

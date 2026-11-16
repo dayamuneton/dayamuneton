@@ -6,7 +6,7 @@ import HomeTiles from "@/features/home/HomeTiles";
 
 export default function Home() {
    return (
-      <div className="landing-page">
+      <div className="landing-page home-page">
          <Head>
             <title>Daya Muneton | Art &amp; Emotional Education</title>
             <meta name="description" content="Explore Daya Muneton’s artwork, stories behind the songs, and resources for emotional education." />
