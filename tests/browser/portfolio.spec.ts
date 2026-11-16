@@ -144,6 +144,7 @@ test("reader testimonials use a keyboard-scrollable track without navigation but
    const sara = carousel.getByText("Sara Contramaestre", { exact: true });
 
    await carousel.scrollIntoViewIfNeeded();
+   await expect(track).toHaveCSS("scrollbar-width", "none");
    await expect(carousel.getByText("Michel Leroy", { exact: true })).toBeInViewport();
    await expect(carousel.getByRole("button")).toHaveCount(0);
    await expect(track.getByRole("figure")).toHaveCount(4);

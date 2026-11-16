@@ -157,7 +157,7 @@
    overscroll-behavior-x: contain;
    scroll-snap-type: x mandatory;
    scroll-padding-inline: var(--space-1);
-   scrollbar-color: var(--color-on-accent) var(--color-brand-purple);
+   scrollbar-width: none;
    border-radius: var(--radius-control);
 }
 .testimonials-track:focus-visible {
