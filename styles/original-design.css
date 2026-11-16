@@ -145,7 +145,35 @@
 .education-story, .education-story h2 { color: var(--color-on-accent); }
 .education-logo { margin-block: var(--space-2); }
 .landing-page > .portfolio-content { padding-inline: 0; }
+.testimonials { width: min(100%, 42rem); margin-inline: auto; }
 .testimonials > h2 { display: inline-block; margin-top: var(--space-4); }
+.testimonials-panel { padding: var(--space-2); }
+.testimonials-slides { display: grid; touch-action: pan-y pinch-zoom; }
+.testimonial-quote {
+   grid-area: 1 / 1;
+   align-content: center;
+   padding: var(--panel-padding);
+   text-align: start;
+}
+.testimonial-quote[data-active="false"] { visibility: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+   .testimonial-quote[data-active="true"] { animation: testimonial-appear var(--motion-fast) var(--ease-out); }
+}
+@keyframes testimonial-appear { from { opacity: 0; } }
+.testimonials-controls {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: var(--space-3);
+   padding-block: var(--space-2);
+}
+.testimonials-controls button { min-width: var(--size-control); padding: var(--space-2); }
+.testimonials-position { color: var(--color-muted); font-size: var(--text-small); font-variant-numeric: tabular-nums; }
+@media (scripting: none) {
+   .testimonial-quote { grid-area: auto; }
+   .testimonial-quote[data-active="false"] { visibility: visible; }
+   .testimonials-controls { display: none; }
+}
 @variant sm {
    .portfolio-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

@@ -135,6 +135,39 @@ test("public landing pages fit a 320 pixel viewport", async ({ page }) => {
    }
 });
 
+test("reader testimonials can be browsed one at a time without losing keyboard focus", async ({ page, isMobile }) => {
+   await page.goto("/ageofemotions");
+   const carousel = page.getByRole("region", { name: "What readers say" });
+   const previous = carousel.getByRole("button", { name: "Previous testimonial" });
+   const next = carousel.getByRole("button", { name: "Next testimonial" });
+   const position = carousel.getByRole("status");
+   const sara = carousel.getByText("Sara Contramaestre", { exact: true });
+
+   await carousel.scrollIntoViewIfNeeded();
+   await expect(carousel.getByText("Michel Leroy", { exact: true })).toBeInViewport();
+   await expect(sara).toBeHidden();
+   await expect(previous).toBeDisabled();
+   await next.focus();
+   await page.keyboard.press("Enter");
+   await page.keyboard.press("Enter");
+   await page.keyboard.press("Enter");
+   await expect(position).toContainText("Testimonial 4 of 4, Sara Contramaestre");
+   await expect(sara).toBeInViewport();
+   await expect(next).toBeDisabled();
+   await expect(next).toBeFocused();
+   await previous.press("Space");
+   await expect(position).toContainText("Testimonial 3 of 4, Booker Brown");
+   await expect(sara).toBeHidden();
+   if (isMobile) {
+      const slides = carousel.locator("#testimonial-quotes");
+      const touch = { pointerType: "touch", isPrimary: true, clientY: 100 };
+      await slides.dispatchEvent("pointerdown", { ...touch, clientX: 180 });
+      await slides.dispatchEvent("pointerup", { ...touch, clientX: 90 });
+      await expect(position).toContainText("Testimonial 4 of 4, Sara Contramaestre");
+      await expect(sara).toBeInViewport();
+   }
+});
+
 test("commission formats keep their expandable layout and work with the keyboard", async ({ page }) => {
    await page.goto("/shop/custom");
    const digital = page.locator("summary").filter({ hasText: "Digital Art Format" });

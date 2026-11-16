@@ -429,7 +429,6 @@ html { color-scheme: light; background: var(--color-canvas); scrollbar-gutter: s
 .community-layout { margin-top: var(--section-gap); }
 .education-logo { width: clamp(4rem, 12vw, 8rem); aspect-ratio: 1; position: relative; flex-shrink: 0; }
 .education-logo img { object-fit: contain; }
-.testimonials-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); margin-top: 1rem; }
 .legal-document { max-width: 72ch; margin: auto; overflow-wrap: anywhere; color: var(--color-muted); line-height: 1.7; }
 .legal-document h1, .legal-document h2 { color: var(--color-ink); }
 .legal-document h1 { margin-bottom: clamp(1.25rem, 4vw, 2.5rem); }
