@@ -1,56 +1,74 @@
 import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+import { useRouter } from "next/router";
+import { useEffect, useState, useRef } from "react";
 import { useClickOutside } from "@/hooks/clickOutside";
 import { ShoppingCart } from "./shoppingCart";
 import NavbarProfile from "./profile";
 
-function Navbar() {
+const links = [
+   { href: "/community", label: "Community" },
+   { href: "/shop", label: "Shop" },
+   { href: "/ageofemotions", label: "Emotional Education" },
+];
+
+export default function Navbar() {
+   const { pathname, events } = useRouter();
    const [showNavbar, setShowNavbar] = useState(false);
-   const navRef = useRef<HTMLUListElement>(null);
+   const navRef = useRef<HTMLElement>(null);
+   const menuButton = useRef<HTMLButtonElement>(null);
 
    useClickOutside(navRef, () => setShowNavbar(false));
+   useEffect(() => {
+      if (showNavbar) navRef.current?.querySelector<HTMLAnchorElement>(".site-nav-links a")?.focus();
+   }, [showNavbar]);
+   useEffect(() => {
+      const closeMenu = () => setShowNavbar(false);
+      events.on("routeChangeComplete", closeMenu);
+      return () => events.off("routeChangeComplete", closeMenu);
+   }, [events]);
 
    return (
-      <nav className="z-[1000] top-0 w-full font-medium text-white ">
-         <MenuIcon
-            className="fixed text-black cursor-pointer left-2 top-2 sm:!hidden "
-            sx={{
-               fontSize: "2.3rem",
-            }}
-            onClick={() => setShowNavbar((show) => !show)}
-         />
-         <div className="fixed flex top-2 right-2">
-            <ShoppingCart size="1.7rem" className="" />
-            <NavbarProfile size="1.7rem" className="" />
-         </div>
-         <ul
-            className={`bg-[#4a23a9] min-h-screen sm:min-h-0 sm:absolute fixed pl-4 pr-8 pt-2 flex-col sm:flex-row gap-4 sm:pt-1 top-0 p-1 flex  ease-in-out duration-300 sm:left-0 ${
-               showNavbar ? "left-0" : "-left-full"
-            }`}
-            ref={navRef}
-         >
-            <Link href="/" className="hover:underline hover:scale-[1.01]">
+      <nav ref={navRef} aria-label="Main navigation" className="site-nav"
+         onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setShowNavbar(false);
+         }}
+         onKeyDown={(event) => {
+            if (!event.defaultPrevented && event.key === "Escape" && showNavbar) {
+               event.preventDefault();
+               setShowNavbar(false);
+               menuButton.current?.focus();
+            }
+         }}>
+         <div className="site-nav-row">
+            <Link href="/" className="site-nav-brand" aria-current={pathname === "/" ? "page" : undefined}>
                Daya Muneton
             </Link>
-            <Link
-               href="/community"
-               className="hover:underline hover:scale-[1.01]"
-            >
-               Community
-            </Link>
-            <Link href="/shop" className="hover:underline hover:scale-[1.01]">
-               Shop
-            </Link>
-            <Link
-               href="/ageofemotions"
-               className="hover:underline hover:scale-[1.01]"
-            >
-               Emotional Education
-            </Link>
-         </ul>
+            <ul id="main-navigation-links" className="site-nav-links" data-open={showNavbar}>
+               {links.map(({ href, label }) => (
+                  <li key={href}>
+                     <Link href={href} aria-current={pathname === href ? "page" : undefined}
+                        data-section-active={pathname.startsWith(href)}
+                        onClick={() => {
+                           if (showNavbar && pathname === href) {
+                              setShowNavbar(false);
+                              menuButton.current?.focus();
+                           }
+                        }}>
+                        {label}
+                     </Link>
+                  </li>
+               ))}
+            </ul>
+            <div className="site-nav-actions">
+               <ShoppingCart size="1.4rem" />
+               <NavbarProfile size="1.4rem" />
+               <button ref={menuButton} type="button" className="site-menu-button"
+                  aria-controls="main-navigation-links" aria-expanded={showNavbar}
+                  onClick={() => setShowNavbar((open) => !open)}>
+                  Menu
+               </button>
+            </div>
+         </div>
       </nav>
    );
 }
-
-export default Navbar;

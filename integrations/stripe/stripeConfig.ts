@@ -1,17 +1,11 @@
 import Stripe from "stripe";
+import { isTestSite } from "@/config/site-environment";
 
-let stripeKey: string | undefined = "";
+let client: Stripe | undefined;
 
-if (process.env.NODE_ENV === "production") {
-   stripeKey = process.env.STRIPE_SECRET_KEY;
-} else {
-   stripeKey = process.env.STRIPE_TEST_SECRET_KEY;
+export function getStripe() {
+   if (isTestSite) throw new Error("Stripe is disabled in the local site.");
+   const key = process.env.STRIPE_SECRET_KEY;
+   if (!key) throw new Error("STRIPE_SECRET_KEY is required.");
+   return client ??= new Stripe(key);
 }
-
-if (!stripeKey) {
-   throw new Error("Stripe key is not defined.");
-}
-
-export const stripe = new Stripe(stripeKey, {
-   apiVersion: "2022-11-15",
-});

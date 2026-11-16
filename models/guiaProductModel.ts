@@ -14,6 +14,8 @@ export class GuiaProduct {
    beneficts: string;
    date: number;
    featuredImage: string;
+   externalLink: string;
+   externalLinkText: string;
 
    constructor({
       id,
@@ -29,6 +31,8 @@ export class GuiaProduct {
       beneficts,
       date,
       featuredImage,
+      externalLink,
+      externalLinkText,
    }: {
       id: string;
       name?: string;
@@ -43,6 +47,8 @@ export class GuiaProduct {
       beneficts?: string;
       date?: number;
       featuredImage?: string;
+      externalLink?: string;
+      externalLinkText?: string;
    }) {
       this.id = id || "";
       this.name = name || "";
@@ -57,6 +63,8 @@ export class GuiaProduct {
       this.beneficts = beneficts || "";
       this.date = date || 0;
       this.featuredImage = featuredImage || "";
+      this.externalLink = externalLink || "";
+      this.externalLinkText = externalLinkText || "";
    }
 }
 

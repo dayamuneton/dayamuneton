@@ -1,5 +1,5 @@
 import { guiaOrderConverter } from "@/models/guiasOrderModel";
-import { db } from "@/integrations/firebase/firebaseConfig";
+import { db } from "@/integrations/firebase/firestore";
 import { subscribeCustomerToGroups } from "@/integrations/mailerlite/subscribeCustomerToGroups";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 

@@ -1,118 +1,82 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
-import CartItems from "@/components/checkout/cartItems";
-import Navbar from "@/components/navbar/navbar";
-import Footer from "@/components/footer";
 import Link from "next/link";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { ShoppingCart } from "@/components/navbar/shoppingCart";
-import { useShop } from "@/context/shopContext";
-import { createPdfsCheckout } from "@/handlers/orders/createPdfsCheckout";
-import { useAuth } from "@/context/authContext";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-// import FooterBottom from "@/components/footer/footerBottom";
-// import ShopNowButton from "@/components/checkout/shopNowButton";
+import { FiShoppingBag } from "react-icons/fi";
+import PageIntro from "@/components/layout/PageIntro";
+import PageSkeleton from "@/components/ui/PageSkeleton";
+import CartItems from "@/components/checkout/cartItems";
+import { useShop } from "@/context/shopContext";
+import { useAuth } from "@/context/authContext";
+import { formatCurrency } from "@/utils/formatCurrency";
 
-function Checkout() {
-   const { shoppingCart } = useShop();
-   const { currentUser } = useAuth();
+const signInPath = "/auth/login?src=%2Fcheckout";
+
+export default function Checkout() {
+   const { shoppingCart, cartStatus, retryCart, refreshCart } = useShop();
+   const { currentUser, authReady } = useAuth();
    const router = useRouter();
+   const [pending, setPending] = useState(false);
+   const [error, setError] = useState("");
+   const itemCount = shoppingCart?.cartItems.length ?? 0;
 
    useEffect(() => {
-      if (!currentUser) {
-         router.push("/auth/login");
-      }
-   }, [currentUser, router]);
+      if (authReady && !currentUser) void router.replace(signInPath);
+   }, [authReady, currentUser, router]);
 
-   const redirectToCheckout = async (e: any) => {
-      e.preventDefault();
-      const response = await createPdfsCheckout({
-         cartItems: shoppingCart?.cartItems || [],
-         cancel_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}/checkout`,
-         email: currentUser.email,
-         name: currentUser.displayName,
-         success_url: `${process.env.NEXT_PUBLIC_MY_DOMAIN}`,
-         cartId: shoppingCart?.id,
-      });
-
-      if (response.url) {
-         router.push(response.url);
+   async function startCheckout() {
+      if (!currentUser?.email || !shoppingCart || !itemCount || pending) return;
+      setPending(true);
+      setError("");
+      try {
+         const { createPdfsCheckout } = await import("@/handlers/orders/createPdfsCheckout");
+         const response = await createPdfsCheckout({
+            cartItems: shoppingCart.cartItems,
+            cancel_url: "/checkout",
+            email: currentUser.email,
+            name: currentUser.displayName || currentUser.email.split("@")[0],
+            success_url: "/thankyou",
+            cartId: shoppingCart.id,
+         });
+         if (!response.url) throw new Error("Missing checkout URL");
+         refreshCart();
+         await router.push(response.url);
+      } catch {
+         setError("Couldn’t open checkout. Please try again.");
+      } finally {
+         setPending(false);
       }
-   };
+   }
 
    return (
-      <div
-         className="flex flex-col items-center w-full h-full min-h-screen"
-         style={{
-            backgroundImage:
-               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-         }}
-      >
-         <Head>
-            <title>Checkout</title>
-            <meta name="description" content="Términos de uso Ama Y Liberate" />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-         <Navbar />
-
-         <div className="flex-1 max-w-md sm:max-w-xl">
-            <div className=" p-8 bg-gradient-to-r from-[#4a23a9] to-[#5cdde5] rounded-xl  drop-shadow-xl my-12 ">
-               <p className="mb-2 text-xl font-medium text-white">My Cart</p>
-
-               <CartItems className="flex flex-col w-full " />
-
-               <span
-                  className={`${
-                     shoppingCart?.cartItems?.length == 0 ? "hidden" : ""
-                  } flex justify-between mt-8 text-2xl font-medium text-gray-200`}
-               >
-                  <p>Total: </p>
-                  <p>
-                     {shoppingCart?.subTotal?.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                     })}{" "}
-                     USD
-                  </p>
-               </span>
-
-               <div className={` flex flex-col items-center`}>
-                  <ShoppingCartIcon
-                     sx={{ fontSize: "4rem" }}
-                     className={`${
-                        shoppingCart?.cartItems?.length == 0 ? "" : "!hidden"
-                     } text-[#1b005f]`}
-                  />
-                  <div className="w-full drop-shadow">
-                     <button
-                        onClick={redirectToCheckout}
-                        className=" w-full max-w-xl px-8 py-3 mt-2  mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
-                        hidden={shoppingCart?.cartItems?.length == 0}
-                     >
-                        Checkout
-                     </button>
-                     <span className="flex">
-                        <Link
-                           href="/shop"
-                           className="w-full  px-8 py-3 mt-2 mb-8 mr-2 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
-                        >
-                           Paintings
-                        </Link>
-                        <Link
-                           href="/ageofemotions"
-                           className="w-full  px-8 py-3 mt-2 mb-8 text-2xl font-bold text-center text-white bg-[#4a23a9] rounded-lg drop-shadow hover:scale-[1.03]"
-                        >
-                           Guides
-                        </Link>
-                     </span>
-                  </div>
+      <div className="portfolio-content page-content">
+         <Head><title>Cart | Daya Muneton</title><meta name="robots" content="noindex" /></Head>
+         <PageIntro title="Your cart" />
+         {!authReady || cartStatus === "loading" ? <PageSkeleton kind="form" label="Loading your cart…" /> :
+            !currentUser ? <Link href={signInPath} className="portfolio-button portfolio-button-primary">Sign in</Link> :
+            cartStatus === "error" ? <div className="content-panel empty-panel">
+               <h2>We couldn’t load your cart</h2>
+               <button type="button" onClick={retryCart} className="portfolio-button portfolio-button-primary">Try again</button>
+            </div> :
+            itemCount === 0 ? <div className="content-panel empty-panel">
+               <FiShoppingBag aria-hidden="true" size={36} />
+               <h2>Your cart is empty.</h2>
+               <div className="portfolio-actions">
+                  <Link href="/shop" className="portfolio-button portfolio-button-primary">Browse artwork</Link>
+                  <Link href="/ageofemotions" className="portfolio-button portfolio-button-secondary">Browse guides</Link>
                </div>
-               {/* <ShopNowButton /> */}
-            </div>
-         </div>
-         <Footer />
+            </div> :
+            <div className="checkout-grid">
+               <CartItems />
+               <section className="content-panel detail-actions order-summary" aria-labelledby="order-summary">
+                  <h2 id="order-summary">Order summary</h2>
+                  <p className="checkout-total"><span>Total</span><strong>{formatCurrency(shoppingCart?.subTotal ?? 0)} USD</strong></p>
+                  <button type="button" disabled={pending} onClick={startCheckout} className="portfolio-button portfolio-button-primary">
+                     {pending ? "Opening checkout…" : "Checkout"}
+                  </button>
+                  {error && <p role="alert" className="form-feedback">{error}</p>}
+               </section>
+            </div>}
       </div>
    );
 }
-
-export default Checkout;

@@ -1,60 +1,47 @@
-import { OrderType } from "@/handlers/checkoutSessionCompleted/event";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { stripe } from "@/integrations/stripe/stripeConfig";
+import { site } from "@/config/site";
+import { isTestSite } from "@/config/site-environment";
+import { supportThanksPath } from "@/features/home/support";
+import { getStripe } from "@/integrations/stripe/stripeConfig";
+import { formatLineItems, sameOriginUrl } from "@/integrations/stripe/line-items";
 
-const formatLineItems = (items: any[]) => {
-   return items.map((item: any) => {
-      const product_data: any = {
-         name: item.name,
-      };
-      if (item.images?.length > 0) {
-         product_data.images = [item.featuredImage || item.images[0]];
-      }
-      const priceInCents = item.price * 100;
-
-      return {
-         price_data: {
-            currency: "usd",
-            product_data,
-            unit_amount: priceInCents,
-         },
-         quantity: 1,
-      };
-   });
-};
-
-export default async function handler(
-   req: NextApiRequest,
-   res: NextApiResponse
-) {
-   if (req.method !== "POST")
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+   if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
       return res.status(405).json({ message: "Method not allowed" });
+   }
 
-   const { success_url, cancel_url, lineItems, order_id, metadata, email } =
-      req.body;
-
+   const { success_url, cancel_url, lineItems, order_id, metadata, email } = req.body ?? {};
    const line_items = formatLineItems(lineItems);
+   if (!line_items) return res.status(400).json({ message: "Invalid checkout items" });
+
+   if (isTestSite) {
+      const url = metadata?.order_type === "tip" && success_url === supportThanksPath
+         ? supportThanksPath
+         : "/thankyou?checkout=local";
+      return res.status(200).json({ url });
+   }
 
    try {
-      const session = await stripe.checkout.sessions.create({
+      const origin = new URL(process.env.NEXT_PUBLIC_MY_DOMAIN || site.origin).origin;
+      const session = await getStripe().checkout.sessions.create({
          payment_method_types: ["card"],
          line_items,
          mode: "payment",
-         success_url: success_url || `${req.headers.origin}/`,
-         cancel_url: cancel_url || `${req.headers.origin}/`,
-         customer_email: email,
-         client_reference_id: order_id || "no_cart_id",
+         success_url: sameOriginUrl(success_url, origin),
+         cancel_url: sameOriginUrl(cancel_url, origin),
+         customer_email: typeof email === "string" ? email : undefined,
+         client_reference_id: typeof order_id === "string" ? order_id : undefined,
          metadata: {
-            order_type: (metadata?.order_type as OrderType) ?? "guias_pdf",
-            customerName: metadata?.customerName?.toLowerCase() ?? "no_name",
-            customerEmail: metadata?.customerEmail ?? "no_email",
+            order_type: typeof metadata?.order_type === "string" ? metadata.order_type : "tip",
+            customerName: typeof metadata?.customerName === "string" ? metadata.customerName.toLowerCase() : "",
+            customerEmail: typeof metadata?.customerEmail === "string" ? metadata.customerEmail : "",
          },
          allow_promotion_codes: true,
       });
 
-      res.status(200).json(session);
-   } catch (error) {
-      console.error(error);
-      res.status(500).json(error);
+      return res.status(200).json({ url: session.url });
+   } catch {
+      return res.status(502).json({ message: "Could not start checkout. Try again." });
    }
 }

@@ -1,60 +1,47 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { google } from "googleapis";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
-import SMTPConnection from "nodemailer/lib/smtp-connection";
+import { isTestSite } from "@/config/site-environment";
 
-const clientId = process.env.GOOGLE_APIS_CLIENT_ID,
-   clientSecret = process.env.GOOGLE_APIS_CLIENT_SECRET,
-   refreshToken = process.env.GOOGLE_APIS_REFRESH_TOKEN,
-   redirectUri = process.env.GOOGLE_APIS_REDIRECT_URI,
-   user = process.env.SMTP_TRANSPORT_USER;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+   if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return res.status(405).json({ error: "Method not allowed" });
+   }
+   const { name, email, message, anonymously } = req.body ?? {};
+   if (typeof name !== "string" || typeof email !== "string" ||
+       typeof message !== "string" || !message.trim() || message.length > 10_000) {
+      return res.status(400).json({ error: "Invalid message" });
+   }
+   if (isTestSite) return res.status(200).json({ accepted: true, local: true });
 
-const OAuth2 = google.auth.OAuth2;
-const oAuth2Client = new OAuth2(clientId, clientSecret, redirectUri);
-oAuth2Client.setCredentials({
-   refresh_token: refreshToken,
-});
+   const clientId = process.env.GOOGLE_APIS_CLIENT_ID;
+   const clientSecret = process.env.GOOGLE_APIS_CLIENT_SECRET;
+   const refreshToken = process.env.GOOGLE_APIS_REFRESH_TOKEN;
+   const redirectUri = process.env.GOOGLE_APIS_REDIRECT_URI;
+   const user = process.env.SMTP_TRANSPORT_USER;
+   if (!clientId || !clientSecret || !refreshToken || !user) {
+      return res.status(503).json({ error: "Email is unavailable" });
+   }
 
-export default async function handler(
-   req: NextApiRequest,
-   res: NextApiResponse
-) {
    try {
-      const { name, email, message, anonymously } = req.body;
+      const client = new OAuth2Client({ clientId, clientSecret, redirectUri });
+      client.setCredentials({ refresh_token: refreshToken });
+      const { token: accessToken } = await client.getAccessToken();
+      if (!accessToken) return res.status(502).json({ error: "Email is unavailable" });
 
-      const accessToken = await oAuth2Client.getAccessToken();
-
-      if (!accessToken.token) {
-         res.status(500).json({ error: "Could not get access token" });
-         return;
-      }
-
-      const auth: SMTPConnection.AuthenticationTypeOAuth2 = {
-         type: "OAuth2",
-         user,
-         clientId: clientId,
-         clientSecret: clientSecret,
-         refreshToken,
-         accessToken: accessToken.token,
-      };
-
-      const transporter = nodemailer.createTransport({
+      const mailer = nodemailer.createTransport({
          service: "gmail",
-         auth,
+         auth: { type: "OAuth2", user, clientId, clientSecret, refreshToken, accessToken },
       });
-
-      const mailOptions = {
+      await mailer.sendMail({
          from: user,
          to: user,
          subject: `Message from ${name} (${email})`,
-         text: `${anonymously ? "MENSAJE ANONIMO!!! \n" : ""} ${message}`,
-      };
-
-      const sentMessageInfo = await transporter.sendMail(mailOptions);
-
-      res.status(200).json(sentMessageInfo);
-   } catch (error: any) {
-      console.error(error);
-      res.status(500).json({ error: error.message });
+         text: `${anonymously ? "MENSAJE ANONIMO!!!\n" : ""} ${message}`,
+      });
+      return res.status(200).json({ accepted: true });
+   } catch {
+      return res.status(502).json({ error: "Could not send the message. Try again." });
    }
 }

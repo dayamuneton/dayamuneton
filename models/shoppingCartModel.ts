@@ -1,9 +1,8 @@
 import {
-   FieldValue,
-   QueryDocumentSnapshot,
-   SnapshotOptions,
+FieldValue,
+QueryDocumentSnapshot,
+SnapshotOptions,
 } from "firebase/firestore";
-import { GuiaProduct } from "./guiaProductModel";
 
 export class ShoppingCart {
    id: string;
@@ -36,7 +35,7 @@ export class ShoppingCart {
       this.cartItems = cartItems || [];
       this.updatedAt = updatedAt;
       this.subTotal = subTotal || 0;
-      this.isActive = isActive || true;
+      this.isActive = isActive ?? true;
       this.isProcessed = isProcessed ?? false;
    }
 }

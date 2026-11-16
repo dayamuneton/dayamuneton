@@ -1,61 +1,46 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { stripe } from "@/integrations/stripe/stripeConfig";
-import { buffer } from "micro";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { isTestSite } from "@/config/site-environment";
 import checkoutSessionCompletedEvent from "@/handlers/checkoutSessionCompleted/event";
+import { verifyStripeWebhook } from "@/integrations/stripe/webhook-signature";
 
-const signingSecret =
-   process.env.NODE_ENV === "production"
-      ? process.env.STRIPE_WEBHOOK_SIGNING_SECRET
-      : process.env.STRIPE_TEST_WEBHOOK_SIGNING_SECRET;
+export const config = { api: { bodyParser: false } };
 
-export const config = {
-   api: {
-      bodyParser: false,
-   },
-};
-
-const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
-   if (req.method !== "POST") {
-      res.status(405).send("Method not allowed");
-      return;
+async function readBody(request: NextApiRequest) {
+   const chunks: Buffer[] = [];
+   let bytes = 0;
+   for await (const chunk of request) {
+      const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      bytes += buffer.length;
+      if (bytes > 1024 * 1024) throw new Error("Webhook payload too large");
+      chunks.push(buffer);
    }
+   return Buffer.concat(chunks, bytes);
+}
+
+export default async function webhook(req: NextApiRequest, res: NextApiResponse) {
+   if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return res.status(405).end();
+   }
+   if (isTestSite) return res.status(404).end();
+
+   const secret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET;
+   const signature = req.headers["stripe-signature"];
+   if (!secret || typeof signature !== "string") return res.status(400).end();
 
    let event;
-
-   const buf = await buffer(req);
-   const sig = req.headers["stripe-signature"];
-
    try {
-      if (!signingSecret || !sig) {
-         res.status(400).send(
-            "Webhook Error: signing secret or stripe-signature is missing"
-         );
-
-         return;
-      }
-      event = stripe.webhooks.constructEvent(buf, sig, signingSecret);
-   } catch (err: any) {
-      res.status(400).send(`Webhook Error: ${err.message}`);
-      return;
+      event = verifyStripeWebhook(await readBody(req), signature, secret);
+   } catch {
+      return res.status(400).send("Invalid webhook");
    }
 
    try {
-      switch (event.type) {
-         case "checkout.session.completed":
-            await checkoutSessionCompletedEvent(event.data.object);
-            break;
-         case "payment_intent.succeeded":
-            console.log(event);
-
-            break;
-
-         default:
-            break;
+      if (event.type === "checkout.session.completed") {
+         await checkoutSessionCompletedEvent(event.data.object);
       }
-      res.status(200).send("OK");
-   } catch (error) {
-      res.status(500).send(error);
+      return res.status(200).send("OK");
+   } catch {
+      return res.status(500).send("Could not process webhook");
    }
-};
-
-export default webhook;
+}

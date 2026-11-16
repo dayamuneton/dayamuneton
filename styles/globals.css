@@ -1,84 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source(none);
+@import "./theme.css";
+@import "./portfolio.css";
+@import "./original-design.css";
+@import "./support.css";
+@source "../components";
+@source "../features";
+@source "../pages";
 
-.custom-scrollbar {
-   scrollbar-color: gray white;
-   scrollbar-width: thin;
-}
-.custom-scrollbar::-webkit-scrollbar {
-   width: 0.4rem;
-   height: 0.4rem;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-   border-radius: 0.5rem;
-   background: gray;
-}
-
-.authInputBox {
-   width: 100%;
-   margin: auto;
-   position: relative;
-   display: flex;
-   align-items: center;
-   margin-block: 0.5rem;
-   /* border-color: #a9d1ff; */
-   /* border-width: 2px; */
-   border-radius: 2px;
-   padding-right: 0.3rem;
-}
-.authInputBox input {
-   width: 100%;
-   display: flex;
-   cursor: pointer;
-   padding: 0.5rem;
-   margin: auto;
-   outline: none;
-   background-color: transparent;
-}
-
-.authInputBox label {
-   position: absolute;
-   top: -0.25rem;
-   left: 0.5rem;
-   transform: translate(0, 50%);
-   /* color: white; */
-   padding: 0.1rem;
-   font-size: 16px;
-   pointer-events: none;
-   transition: 0.3s;
-   height: fit-content;
-   font-size: 0.9rem;
-   z-index: 100;
-}
-.authInputBox input:focus ~ label,
-.authInputBox input:not([value=""]) ~ label {
-   transform: translate(0, -50%);
-   /* color: #03a9f4; */
-
-   /* background-color: white; */
-}
-
-@keyframes wiggle {
-   0%,
-   75%,
-   100% {
-      transform: rotate(0deg);
+@layer base {
+   *, ::before, ::after, ::backdrop, ::file-selector-button {
+      border-color: var(--color-line);
    }
-   80% {
-      transform: rotate(1deg) translateX(10px);
+   input::placeholder, textarea::placeholder {
+      color: var(--color-muted);
    }
-   85% {
-      transform: rotate(-1deg) translateX(-10px);
+   button:not(:disabled), [role="button"]:not(:disabled) {
+      cursor: pointer;
    }
-   90% {
-      transform: rotate(1deg) translateX(10px);
-   }
-   95% {
-      transform: rotate(-1deg) translateX(-10px);
-   }
-}
-
-.animate-wiggle {
-   animation: wiggle 3s infinite ease-in-out;
 }

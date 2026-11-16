@@ -1,12 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from "next/head";
-import React from "react";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
 
 function TermsOfService() {
    return (
-      <div className="flex flex-col items-center w-full">
+      <div className="portfolio-content page-content">
          <Head>
             <title>Terms Of Service</title>
             <meta
@@ -15,12 +12,9 @@ function TermsOfService() {
             />
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <Navbar />
-         <div className="max-w-[min(90%,70ch)] my-20">
-            <span className="flex justify-center mb-10">
-               <h1 className="text-2xl font-bold">Terms Of Service</h1>
-            </span>
-            <p className="text-sm">
+         <article className="content-panel legal-document">
+            <h1 className="page-title">Terms Of Service</h1>
+            <p>
                This website, together with social media accounts and applicable
                mobile applications are owned and operated by DAYA MUNETON LLC.,
                a company in the USA. ("DAYA MUNETON LLC". These Terms set forth
@@ -45,12 +39,37 @@ function TermsOfService() {
                of the Data Personal for whom Daya Muneton LLC acts as
                responsible for said treatment.
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
+               AUTHORIZATION FOR CONTENT USE.
+            </h2>
+            <p>
+               I, [Full Name], hereby authorize [Dahyana Muneton], henceforth
+               referred to as "Daya Muneton", to use the stories, anecdotes, and
+               any other content that I share, related to my personal
+               experiences and favorite songs. I recognize and agree that this
+               content may be linked with different songs and be part of
+               multiple stories. I understand that including my name and the
+               country where I live in the shared content is completely
+               optional, and I have the right to share my experiences
+               anonymously if I prefer. By signing this document, I grant Daya
+               irrevocable permission to use the content I provide to be
+               included in her artwork, social media publications, and any
+               future projects Daya decides to undertake, which may include, but
+               is not limited to, books, video podcasts, art exhibitions, and
+               other forms of creative expression and cultural dissemination. I
+               acknowledge that by sharing my story, I am not guaranteed any
+               financial compensation or direct benefit, and my contribution is
+               made voluntarily, with the understanding that my story may help
+               enrich Daya's artistic and cultural project. Date: [Date] By
+               accepting the terms and conditions, it will be interpreted as a
+               signature.
+            </p>
+            <h2>
                Classification of Personal Data.
             </h2>
-            <span className="text-sm">
+            <div>
                Daya Muneton LLC collects the following Personal Data:
-               <ul className="ml-8 list-disc">
+               <ul>
                   <li>
                      Name, identity document number, address, telephone,
                      physical or postal address, email, and contact information.
@@ -88,11 +107,11 @@ function TermsOfService() {
                   <li>Images, photographs and fingerprints.</li>
                   <li>Personal Data that are considered sensitive.</li>
                </ul>
-            </span>
-            <h2 className="my-4 text-xl font-bold">
+            </div>
+            <h2>
                Processing of personal data.
             </h2>
-            <p className="text-sm">
+            <p>
                Daya Muneton LLC, in the course of its business activities,
                segment, collect, use, manage, store, analyze, profile, transmit,
                transfer and perform various operations with Personal Data. The
@@ -121,11 +140,11 @@ function TermsOfService() {
                interests of the Owners and (n) share the information through
                social networks and internet pages.
             </p>
-            <h2 className="my-4 text-xl font-bold">Rights of the Holders.</h2>
-            <span className="text-sm">
+            <h2>Rights of the Holders.</h2>
+            <div>
                In accordance with the law, the Holders have the following
                rights:
-               <ul className="ml-8 list-disc">
+               <ul>
                   <li>
                      Update: Update the Personal Data that rests in Daya Muneton
                      LLC's databases to maintain your integrity and veracity.
@@ -172,14 +191,14 @@ function TermsOfService() {
                Daya Muneton LLC will handle respond to complaints, requests or
                claims in accordance with the provided in the Personal Data
                protection regulations.
-            </span>
-            <h2 className="my-4 text-xl font-bold">
+            </div>
+            <h2>
                Procedure for Exercise of Rights by Holders.
             </h2>
-            <span className="text-sm">
+            <div>
                The rights of rectification, updating or deletion or revocation
                of consent may only be exercised by:
-               <ul className="ml-8 list-disc">
+               <ul>
                   <li>
                      The owner or his successors in title, prior accreditation
                      of his identity.
@@ -191,7 +210,7 @@ function TermsOfService() {
                </ul>
                It must be presented in writing through the media authorized by
                Daya muneton LLC and contain, as a minimum, the Next information:
-               <ul className="ml-8 list-disc">
+               <ul>
                   <li>
                      The name and address of the owner or any other means to
                      receive the answer.
@@ -219,11 +238,11 @@ function TermsOfService() {
                treatment, privacy and protection of Personal Data is related to
                several bases of data, the Holder must address said request or
                claim to the area in charge of Personal Data.
-            </span>
-            <h2 className="my-4 text-xl font-bold">
+            </div>
+            <h2>
                Preference of law and dispute resolution
             </h2>
-            <p className="text-sm">
+            <p>
                These Terms, the rights and remedies provided in this document,
                and any and all claims and disputes related to this and/or the
                services, will be governed, interpret and apply in all respects
@@ -237,16 +256,16 @@ function TermsOfService() {
                Goods. <br /> Customer service and contact information
                info@dayamuneton.com
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
                Personal Data Protection Area.
             </h2>
-            <p className="text-sm">
+            <p>
                Daya Muneton LLC in charge of the reception and care of
                Petitions, Complaints and Claims related to Personal Data she can
                be reached at info@dayamuneton.com.
             </p>
-            <h2 className="my-4 text-xl font-bold">Validity.</h2>
-            <p className="text-sm">
+            <h2>Validity.</h2>
+            <p>
                This Policy will come into effect as of November 22, 2022. The
                Personal Data that is stored, used or transmitted will remain in
                the database of Daya muneton LLC, based on the temporality
@@ -255,10 +274,10 @@ function TermsOfService() {
                In this way, the validity of the database is closely related to
                the purposes for which Personal Data was collected.
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
                Right to Change and Modify the Terms
             </h2>
-            <p className="text-sm">
+            <p>
                We reserve the right to modify these terms from time to time.
                when at our sole discretion. So you should check these pages
                periodically. When we change the Terms of substantially, we will
@@ -269,10 +288,10 @@ function TermsOfService() {
                Terms, do not use or access (or continue to access) the Website
                or the Service.
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
                Right to suspend or cancel the user account
             </h2>
-            <p className="text-sm">
+            <p>
                We may permanently or temporarily terminate or suspend your
                access to the Service without notice and liability for for any
                reason, even if, in our sole discretion, it violates any
@@ -284,8 +303,8 @@ function TermsOfService() {
                expiration of the applicable period for which you have already
                made payment
             </p>
-            <h2 className="my-4 text-xl font-bold">Limitation of Liability</h2>
-            <p className="text-sm">
+            <h2>Limitation of Liability</h2>
+            <p>
                To the fullest extent permitted by applicable law, in no event
                Daya Muneton will be liable for consequential, punitive,
                incidental, special, consequential or exemplary, including, among
@@ -299,10 +318,10 @@ function TermsOfService() {
                access to or use of our secure servers and/or any personal
                information stored in them.
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
                Ownership of intellectual property, copyrights and logos.
             </h2>
-            <p className="text-sm">
+            <p>
                The Service and all materials included in or transferred,
                including, but not limited to, software, images, text, graphics,
                logos, patents, trademarks, service marks, copyright,
@@ -315,10 +334,10 @@ function TermsOfService() {
                publicly perform, publish, adapt, edit or create derivative works
                thereof.
             </p>
-            <h2 className="my-4 text-xl font-bold">
+            <h2>
                Emails for promotions and content
             </h2>
-            <p className="text-sm">
+            <p>
                Many countries require that you receive consent from your users
                before sending them promotional messages. The way of Such consent
                and the legal requirements vary from country to country. other
@@ -332,10 +351,9 @@ function TermsOfService() {
                materials or notices, simply notify us at any time:
                info@dayamuneton.com
             </p>
-            <p className="text-sm">In force from November 22, 2021 ​ ​ ​ ​ ​</p>
+            <p>In force from November 22, 2021 ​ ​ ​ ​ ​</p>
             ​ ​ ​ ​
-         </div>
-         <Footer />
+         </article>
       </div>
    );
 }

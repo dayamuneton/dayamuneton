@@ -1,55 +1,36 @@
-import { db } from "@/integrations/firebase/firebaseConfig";
-import {
-   arrayUnion,
-   doc,
-   increment,
-   serverTimestamp,
-   updateDoc,
-} from "firebase/firestore";
-import { createShoppingCart } from "./createShoppingCart";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore/lite";
+import { db } from "@/integrations/firebase/firestore-lite";
+import type { ShoppingCart } from "@/models/shoppingCartModel";
+import type { GuiaProductVariant } from "@/models/guiaProductModel";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
-import { ShoppingCart } from "@/models/shoppingCartModel";
-import { GuiaProductVariant } from "@/models/guiaProductModel";
-// import { GuiaProduct } from "@/models/guiaProductModel";
 
-export const addItemToCart = async (
+export async function addItemToCart(
    shoppingCart: ShoppingCart | null,
-   item: any,
+   item: { name: string; handle: string; price: number },
    email: string,
-   variant?: GuiaProductVariant
-) => {
-   try {
-      let cart: any = shoppingCart || (await createShoppingCart(email));
-      const data = removeUndefinedEntriesFromObject(item);
-      if (variant) {
-         data.name = `${item.name} (${variant.title})`;
-         data.mailerlite_group = variant.mailerlite_group;
-      }
+   variant?: GuiaProductVariant,
+) {
+   // A stable ID prevents two tabs from creating competing carts on their first add.
+   const reference = doc(db, "shoppingCarts", shoppingCart?.id || "active:" + encodeURIComponent(email));
+   const data = removeUndefinedEntriesFromObject({
+      ...item,
+      name: variant ? `${item.name} (${variant.title})` : item.name,
+      ...(variant && { mailerlite_group: variant.mailerlite_group, variantId: variant.id }),
+   });
 
-      const itemExists = cart.cartItems.some(
-         (product: any) => product.name === data.name
-      );
-
-      if (itemExists) {
-         console.log("Item already exists in cart.");
-
-         return cart;
-      }
-
-      const cartDoc = doc(db, "shoppingCarts", cart.id);
-
-      await updateDoc(cartDoc, {
-         cartItems: arrayUnion(data),
-         subTotal: increment(data.price as number),
+   await runTransaction(db, async (transaction) => {
+      const snapshot = await transaction.get(reference);
+      if (snapshot.exists() && snapshot.get("customerEmail") !== email) throw new Error("Unexpected cart owner");
+      const existing: ShoppingCart["cartItems"] = snapshot.get("isActive") ? snapshot.get("cartItems") ?? [] : [];
+      if (existing.some((entry) => entry.handle === data.handle && entry.name === data.name && entry.variantId === data.variantId)) return;
+      const cartItems = [...existing, data];
+      transaction.set(reference, {
+         customerEmail: email,
+         isActive: true,
+         isProcessed: false,
+         cartItems,
+         subTotal: cartItems.reduce((total, entry) => total + Number(entry.price || 0), 0),
          updatedAt: serverTimestamp(),
-      });
-
-      const cartItems = [...cart.cartItems, data];
-      const cartData = { ...cart, cartItems };
-
-      return new ShoppingCart(cartData);
-   } catch (error) {
-      console.error("Error adding item to cart: ", error);
-      throw new Error("Could not add item to cart.");
-   }
-};
+      }, { merge: true });
+   });
+}

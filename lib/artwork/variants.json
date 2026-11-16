@@ -1,0 +1,382 @@
+{
+   "/DayaMunetonB&WArt.jpg": {
+      "path": "/artwork/dayamunetonb-wart-d1b1360fbf0e",
+      "widths": [
+         112,
+         224,
+         320
+      ],
+      "fallbackWidths": [
+         112,
+         224
+      ],
+      "width": 2479,
+      "height": 2479,
+      "fallback": "jpg"
+   },
+   "/StoriesBehindTheSongs.png": {
+      "path": "/artwork/storiesbehindthesongs-d791a42b8f84",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1051,
+      "height": 1051,
+      "fallback": "jpg"
+   },
+   "/ShopMyArt.png": {
+      "path": "/artwork/shopmyart-c235c5cd61a9",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 914,
+      "height": 914,
+      "fallback": "jpg"
+   },
+   "/MyNotes.png": {
+      "path": "/artwork/mynotes-eacb581281ea",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 965,
+      "height": 965,
+      "fallback": "png"
+   },
+   "/newshopartcollection.png": {
+      "path": "/artwork/newshopartcollection-59660d449879",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 2000,
+      "height": 2000,
+      "fallback": "png"
+   },
+   "/newshopcelebrating.png": {
+      "path": "/artwork/newshopcelebrating-6afeeea59782",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 2000,
+      "height": 2000,
+      "fallback": "png"
+   },
+   "/newshopdayashop.png": {
+      "path": "/artwork/newshopdayashop-21882f40a348",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 2000,
+      "height": 2000,
+      "fallback": "png"
+   },
+   "/BannerHeads.png": {
+      "path": "/artwork/bannerheads-0bdbc30ccbf1",
+      "widths": [
+         480,
+         768,
+         1200,
+         1600,
+         2400
+      ],
+      "fallbackWidths": [
+         480,
+         1200
+      ],
+      "width": 3000,
+      "height": 1389,
+      "fallback": "png"
+   },
+   "/Bannerbodies.png": {
+      "path": "/artwork/bannerbodies-3bc128b12b7f",
+      "widths": [
+         480,
+         768,
+         1200,
+         1600,
+         2400
+      ],
+      "fallbackWidths": [
+         480,
+         1200
+      ],
+      "width": 2989,
+      "height": 1383,
+      "fallback": "jpg"
+   },
+   "/BannerAbstracts.png": {
+      "path": "/artwork/bannerabstracts-40b607d7d462",
+      "widths": [
+         480,
+         768,
+         1200,
+         1600,
+         2400
+      ],
+      "fallbackWidths": [
+         480,
+         1200
+      ],
+      "width": 3250,
+      "height": 1506,
+      "fallback": "jpg"
+   },
+   "/BannerConmemorativeArt.png": {
+      "path": "/artwork/bannerconmemorativeart-0aef601c6777",
+      "widths": [
+         480,
+         768,
+         1200,
+         1600,
+         2400
+      ],
+      "fallbackWidths": [
+         480,
+         1200
+      ],
+      "width": 3249,
+      "height": 1513,
+      "fallback": "jpg"
+   },
+   "/DayaAbout1.png": {
+      "path": "/artwork/dayaabout1-e6aeae7d51d7",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1146,
+      "height": 1146,
+      "fallback": "png"
+   },
+   "/Freebies.png": {
+      "path": "/artwork/freebies-085d67d95de4",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 2750,
+      "height": 2750,
+      "fallback": "png"
+   },
+   "/ArtEmotions.png": {
+      "path": "/artwork/artemotions-803060500551",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 3000,
+      "height": 3000,
+      "fallback": "png"
+   },
+   "/ChemistryEmotions.png": {
+      "path": "/artwork/chemistryemotions-5738d38fecde",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 3500,
+      "height": 3500,
+      "fallback": "png"
+   },
+   "/LogoAgeOfEmotions.png": {
+      "path": "/artwork/logoageofemotions-97df5b89f0e1",
+      "widths": [
+         112,
+         224,
+         320
+      ],
+      "fallbackWidths": [
+         112,
+         224
+      ],
+      "width": 1571,
+      "height": 1571,
+      "fallback": "png"
+   },
+   "/HeadPhonesCommunity1.png": {
+      "path": "/artwork/headphonescommunity1-7a5553d5eea7",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 948,
+      "height": 948,
+      "fallback": "jpg"
+   },
+   "/HeadPhonesCommunity2.png": {
+      "path": "/artwork/headphonescommunity2-638a4c9e35d2",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1307,
+      "height": 1307,
+      "fallback": "png"
+   },
+   "/HeadPhonesCommunity3.png": {
+      "path": "/artwork/headphonescommunity3-01701243bc0f",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1304,
+      "height": 1304,
+      "fallback": "jpg"
+   },
+   "/MujerYourCanvas1.png": {
+      "path": "/artwork/mujeryourcanvas1-c65e7dccb373",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1846,
+      "height": 1564,
+      "fallback": "png"
+   },
+   "/ESCUCHA_LA_MUSICA_DE_TU_LIENZO.png": {
+      "path": "/artwork/escucha-la-musica-de-tu-lienzo-6d2f1f59da37",
+      "widths": [
+         256,
+         384,
+         560,
+         768
+      ],
+      "fallbackWidths": [
+         256,
+         560
+      ],
+      "width": 1768,
+      "height": 2500,
+      "fallback": "png"
+   },
+   "/DigitalArtFormat.png": {
+      "path": "/artwork/digitalartformat-58dc8e9ce8b6",
+      "widths": [
+         160,
+         320
+      ],
+      "fallbackWidths": [
+         160,
+         320
+      ],
+      "width": 2048,
+      "height": 2048,
+      "fallback": "jpg"
+   },
+   "/AcrylicOnCanvas.png": {
+      "path": "/artwork/acryliconcanvas-bffb518187c4",
+      "widths": [
+         160,
+         320
+      ],
+      "fallbackWidths": [
+         160,
+         320
+      ],
+      "width": 2750,
+      "height": 2750,
+      "fallback": "jpg"
+   },
+   "/ArtPrints.png": {
+      "path": "/artwork/artprints-b9fa1094780d",
+      "widths": [
+         160,
+         320
+      ],
+      "fallbackWidths": [
+         160,
+         320
+      ],
+      "width": 3250,
+      "height": 3250,
+      "fallback": "jpg"
+   }
+}

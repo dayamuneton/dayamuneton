@@ -1,174 +1,66 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar/navbar";
-import {
-   Acordion,
-   AcordionButton,
-   AcordionContent,
-   AcordionIcon,
-} from "@/components/ui/acordion";
-import { sendWaMessageURL } from "@/utils/sendWaMessageURL";
 import Head from "next/head";
-import Image from "next/image";
+import { site } from "@/config/site";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
+import { FiChevronDown } from "react-icons/fi";
+import ArtworkImage from "@/components/ui/ArtworkImage";
+import { sendWaMessageURL } from "@/utils/sendWaMessageURL";
 
-function Custom() {
+const formats = [
+   {
+      title: "Digital Art Format",
+      image: "/DigitalArtFormat.png",
+      details: ["30 × 30 cm at 300 DPI", "Digital download in PNG format"],
+      price: "$175 USD",
+      actions: [{ label: "Request digital art", message: "Daya, I want a custom digital artwork." }],
+   },
+   {
+      title: "Acrylic on canvas",
+      image: "/AcrylicOnCanvas.png",
+      details: ["Custom canvas sizes", "24 × 48, 30 × 40, 30 × 48, 36 × 36, 36 × 48, 48 × 48, and 48 × 60 inches"],
+      price: "Price depends on size",
+      actions: [{ label: "Request a canvas", message: "Daya, I want a custom artwork on canvas." }],
+   },
+   {
+      title: "Art prints",
+      image: "/ArtPrints.png",
+      details: ["Canvas prints use dye-based inks. Giclée prints use archival pigment inks."],
+      price: "Price depends on format",
+      actions: [
+         { label: "Request a reproduction", message: "Daya, I want a reproduction of your art." },
+         { label: "Request a custom print", message: "Daya, I want a custom art print." },
+      ],
+   },
+];
+
+export default function Commissions() {
    return (
-      <div
-         className="flex flex-col items-center min-h-screen overflow-hidden text-[#d7d7d7] pt-14"
-         style={{
-            backgroundImage:
-               "radial-gradient(circle at center, #4a23a9, #5cdde5)",
-         }}
-      >
-         <Head>
-            <title>Custom | Daya Muneton</title>
-            <meta name="description" content="Daya Muneton" />
-            <meta
-               name="keywords"
-               content="Arte, Ciencia, Tecnología, Amor, Liberate, Regalo"
-            />
-            <link rel="icon" href="/favicon.ico" />
-         </Head>
-         <Navbar />
-         <h1 className="mb-4 text-2xl font-bold">Custom Art Commissions</h1>
-         <div className="w-[95vw] max-w-xl mb-20 text-center">
-            <span>
-               <p>Hello, and thanks for your interest in my art! </p>
-               <p>
-                  {
-                     "I'm excited to discuss your commission request. If WhatsApp isn't accessible, please feel free to directly email me at info@dayamuneton.com."
-                  }
-               </p>
-            </span>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
-               <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
-                  <p className="w-full text-center">Digital Art Format</p>
-                  <AcordionIcon className="text-white" />
-               </AcordionButton>
-               <AcordionContent className="flex flex-col items-center px-4 pb-2">
-                  <div className="flex items-center w-full max-w-md gap-6">
-                     <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/DigitalArtFormat.png"
-                           fill
-                           alt=""
-                           className="object-cover"
-                        />
-                     </span>
-                     <div className="max-w-[30ch] text-sm font-medium">
-                        <p>Format Digital Art</p>
-                        <p>Size (30cm x 30cm)</p>
-                        <p>300 DPI</p>
-                        <p className="pl-2">● Digital download</p>
-                        <p className="pl-2">● Digital file type(s): PNG</p>
-                        <p className="text-xl text-white">$175 USD</p>
+      <div className="portfolio-content page-content commission-page">
+         <Head><title>Custom Art Commissions | Daya Muneton</title><meta name="description" content="Commission digital art, an acrylic canvas, or a print from Daya Muneton." /></Head>
+         <Link href="/shop" className="back-link">← Art shop</Link>
+         <header className="commission-intro landing-copy">
+            <h1>Custom Art Commissions</h1>
+            <p>Hello, and thanks for your interest in my art!</p>
+            <p>I&apos;m excited to discuss your commission request. If WhatsApp isn&apos;t accessible, you can email me at <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+         </header>
+         <div className="commission-formats">
+            {formats.map(({ title, image, details, price, actions }) => (
+               <details key={title} className="commission-format">
+                  <summary>{title}<FiChevronDown aria-hidden="true" /></summary>
+                  <div className="commission-details">
+                     <div className="commission-image"><ArtworkImage src={image} alt="" fill sizes="(min-width: 440px) 160px, 33vw" className="object-cover" /></div>
+                     <div className="reading-flow">
+                        {details.map((line) => <p key={line}>{line}</p>)}
+                        <p className="text-ink font-semibold">{price}</p>
+                     </div>
+                     <div className="detail-actions">
+                        {actions.map(({ label, message }) => (
+                           <a key={label} href={sendWaMessageURL(message)} className="portfolio-button portfolio-button-primary">{label}</a>
+                        ))}
                      </div>
                   </div>
-                  <Link
-                     target="_blank"
-                     href={sendWaMessageURL(
-                        "Daya, I want a custom digital art"
-                     )}
-                     className="text-center text-white bg-gradient-to-l to-[#4a23a9] from-[#5cdde5] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
-                  >
-                     Daya, I want a custom digital art
-                  </Link>
-               </AcordionContent>
-            </Acordion>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
-               <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
-                  <p className="w-full text-center">Acrylic On Canvas</p>
-                  <AcordionIcon className="text-white" />
-               </AcordionButton>
-               <AcordionContent className="flex flex-col items-center px-4 pb-2">
-                  <div className="flex items-center justify-center max-w-md gap-6">
-                     <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/AcrylicOnCanvas.png"
-                           fill
-                           alt=""
-                           className="object-cover"
-                        />
-                     </span>
-                     <div className="text-sm font-medium ">
-                        <p>Format Acrylic on canvas</p>
-                        <p>Size Custom</p>
-                        <p>
-                           {
-                              '24" x 48"/ 30" x 40" / 30" x 48" / 36" x 36" / 36" x 48" / 48" x 48" / 48" x 60"'
-                           }
-                        </p>
-                        <p className="mt-2 text-xl leading-5 text-white">
-                           PRICE DEPENDS ON YOUR CHOISE
-                        </p>
-                     </div>
-                  </div>
-                  <Link
-                     target="_blank"
-                     href={sendWaMessageURL(
-                        "Daya, I want a custom art on canvas"
-                     )}
-                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
-                  >
-                     Daya, I want a custom art on canvas
-                  </Link>
-               </AcordionContent>
-            </Acordion>
-            <Acordion className="my-2 bg-gradient-to-r to-[#4a23a9] from-[#5cdde5] rounded-lg w-full">
-               <AcordionButton className="flex items-center justify-between px-4 py-3 font-semibold text-center">
-                  <p className="w-full leading-5 text-center">Art Prints</p>
-                  <AcordionIcon className="text-white" />
-               </AcordionButton>
-               <AcordionContent className="flex flex-col items-center px-4 pb-2">
-                  <div className="flex items-center justify-center max-w-md gap-6">
-                     <span className="relative flex aspect-square min-w-[10rem] h-[10rem] overflow-hidden">
-                        <Image
-                           src="/ArtPrints.png"
-                           fill
-                           alt=""
-                           className="object-cover"
-                        />
-                     </span>
-                     <div className="text-sm font-medium leading-4">
-                        <p>
-                           Canvas prints are basic inkjet prints that use dye
-                           inks, which are not fade resistant and have a
-                           longevity of 10-20 years.
-                        </p>
-                        <p className="mt-2">
-                           Giclée, use pigments instead of dyes which are
-                           archival and have a longevity of hundreds of years
-                        </p>
-
-                        <p className="mt-2 text-xl leading-5 text-white">
-                           PRICE DEPENDS ON YOUR CHOISE
-                        </p>
-                     </div>
-                  </div>
-                  <Link
-                     target="_blank"
-                     href={sendWaMessageURL(
-                        "Daya, I want a reproduction of your art"
-                     )}
-                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
-                  >
-                     Daya, I want a reproduction of your art
-                  </Link>
-                  <Link
-                     target="_blank"
-                     href={sendWaMessageURL("Daya, I want a custom art print")}
-                     className="text-center text-white bg-[#4a23a9] px-4 py-2 rounded-lg mt-2 w-full max-w-md"
-                  >
-                     Daya, I want a custom art print
-                  </Link>
-               </AcordionContent>
-            </Acordion>
+               </details>
+            ))}
          </div>
-         <Footer />
       </div>
    );
 }
-
-export default Custom;
