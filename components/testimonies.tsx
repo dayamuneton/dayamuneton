@@ -1,6 +1,3 @@
-import { useRef, useState, type PointerEvent } from "react";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
 const testimonies = [
    {
       name: "Michel Leroy",
@@ -28,62 +25,17 @@ const testimonies = [
    },
 ];
 
-const lastIndex = testimonies.length - 1;
-const swipeThreshold = 48;
-
 export default function Testimonies() {
-   const [activeIndex, setActiveIndex] = useState(0);
-   const swipeStart = useRef<{ x: number; y: number } | null>(null);
-
-   function move(direction: -1 | 1) {
-      setActiveIndex((current) => Math.min(lastIndex, Math.max(0, current + direction)));
-   }
-
-   function startSwipe(event: PointerEvent<HTMLDivElement>) {
-      if (event.pointerType !== "touch") return;
-      swipeStart.current = event.isPrimary ? { x: event.clientX, y: event.clientY } : null;
-   }
-
-   function finishSwipe(event: PointerEvent<HTMLDivElement>) {
-      if (event.pointerType !== "touch" || !event.isPrimary) return;
-      const start = swipeStart.current;
-      swipeStart.current = null;
-      if (!start) return;
-
-      const horizontalDistance = event.clientX - start.x;
-      const verticalDistance = event.clientY - start.y;
-      if (Math.abs(horizontalDistance) >= swipeThreshold && Math.abs(horizontalDistance) > Math.abs(verticalDistance)) {
-         move(horizontalDistance < 0 ? 1 : -1);
-      }
-   }
-
    return (
       <section className="testimonials" aria-labelledby="testimonials-heading" aria-roledescription="carousel">
          <h2 className="section-title landing-copy" id="testimonials-heading">What readers say</h2>
-         <div className="content-panel testimonials-panel">
-            <div className="testimonials-slides" id="testimonial-quotes" onPointerDown={startSwipe} onPointerUp={finishSwipe}
-               onPointerCancel={() => { swipeStart.current = null; }}>
-               {testimonies.map(({ name, language, message }, index) => (
-                  <figure className="testimonial-quote reading-flow" key={name} data-active={activeIndex === index}>
-                     <blockquote lang={language}>{message}</blockquote>
-                     <figcaption className="text-ink font-semibold">{name}</figcaption>
-                  </figure>
-               ))}
-            </div>
-            <div className="testimonials-controls">
-               <button type="button" className="portfolio-button portfolio-button-secondary" aria-label="Previous testimonial"
-                  aria-controls="testimonial-quotes" aria-disabled={activeIndex === 0} onClick={() => move(-1)}>
-                  <FiChevronLeft aria-hidden="true" />
-               </button>
-               <p className="testimonials-position" role="status">
-                  <span aria-hidden="true">{activeIndex + 1} / {testimonies.length}</span>
-                  <span className="sr-only">Testimonial {activeIndex + 1} of {testimonies.length}, {testimonies[activeIndex].name}</span>
-               </p>
-               <button type="button" className="portfolio-button portfolio-button-secondary" aria-label="Next testimonial"
-                  aria-controls="testimonial-quotes" aria-disabled={activeIndex === lastIndex} onClick={() => move(1)}>
-                  <FiChevronRight aria-hidden="true" />
-               </button>
-            </div>
+         <div className="testimonials-track" role="group" aria-label="Scroll through testimonials" tabIndex={0}>
+            {testimonies.map(({ name, language, message }) => (
+               <figure className="testimonial-quote reading-flow" key={name}>
+                  <blockquote lang={language}>{message}</blockquote>
+                  <figcaption className="font-semibold">{name}</figcaption>
+               </figure>
+            ))}
          </div>
       </section>
    );

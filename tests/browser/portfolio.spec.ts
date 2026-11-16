@@ -43,6 +43,7 @@ test("support opens as a desktop dropdown or mobile modal without shifting the p
    await support.press("Enter");
    const dialog = page.getByRole("dialog", { name: "Support my work" });
    await expect(dialog).toBeVisible();
+   await expect(dialog).toHaveCSS("background-image", /^linear-gradient/);
    await expect(support).toHaveAttribute("aria-expanded", "true");
    expect(await dialog.evaluate((panel) => panel.matches(":modal"))).toBe(isMobile);
    if (!isMobile) {
@@ -62,6 +63,7 @@ test("support opens as a desktop dropdown or mobile modal without shifting the p
    await expect(support).toBeFocused();
    await support.press("Enter");
    const amount = dialog.getByRole("textbox", { name: "Tip amount (USD)" });
+   await expect(amount).toHaveCSS("color", "rgb(255, 255, 255)");
    await amount.fill("0");
    await dialog.getByRole("button", { name: "Continue to checkout" }).click();
    await expect(dialog.getByRole("alert")).toContainText("Enter an amount");
@@ -135,37 +137,23 @@ test("public landing pages fit a 320 pixel viewport", async ({ page }) => {
    }
 });
 
-test("reader testimonials can be browsed one at a time without losing keyboard focus", async ({ page, isMobile }) => {
+test("reader testimonials use a keyboard-scrollable track without navigation buttons", async ({ page }) => {
    await page.goto("/ageofemotions");
    const carousel = page.getByRole("region", { name: "What readers say" });
-   const previous = carousel.getByRole("button", { name: "Previous testimonial" });
-   const next = carousel.getByRole("button", { name: "Next testimonial" });
-   const position = carousel.getByRole("status");
+   const track = carousel.getByRole("group", { name: "Scroll through testimonials" });
    const sara = carousel.getByText("Sara Contramaestre", { exact: true });
 
    await carousel.scrollIntoViewIfNeeded();
    await expect(carousel.getByText("Michel Leroy", { exact: true })).toBeInViewport();
-   await expect(sara).toBeHidden();
-   await expect(previous).toBeDisabled();
-   await next.focus();
-   await page.keyboard.press("Enter");
-   await page.keyboard.press("Enter");
-   await page.keyboard.press("Enter");
-   await expect(position).toContainText("Testimonial 4 of 4, Sara Contramaestre");
+   await expect(carousel.getByRole("button")).toHaveCount(0);
+   await expect(track.getByRole("figure")).toHaveCount(4);
+   await expect(sara).not.toBeInViewport();
+   await expect(track.getByRole("figure").first()).toHaveCSS("background-image", /radial-gradient/);
+   await track.press("ArrowRight");
+   await expect.poll(() => track.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+   await expect(track).toBeFocused();
+   await track.evaluate((element) => element.scrollTo({ left: element.scrollWidth, behavior: "instant" }));
    await expect(sara).toBeInViewport();
-   await expect(next).toBeDisabled();
-   await expect(next).toBeFocused();
-   await previous.press("Space");
-   await expect(position).toContainText("Testimonial 3 of 4, Booker Brown");
-   await expect(sara).toBeHidden();
-   if (isMobile) {
-      const slides = carousel.locator("#testimonial-quotes");
-      const touch = { pointerType: "touch", isPrimary: true, clientY: 100 };
-      await slides.dispatchEvent("pointerdown", { ...touch, clientX: 180 });
-      await slides.dispatchEvent("pointerup", { ...touch, clientX: 90 });
-      await expect(position).toContainText("Testimonial 4 of 4, Sara Contramaestre");
-      await expect(sara).toBeInViewport();
-   }
 });
 
 test("commission formats keep their expandable layout and work with the keyboard", async ({ page }) => {

@@ -10,6 +10,7 @@
    --color-line-strong: #677c91;
    --color-brand-purple: #4a23a9;
    --color-brand-aqua: #5cdde5;
+   --color-brand-teal: #087582;
    --color-brand-blue: #034daf;
    --color-accent: #422099;
    --color-accent-hover: #321675;
@@ -75,6 +76,8 @@
    --gradient-about: linear-gradient(90deg, #76e3f0, #318791);
    --gradient-landing-shade: radial-gradient(ellipse 50% 49% at 50% 49%, #25134b8c 15%, #25134b45 60%, transparent 100%);
    --gradient-action-shade: linear-gradient(#25134b91, #25134b91);
+   --gradient-support: linear-gradient(90deg, var(--color-brand-purple), var(--color-brand-teal));
+   --gradient-testimonial: radial-gradient(circle at center, var(--color-brand-purple), var(--color-brand-teal));
    --overlay-gradient-copy: #25134b8f;
    --overlay-artwork-label: #ffffffb3;
    --overlay-community-intro: #f8fcfc70;

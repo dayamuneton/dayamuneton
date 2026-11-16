@@ -151,7 +151,7 @@ export default function SupportMyWork() {
                <header className="mb-5 flex items-start justify-between gap-3">
                   <div>
                      <h2 id={titleId} className="text-2xl font-bold">Support my work</h2>
-                     <p className="mt-1 text-sm text-muted">Your tip helps make emotional education freely available.</p>
+                     <p className="mt-1 text-sm">Your tip helps make emotional education freely available.</p>
                   </div>
                   <button type="button" className="support-close" aria-label="Close support"
                      onClick={() => closeSupport()}>
@@ -176,7 +176,7 @@ export default function SupportMyWork() {
                            value={amount} onChange={(event) => updateAmount(event.target.value)}
                            aria-invalid={Boolean(error)} aria-describedby={error ? errorId : undefined} />
                      </div>
-                     {error && <p id={errorId} role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
+                     {error && <p id={errorId} role="alert" className="form-feedback mt-2 text-sm font-medium">{error}</p>}
                      <button type="submit" className="portfolio-button portfolio-button-primary mt-5 w-full">
                         {pending ? "Opening checkout…" : "Continue to checkout"}
                      </button>
