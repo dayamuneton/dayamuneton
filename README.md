@@ -28,6 +28,8 @@ npm run test:local
 
 Stop any standalone emulator or preview before running `test:local`. It builds the local app, starts all three emulators, and runs browser tests at desktop and mobile widths. Tests cover the public route families, cart and sign-in, catalog editing, Storage uploads, and simulated checkout and email. You can set `PLAYWRIGHT_CHANNEL=msedge` to use an installed Edge browser.
 
+The browser test server disables native `require()` of ES modules to catch Vercel function-loader incompatibilities. The build bundles the sanitizer and Firebase Auth dependency chains while keeping Firestore's filesystem-dependent transport external. Production and local builds both use webpack.
+
 For the cross-browser run, install Firefox and WebKit with `npx playwright install firefox webkit`, then set `PLAYWRIGHT_ALL_BROWSERS=1`. Set `PLAYWRIGHT_PORT` to use a different local test port. With the demo emulators already running, use `npm run build:local` and `npm run test:browser`.
 
 Set `NEXT_PUBLIC_REPORT_VITALS=1` in `.env.local` to log Web Vitals in the browser console. The reports are local and have no analytics vendor or paid service dependency.

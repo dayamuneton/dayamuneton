@@ -19,7 +19,11 @@ export default defineConfig({
    ],
    webServer: {
       command: `npm run start -- --port ${port}`,
-      env: { NEXT_PUBLIC_SITE_ENV: "local", NEXT_TELEMETRY_DISABLED: "1" },
+      env: {
+         NEXT_PUBLIC_SITE_ENV: "local", NEXT_TELEMETRY_DISABLED: "1",
+         // Match Vercel's CommonJS loader, which rejects require() of ESM dependencies.
+         NODE_OPTIONS: [process.env.NODE_OPTIONS, "--no-experimental-require-module"].filter(Boolean).join(" "),
+      },
       url: baseURL,
       timeout: 60_000,
    },

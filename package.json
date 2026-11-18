@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next dev --hostname 127.0.0.1",
-    "build": "next build",
+    "build": "next build --webpack",
     "build:local": "cross-env LOCAL_NEXT_BUILD=1 NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next build --webpack",
     "start": "cross-env LOCAL_NEXT_BUILD=1 NEXT_PUBLIC_SITE_ENV=local NEXT_TELEMETRY_DISABLED=1 next start --hostname 127.0.0.1",
     "lint": "eslint .",

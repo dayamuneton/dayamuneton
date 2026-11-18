@@ -5,6 +5,14 @@ const local = !preview && process.env.NEXT_PUBLIC_SITE_ENV !== "production";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    reactStrictMode: true,
+   bundlePagesRouterDependencies: true,
+   // Bundle ESM dependencies that Vercel's CommonJS function loader cannot require.
+   transpilePackages: [
+      "sanitize-html", "htmlparser2", "domelementtype", "domhandler", "domutils", "entities",
+      "firebase-admin", "jwks-rsa", "jose",
+   ],
+   serverExternalPackages: ["@google-cloud/firestore", "google-gax", "@grpc/grpc-js"],
+   experimental: { esmExternals: "loose" },
    ...(preview && { env: { NEXT_PUBLIC_SITE_ENV: "preview" } }),
    async headers() {
       return [...(preview ? [{
