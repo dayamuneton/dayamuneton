@@ -63,6 +63,8 @@ Run `npm run artwork:generate` after changing a bundled artwork source. Commit t
 
 Vercel builds Preview deployments with the sample artwork and guides from the local seed. Preview checkout and email are simulated, and sign-in and admin are available in the local emulator build. A Preview needs no Firebase or payment credentials.
 
+Vercel deployments without an explicit production flag also use this demo mode. This keeps the personal repository's mirror separate from the owner's live data and services.
+
 To reproduce the Preview build locally, set `VERCEL_ENV=preview` and run `npm run build -- --webpack`, then `npx next start`.
 
 ## Production handoff

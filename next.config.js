@@ -1,4 +1,5 @@
-const preview = process.env.VERCEL_ENV === "preview" || process.env.NEXT_PUBLIC_SITE_ENV === "preview";
+const preview = process.env.VERCEL_ENV === "preview" || process.env.NEXT_PUBLIC_SITE_ENV === "preview"
+   || (process.env.VERCEL === "1" && process.env.NEXT_PUBLIC_SITE_ENV !== "production");
 const local = !preview && process.env.NEXT_PUBLIC_SITE_ENV !== "production";
 
 /** @type {import('next').NextConfig} */
