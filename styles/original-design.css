@@ -13,10 +13,7 @@ html:has(.home-page) { scrollbar-gutter: auto; }
    .site-nav :is(.site-nav-brand, .site-nav-links a) { font-size: 1rem; }
 }
 @variant max-navigation {
-   .site-nav { background: var(--color-brand-purple); color: var(--color-on-accent); }
-   .site-nav-row { padding-block: var(--space-1); }
-   .site-menu-button { border-color: var(--color-navigation-line); border-radius: var(--radius-control); }
-   .site-nav-links { padding-block: var(--space-3); }
+   .site-nav .site-nav-row { padding: var(--space-1) var(--space-2); }
    .site-account-panel { color: var(--color-ink); }
 }
 

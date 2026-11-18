@@ -171,17 +171,46 @@ test("commission formats keep their expandable layout and work with the keyboard
    await expect(request).toBeHidden();
 });
 
-test("mobile navigation opens with the keyboard and returns focus on Escape", async ({ page, isMobile }) => {
+test("mobile navigation opens from the left, traps focus, and restores the hamburger on dismissal", async ({ page, isMobile }) => {
    test.skip(!isMobile, "The desktop navigation stays open.");
    await page.goto("/");
    const menu = page.getByRole("button", { name: "Menu" });
    const navigation = page.getByRole("navigation", { name: "Main navigation" });
+   const drawer = page.getByRole("dialog", { name: "Daya Muneton", exact: true });
+   expect((await menu.boundingBox())!.x).toBeLessThan(20);
+   await expect(menu.locator("svg")).toHaveCount(1);
    await expect(navigation.getByRole("link", { name: "Shop", exact: true })).toBeHidden();
    await menu.press("Enter");
-   await expect(navigation.getByRole("link", { name: "Shop", exact: true })).toBeVisible();
-   await navigation.getByRole("link", { name: "Shop", exact: true }).press("Escape");
+   await expect(drawer).toBeVisible();
+   await expect(drawer.getByRole("button", { name: "Close menu" })).toBeFocused();
+   await expect.poll(async () => (await drawer.boundingBox())!.x).toBe(0);
+   expect(await drawer.evaluate((element) => element.matches(":modal"))).toBe(true);
+   await expect(page.locator("html")).toHaveCSS("overflow", "hidden");
+   await drawer.getByRole("link", { name: "Emotional Education", exact: true }).focus();
+   await page.keyboard.press("Tab");
+   await expect(drawer.getByRole("button", { name: "Close menu" })).toBeFocused();
+   await drawer.getByRole("link", { name: "Shop", exact: true }).press("Escape");
    await expect(menu).toBeFocused();
    await expect(menu).toHaveAttribute("aria-expanded", "false");
+   await expect(drawer).toBeHidden();
+   await expect(page.locator("html")).not.toHaveCSS("overflow", "hidden");
+   await menu.click();
+   await page.mouse.click(page.viewportSize()!.width - 8, 200);
+   await expect(drawer).toBeHidden();
+   await expect(menu).toBeFocused();
+   await menu.click();
+   await drawer.getByRole("link", { name: "Shop", exact: true }).click();
+   await expect(page).toHaveURL(/\/shop$/);
+   await expect(drawer).toBeHidden();
+   await expect(page.getByRole("heading", { name: "Art Shop", exact: true })).toBeVisible();
+   await page.emulateMedia({ reducedMotion: "reduce" });
+   await menu.click();
+   await expect(drawer).toHaveCSS("animation-name", "none");
+   await page.setViewportSize({ width: 1440, height: 900 });
+   await expect(drawer).toBeHidden();
+   await expect(menu).toBeHidden();
+   await expect(navigation.getByRole("link", { name: "Daya Muneton", exact: true })).toBeVisible();
+   await expect(navigation.getByRole("link", { name: "Shop", exact: true })).toBeVisible();
 });
 
 test("local APIs validate data and simulate payment and email", async ({ request }) => {

@@ -82,11 +82,14 @@
    --overlay-artwork-label: #ffffffb3;
    --overlay-community-intro: #f8fcfc70;
    --overlay-support-modal: #020b1bdb;
+   --overlay-navigation-modal: #020b1b99;
+   --overlay-navigation-active: #ffffff1f;
    --overlay-confirmation-modal: #020914b8;
    --shadow-gradient-text: 0 1px 3px #24144d, 0 0 8px #24144d88;
    --shadow-gradient-icon: 0 1px 3px #24144d;
    --shadow-artwork-label: 0 0 .25em #fff9;
    --shadow-card: 0 5px 12px #25174a30;
+   --shadow-navigation: 8px 0 32px #020b1b33;
    --motion-fast: 140ms;
    --motion-normal: 200ms;
    --ease-out: cubic-bezier(.2, .7, .2, 1);

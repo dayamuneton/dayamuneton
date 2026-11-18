@@ -58,6 +58,7 @@ Run `npm run artwork:generate` after changing a bundled artwork source. Commit t
 | Brand colors, button colors, text sizes, spacing, or motion timings | [Theme](styles/theme.css). The `--color-brand-*` tokens control artwork accents and gradients. `--color-accent`, `--color-accent-hover`, `--color-on-accent`, and `--color-focus` control interactive states. |
 | The mobile-to-desktop switch | [Theme](styles/theme.css). `--breakpoint-navigation` sets both the navigation layout and the support dropdown breakpoint. |
 | Public page layouts or shared components | [Public pages](styles/original-design.css), [shared styles](styles/portfolio.css), and [support styles](styles/support.css). |
+| Navigation links or the mobile side menu | [Shared destinations](components/navbar/navigation-links.ts), [desktop navigation](components/navbar/navbar.tsx), and [mobile drawer](components/navbar/MobileNavigation.tsx). |
 | Email, social profiles, portrait, or default site URL | [Site config](config/site.ts). |
 | Shop or education categories | [Catalog categories](features/catalog/categories.ts). |
 
