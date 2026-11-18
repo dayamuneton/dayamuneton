@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null && request.auth.token.email is string; }
+    function owns(email) { return signedIn() && request.auth.token.email == email; }
+    function admin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.token.email)); }
+
+    match /products/{id} {
+      allow read: if true;
+      allow write: if admin();
+    }
+    match /pdfproducts/{id} {
+      allow read: if true;
+      allow write: if admin();
+    }
+    match /admins/{email} {
+      allow get: if owns(email);
+    }
+    match /shoppingCarts/{id} {
+      allow read: if owns(resource.data.customerEmail);
+      allow create: if owns(request.resource.data.customerEmail)
+        && request.resource.data.keys().hasOnly(['customerEmail', 'isActive', 'isProcessed', 'cartItems', 'subTotal', 'updatedAt', 'id'])
+        && request.resource.data.isActive == true
+        && request.resource.data.isProcessed == false
+        && request.resource.data.cartItems is list
+        && request.resource.data.cartItems.size() <= 100
+        && request.resource.data.subTotal is number
+        && request.resource.data.subTotal >= 0;
+      allow update: if owns(resource.data.customerEmail)
+        && request.resource.data.customerEmail == resource.data.customerEmail
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cartItems', 'subTotal', 'updatedAt'])
+        && request.resource.data.cartItems is list
+        && request.resource.data.cartItems.size() <= 100
+        && request.resource.data.subTotal is number
+        && request.resource.data.subTotal >= 0;
+      allow delete: if owns(resource.data.customerEmail);
+    }
+    match /orders/{id} {
+      allow read: if owns(resource.data.email) || admin();
+    }
+    match /users/{email} {
+      allow read: if owns(email) || admin();
+    }
+  }
+}

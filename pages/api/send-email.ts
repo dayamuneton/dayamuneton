@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 import { isTestSite } from "@/config/site-environment";
+import { site } from "@/config/site";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    if (req.method !== "POST") {
@@ -19,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    const clientSecret = process.env.GOOGLE_APIS_CLIENT_SECRET;
    const refreshToken = process.env.GOOGLE_APIS_REFRESH_TOKEN;
    const redirectUri = process.env.GOOGLE_APIS_REDIRECT_URI;
-   const user = process.env.SMTP_TRANSPORT_USER;
+   const user = process.env.SMTP_TRANSPORT_USER || site.email;
    if (!clientId || !clientSecret || !refreshToken || !user) {
       return res.status(503).json({ error: "Email is unavailable" });
    }

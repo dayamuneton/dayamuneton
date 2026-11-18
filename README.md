@@ -67,6 +67,10 @@ To reproduce the Preview build locally, set `VERCEL_ENV=preview` and run `npm ru
 
 ## Production handoff
 
-Production requires an explicit `NEXT_PUBLIC_SITE_ENV=production` in the deployment environment. The repository does not contain live service credentials or production Firebase rules. Review the existing Firestore and Storage rules, server-side catalog price verification, and payment fulfillment against the owner's configuration before releasing. The tests use test doubles for Stripe, Gmail, and MailerLite, so they do not verify the live integrations.
+Production requires an explicit `NEXT_PUBLIC_SITE_ENV=production` in the deployment environment. Keep `FIREBASE_SERVICE_ACCOUNT_JSON` in Production secrets, using a dedicated service account for the configured Firebase project with Cloud Datastore User access. Server checkout validates catalog prices, reserves original artwork, verifies paid Stripe sessions, and fulfills orders idempotently. Stripe must deliver `checkout.session.completed` and `checkout.session.expired` to `/api/stripe/webhook`.
+
+`firestore.rules` and `storage.rules` contain the production access rules; `firebase.json` references them. Public catalog reads are allowed; catalog writes require an existing admin record, carts belong to their customer, and order writes happen only on the server. Review and publish these rules in the owner's Firebase project when deploying. The separate `firebase.local.json` uses disposable emulator fixtures.
+
+With the emulators running, `npm run test:security` checks access denial, cart ownership, artwork reservations, and payment fulfillment. Browser checkout and email use test doubles, so they do not verify live Stripe payments or email delivery. Configure `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SIGNING_SECRET`, the existing Gmail OAuth variables, and optionally `SMTP_TRANSPORT_USER` (defaults to the site email).
 
 Configure MailerLite on the server with `MAILERLITE_API_KEY` and optionally `MAILERLITE_SUBSCRIBERS_API_URL`. Replace any key previously exposed by a `NEXT_PUBLIC_MAILERLITE_API_KEY` build. Keep live credentials in the hosting environment.

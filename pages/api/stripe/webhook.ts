@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { isTestSite } from "@/config/site-environment";
 import checkoutSessionCompletedEvent from "@/handlers/checkoutSessionCompleted/event";
 import { verifyStripeWebhook } from "@/integrations/stripe/webhook-signature";
+import { releaseReservation } from "@/features/checkout/server-order";
 
 export const config = { api: { bodyParser: false } };
 
@@ -38,6 +39,9 @@ export default async function webhook(req: NextApiRequest, res: NextApiResponse)
    try {
       if (event.type === "checkout.session.completed") {
          await checkoutSessionCompletedEvent(event.data.object);
+      }
+      if (event.type === "checkout.session.expired" && event.data.object.client_reference_id) {
+         await releaseReservation(event.data.object.client_reference_id);
       }
       return res.status(200).send("OK");
    } catch {

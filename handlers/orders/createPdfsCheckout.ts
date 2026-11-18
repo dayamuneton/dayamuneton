@@ -1,6 +1,7 @@
-import { collection, doc, runTransaction } from "firebase/firestore/lite";
+import { doc, runTransaction } from "firebase/firestore/lite";
 import { db } from "@/integrations/firebase/firestore-lite";
-import { isPreviewSite } from "@/config/site-environment";
+import { isPreviewSite, isTestSite } from "@/config/site-environment";
+import { auth } from "@/integrations/firebase/auth";
 import type { OrderType } from "../checkoutSessionCompleted/event";
 import { removeUndefinedEntriesFromObject } from "@/utils/removeUndefinedEntriesFromObject";
 
@@ -28,6 +29,7 @@ interface CheckoutRequest {
 }
 
 async function removeOrderedItems(cartId: string, ordered: CheckoutRequest["cartItems"]) {
+   if (!ordered.length) return;
    const cart = doc(db, "shoppingCarts", cartId);
    await runTransaction(db, async (transaction) => {
       const snapshot = await transaction.get(cart);
@@ -53,20 +55,17 @@ export async function createPdfsCheckout({ cartItems, email, name, cancel_url, s
       return { url: success_url };
    }
 
-   const order = doc(collection(db, "orders"));
-   await runTransaction(db, async (transaction) => {
-      transaction.set(order, { cartItems: paidItems, name: name.toLowerCase(), email });
-   });
-
+   const token = cartId ? await auth.currentUser?.getIdToken() : undefined;
    const response = await fetch("/api/stripe/create-checkout-session", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
       body: JSON.stringify({
          success_url,
          cancel_url,
          email,
+         name,
          lineItems: paidItems,
-         order_id: order.id,
+         ...(cartId && { cartId }),
          metadata: {
             order_type: "guias_pdf" satisfies OrderType,
             customerEmail: email,
@@ -76,6 +75,6 @@ export async function createPdfsCheckout({ cartItems, email, name, cancel_url, s
    });
    if (!response.ok) throw new Error("Could not start checkout.");
    const data: { url?: string } = await response.json();
-   if (cartId && data.url) await removeOrderedItems(cartId, items);
+   if (cartId && data.url) await removeOrderedItems(cartId, isTestSite ? items : items.filter(({ price }) => price === 0));
    return data;
 }

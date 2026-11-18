@@ -1,12 +1,10 @@
-import { db } from "@/integrations/firebase/firestore";
-import { doc, setDoc } from "firebase/firestore";
+import { serverDb } from "@/integrations/firebase/admin";
 
 export const processMembership = async ({ email }: { email: string }) => {
    try {
-      const userRef = doc(db, "users", email);
+      const userRef = serverDb().collection("users").doc(email);
 
-      await setDoc(
-         userRef,
+      await userRef.set(
          {
             email,
             isMember: true,
@@ -16,11 +14,8 @@ export const processMembership = async ({ email }: { email: string }) => {
          }
       );
 
-      console.log("log ", `nuevo miembro ${email}`);
-
       return;
    } catch (error) {
-      console.error(error);
       throw error;
    }
 };
